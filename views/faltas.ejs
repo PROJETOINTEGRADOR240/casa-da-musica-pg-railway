@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD faltas</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel ="icon" type="image/x-icon" href="https://image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5">
+  <link rel="stylesheet" href="./style/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css"         rel="stylesheet">
+  
+</head>
+<body>
+  <h1>Cadastro de faltas</h1>
+    <form action="/add" method="POST" class="mb-4">
+      <div class="form-group">
+        <input type="number" id="aluno_id" name="aluno_id" placeholder="Cod. Aluno" style="flex: 0.2;">
+      </div>
+      <div class="form-group">
+        <input type="number" id="disciplina_id" name="disciplina_id" placeholder="Cod. Disciplina" style="flex: 0.2;">
+      </div>
+      <br>
+      <br>
+      <div class="form-group">
+        <select name="mes_falta" id="mes_falta" required style="flex: 0.2; margin-left: 10px;">
+          <option value="">Mês</option>
+          <option value="Janeiro">Janeiro</option>
+          <option value="Fevereiro">Fevereiro</option>
+          <option value="Março">Março</option>
+          <option value="Abril">Abril</option>
+          <option value="Maio">Maio</option>
+          <option value="Junho">Junho</option>
+          <option value="Julho">Julho</option>
+          <option value="Agosto">Agosto</option>
+          <option value="Setembro">Setembro</option>
+          <option value="Outubro">Outubro</option>
+          <option value="Novembro">Novembro</option>
+          <option value="Dezembro">Dezembro</option>
+        </select>
+        <input type="text" name="ano_falta" placeholder="Ano falta" required style="flex: 0.2;">
+
+        <br>
+      </div>
+      <div class="form-group">
+        <input type="date" name="data_falta" placeholder="Data falta" required style="flex: 0.2;">
+        <input type="number" name="falta" min="0" max="100" step=".01" placeholder="falta" style="flex: 0.1;">
+      </div>
+
+      <br>
+      <br>
+      <div class="form-group">
+        <input type="txt" name="obs" placeholder="Observação" style="flex: 0.2;">
+      </div>
+
+      <button type="submit" class="btn btn-success"><i class="bi bi-check2"></i> Incluir</button>
+    </form> 
+
+    <h1>Lista de faltas</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Mês da falta</th>
+          <th>Ano da falta</th>
+          <th>falta(s)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% faltas.forEach((falta) => { %>
+
+        <tr>
+          <td><%= falta.idfalta %></td>
+          <td><%= falta.mes_falta %></td>
+          <td><%= falta.ano_falta %></td>
+          <td><%= falta.falta %></td>
+          <td>
+
+          <!-- Botão de Editar -->
+          <button class="btn btn-warning" onclick="openEditModal(<%= falta.idfalta %>, '<%= falta.mes_falta %>','<%= falta.ano_falta %>','<%= falta.data_falta %>','<%= falta.falta %>','<%= falta.obs %>')"><i class="bi bi-pencil-fill"></i> Editar</button>
+      
+          <!-- Botão de Excluir -->
+          <button class="btn btn-danger" onclick="openDeleteModal(<%= falta.idfalta %>)"><i class="bi bi-trash"></i> Excluir</button>
+          
+          </td>
+        </tr>  
+       <% }); %>
+      </tbody>
+    </table>
+
+  <!-- Modal de Edição -->
+  <div class="modal" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar faltas</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form id="editForm" method="POST">
+          <div class="modal-body">
+            <input type="hidden" id="edit-idfalta" name="idfalta">
+
+            <div class="form-group">
+              <select name="mes_falta" id="edit-mes_falta" required style="flex: 0.2; margin-left: 10px;">
+                <option value="">Mês falta</option>
+                <option value="Janeiro">Janeiro</option>
+                <option value="Fevereiro">Fevereiro</option>
+                <option value="Março">Março</option>
+                <option value="Abril">Abril</option>
+                <option value="Maio">Maio</option>
+                <option value="Junho">Junho</option>
+                <option value="Julho">Julho</option>
+                <option value="Agosto">Agosto</option>
+                <option value="Setembro">Setembro</option>
+                <option value="Outubro">Outubro</option>
+                <option value="Novembro">Novembro</option>
+                <option value="Dezembro">Dezembro</option>
+              </select>
+
+            </div>
+            <div class="form-group">
+              <label>Ano falta</label>
+              <input type="number" id="edit-ano_falta" name="ano_falta" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label>Data falta</label>
+              <input type="date" id="edit-data_falta" name="data_falta" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>falta</label>
+              <input type="number" id="edit-falta" name="falta" min="0" max="100" step=".01" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Observação</label>
+              <input type="text" id="edit-obs" name="obs" class="form-control">
+            </div>>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success"><i class="bi bi-save2"></i> Salvar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="bi bi-door-closed"></i> Fechar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Exclusão -->
+  <div class="modal" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Excluir faltas</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Tem certeza de que deseja excluir esta falta</p>
+        </div>
+        <div class="modal-footer">
+          <form id="deleteForm" method="GET">
+            <button type="submit" class="btn btn-danger">Excluir</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+    // Função para abrir o modal de edição com os dados da falta
+    function openEditModal(idfalta, mes_falta, ano_falta, data_falta, falta, obs) {
+
+      $('#edit-idfalta').val(idfalta);
+
+      $('#edit-mes_falta').val(mes_falta);
+      $('#edit-ano_falta').val(ano_falta);
+      $('#edit-data_falta').val(data_falta);
+      $('#edit-falta').val(falta);
+      $('#edit-obs').val(obs);
+
+      $('#editForm').attr('action', '/update/' + idfalta);
+      $('#editModal').modal('show');
+    }
+
+    // Função para abrir o modal de exclusão
+    function openDeleteModal(idfalta) {
+      $('#deleteForm').attr('action', '/delete/' + idfalta);
+      $('#deleteModal').modal('show');
+    }
+  </script>
+
+</body>
+</html>
+
+
+
+  <!-- JavaScript para conversão da data - desativado por enquanto
+  <script>
+    function formatDate() {
+      // Seleciona o elemento <td> que contém a data
+      const dataCell = document.getElementById('dataCell');
+      const dateStr = dataCell.textContent;
+
+      // Converte para um objeto Date
+      const dateObj = new Date(dateStr);
+
+      // Extrai dia, mês e ano
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Mês ajustado
+      const year = dateObj.getFullYear();
+
+      // Formata a data como DD/MM/YYYY
+      const formattedDate = `${day}/${month}/${year}`;
+
+      // Substitui o conteúdo da <td> pela data formatada
+      dataCell.textContent = formattedDate;
+    }
+
+    // Chama a função de formatação quando a página carrega
+    window.onload = formatDate;
+  </script>
+
+   -->
+
+

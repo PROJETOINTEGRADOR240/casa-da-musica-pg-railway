@@ -1,0 +1,112 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #93deff; /* Cinza muito claro */
+}
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #323643; /* Cinza escuro */
+    font-size: 2.5em;
+    font-weight: bold;
+}
+form {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #93deff; /* Azul claro */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+    margin-bottom: 20px;
+}
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.form-group input, .form-group select, .form-group textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #606470; /* Cinza médio */
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 1em;
+    transition: border-color 0.3s; /* Efeito suave na borda */
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: #323643; /* Cinza escuro */
+    outline: none; /* Remove a borda padrão do navegador */
+}
+.form-group input:last-child, .form-group select:last-child {
+    margin-right: 0;
+}
+button {
+    background-color: #323643; /* Cinza escuro */
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 1em;
+    transition: background-color 0.3s; /* Efeito suave na cor do botão */
+    margin-top: 10px;
+}
+button:hover {
+    background-color: #606470; /* Cinza médio ao passar o mouse */
+}
+.table-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #93deff; /* Azul claro */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #606470; /* Cinza médio */
+    font-size: 1em;
+}
+th {
+    background-color: #323643; /* Cinza escuro */
+    color: white; /* Texto em branco no cabeçalho */
+    font-weight: bold;
+}
+.button-container {
+    display: flex;
+    gap: 10px; /* Espaço entre os botões */
+}
+.button-update {
+    background-color: #28a745; /* Verde */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+    transition: background-color 0.3s; /* Efeito suave na cor do botão */
+}
+.button-update:hover {
+    background-color: #218838; /* Verde mais escuro */
+}
+.button-delete {
+    background-color: #dc3545; /* Vermelho */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+    transition: background-color 0.3s; /* Efeito suave na cor do botão */
+}
+.button-delete:hover {
+    background-color: #c82333; /* Vermelho mais escuro */
+}

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Alunos</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel ="icon" type="image/x-icon" href="https://image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css"         rel="stylesheet">
+  
+</head>
+<body>
+  <h1>Cadastro de Alunos</h1>
+  <form action="/add" method="POST" class="mb-4">
+  <div class="form-group">
+      <input type="text" name="nome" placeholder="Nome" required style="flex: 2;">
+  </div>
+  <div class="form-group">
+      <input type="text" name="cpf_cnpj"  placeholder="CPF (11 dígitos)" required maxlength="11" style="flex: 0.2;">
+      <input type="text" name="telefone" placeholder="Telefone" style="flex: 0.2;">
+      <input type="email" id="email" name="email" placeholder="Email" style="flex: 0.2;">
+      <input type="date" name="data_nasc" placeholder="Nascimento" required style="flex: 0.2;">
+      <input type="number" name="idade" placeholder="Idade (0-99)" required min="0" max="99" style="flex: 0.1;">
+
+      <select name="sexo" id="sexo" style="flex: 0.2; margin-left: 10px;">
+          <option value="">Sexo</option>
+          <option value="M">Masculino</option>
+          <option value="F">Feminino</option>
+      </select>
+      <select name="cor" id="cor" style="flex: 0.2; margin-left: 10px;">
+          <option value="">Cor</option>
+          <option value="Branco">Branco</option>
+          <option value="Preto">Preto</option>
+          <option value="Pardo">Pardo</option>
+          <option value="Amarelo">Amarelo</option>
+          <option value="Indigena">Indígena</option>
+      </select>
+  </div>
+  <div class="form-group">
+      <input type="text" name="docu_resp" placeholder="CPF Responsável"  style="flex: 0.2;">
+      <input type="text" name="nome_resp" placeholder="Nome Responsável" style="flex: 1;">
+  </div>
+  <div class="form-group">
+      <input type="text"  name="cep" placeholder="CEP" required style="flex: 0.2;">
+      <input type="text"  name="endereco" placeholder="Endereço" required style="flex: 1;">
+  </div>
+  <div class="form-group">
+      <input type="text"  name="numero" placeholder="Número" required style="flex: 0.2;">
+      <input type="text"  name="bairro" placeholder="Bairro" required style="flex: 0.4;">
+      <input type="text"  name="cidade" placeholder="Cidade" required style="flex: 0.3;">
+      <input type="text"  name="estado" placeholder="Estado" required style="flex: 0.2;">
+  </div>
+  <div class="form-group">
+      <input type="text"  name="complemento" placeholder="Complemento" style="flex: 0.4;">
+  </div>
+  <div class="form-group">
+      <textarea name="obs" placeholder="Observação" rows="4" style="flex: 1;"></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-success"><i class="bi bi-check2"></i> Incluir</button>
+</form>
+
+    <!-- Tabela de Alunos -->
+    <h1>Lista de Alunos</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>CPF-CNPJ</th>
+          <th>Nome</th>
+          <th>Idade</th>
+          <th>Telefone</th>
+          <th>Endereco</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% alunos.forEach((aluno) => { %>
+
+        <tr>
+          <td><%= aluno.idaluno %></td>
+          <td><%= aluno.cpf_cnpj %></td>
+          <td><%= aluno.nome %></td>
+          <td><%= aluno.idade %></td>
+          <td><%= aluno.telefone %></td>       
+          <td><%= aluno.endereco %>, <%= aluno.numero %></td>
+          <td>
+
+          <!-- Botão de Editar -->
+          <button class="btn btn-warning" onclick="openEditModal(<%= aluno.idaluno %>, '<%= aluno.nome %>', '<%= aluno.cpf_cnpj %>', '<%= aluno.telefone %>', '<%= aluno.email %>','<%= aluno.data_nasc %>','<%= aluno.idade %>', '<%= aluno.sexo %>', '<%= aluno.cor %>', '<%= aluno.docu_resp %>','<%= aluno.nome_resp %>', '<%= aluno.cep %>', '<%= aluno.endereco %>', '<%= aluno.numero %>', '<%= aluno.bairro %>', '<%= aluno.cidade %>', '<%= aluno.estado %>','<%= aluno.complemento %>','<%= aluno.obs %>')"><i class="bi bi-pencil-fill"></i> Editar</button>
+      
+          <!-- Botão de Excluir -->
+          <button class="btn btn-danger" onclick="openDeleteModal(<%= aluno.idaluno %>)"><i class="bi bi-trash"></i> Excluir</button>
+         
+          </td>
+        </tr>  
+       <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal de Edição -->
+  <div class="modal" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Aluno</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form id="editForm" method="POST">
+          <div class="modal-body">
+            <input type="hidden" id="edit-id" name="idaluno">
+            <div class="form-group">
+              <label>Nome</label>
+              <input type="text" id="edit-nome" name="nome" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>CPF/CNPJ</label>
+              <input type="text" id="edit-cpf_cnpj" name="cpf_cnpj" class="form-control" required>
+            </div>
+            <div class="form-group">
+             <label>Telefone</label>
+             <input type="text" id="edit-telefone" name="telefone" class="form-control">
+            </div>
+            <div class="form-group">
+             <label>Email</label>
+             <input type="email" id="edit-email" name="email" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Nascimento</label>
+              <input type="date" id="edit-data_nasc" name="data_nasc" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Idade</label>
+              <input type="number" id="edit-idade" name="idade" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Sexo</label>
+              <input type="text" id="edit-sexo" name="sexo" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Cor</label>
+              <input type="text" id="edit-cor" name="cor" class="form-control" required>
+            </div>
+
+
+            <div class="form-group">
+              <label>CPF Responsável</label>
+              <input type="text" id="edit-docu_resp" name="docu_resp" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Nome Responsável</label>
+              <input type="text" id="edit-nome_resp" name="nome_resp" class="form-control">
+            </div>
+            <div class="form-group">
+             <label>CEP</label>
+             <input type="text" id="edit-cep" name="cep" class="form-control" required>
+            </div>
+            <div class="form-group">
+             <label>Endereço</label>
+             <input type="text" id="edit-endereco" name="endereco" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Número</label>
+              <input type="text" id="edit-numero" name="numero" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Bairro</label>
+              <input type="text" id="edit-bairro" name="bairro" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Cidade</label>
+              <input type="text" id="edit-cidade" name="cidade" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Estado</label>
+              <input type="text" id="edit-estado" name="estado" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Complemento</label>
+              <input type="text" id="edit-complemento" name="complemento" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Observação</label>
+              <input type="text" id="edit-obs" name="obs" class="form-control">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success"><i class="bi bi-save2"></i> Salvar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="bi bi-door-closed"></i> Fechar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Exclusão -->
+  <div class="modal" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Excluir Aluno</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Tem certeza de que deseja excluir este aluno(a)</p>
+        </div>
+        <div class="modal-footer">
+          <form id="deleteForm" method="GET">
+            <button type="submit" class="btn btn-danger">Excluir</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+    // Função para abrir o modal de edição com os dados do aluno
+    function openEditModal(idaluno, nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo,
+                           cor, docu_resp, nome_resp, cep, endereco, numero, bairro, cidade,
+                           estado, complemento, obs) {
+      $('#edit-id').val(idaluno);
+      $('#edit-nome').val(nome);
+      $('#edit-cpf_cnpj').val(cpf_cnpj);
+      $('#edit-telefone').val(telefone);
+      $('#edit-email').val(email);
+      $('#edit-data_nasc').val(data_nasc);
+      $('#edit-idade').val(idade);
+      $('#edit-sexo').val(sexo);
+      $('#edit-cor').val(cor);
+      $('#edit-docu_resp').val(docu_resp);
+      $('#edit-nome_resp').val(nome_resp);
+      $('#edit-cep').val(cep);
+      $('#edit-endereco').val(endereco);
+      $('#edit-numero').val(numero);
+      $('#edit-bairro').val(bairro);
+      $('#edit-cidade').val(cidade);
+      $('#edit-estado').val(estado);
+      $('#edit-complemento').val(complemento);
+      $('#edit-obs').val(obs);
+      
+      $('#editForm').attr('action', '/update/' + idaluno);
+      $('#editModal').modal('show');
+    }
+
+    // Função para abrir o modal de exclusão
+    function openDeleteModal(idaluno) {
+      $('#deleteForm').attr('action', '/delete/' + idaluno);
+      $('#deleteModal').modal('show');
+    }
+  </script>
+</body>
+</html>
+
+  <!-- JavaScript para conversão da data - desativado por enquanto -->
+  <script>
+    function formatDate() {
+      // Seleciona o elemento <td> que contém a data
+      const dataCell = document.getElementById('dataCell');
+      const dateStr = dataCell.textContent;
+
+      // Converte para um objeto Date
+      const dateObj = new Date(dateStr);
+
+      // Extrai dia, mês e ano
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Mês ajustado
+      const year = dateObj.getFullYear();
+
+      // Formata a data como DD/MM/YYYY
+      const formattedDate = `${day}/${month}/${year}`;
+
+      // Substitui o conteúdo da <td> pela data formatada
+      dataCell.textContent = formattedDate;
+    }
+
+    // Chama a função de formatação quando a página carrega
+    window.onload = formatDate;
+  </script>
