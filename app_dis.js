@@ -1,11 +1,19 @@
 const express = require('express');
+const router = express.Router();
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const path = require("path")
 
 const app = express();
+
+// Permitindo o uso de JSON
+app.use(express.json());
+
 const port = 3000;
 
+
 // Configuração do body-parser
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configuração do banco de dados
@@ -27,7 +35,8 @@ db.connect((err) => {
 
 // Configuração do EJS e Bootstrap
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', './views');
 
 
 // Página inicial - listar disciplinas
@@ -63,7 +72,8 @@ app.post('/update/:iddisciplina', (req, res) => {
   });
 });
 
-// Excluir disciplina
+
+// Excluir disciplina 
 app.get('/delete/:iddisciplina', (req, res) => {
   const { iddisciplina } = req.params;
   const sql = `DELETE FROM disciplinas WHERE iddisciplina = ?`;

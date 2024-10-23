@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors')
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
-
+const path = require("path")
 
 const app = express();
+
 // Permitindo o uso de JSON
 app.use(express.json());
-// Habilitando CORS
-//app.use(cors());
+
 const port = 3000;
 
 
 // Configuração do body-parser
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
@@ -36,10 +36,8 @@ db.connect((err) => {
 
 // Configuração do EJS e Bootstrap
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
-
-// Dando erro ------------ criar estruturas de pastas ??
-//const connection = require('./db');
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', './views');
 
 
 // Página inicial - listar notas
@@ -83,49 +81,6 @@ app.get('/delete/:idnota', (req, res) => {
     res.redirect('/');
   });
 });
-
-
-/* --------------------------------------------------------------
-
-// Rota para verificar se o aluno existe
-router.get('/verificarAluno/:aluno_id', (req, res) => {
-  const idaluno = req.params.aluno_id;
-  const query = 'SELECT nome FROM alunos WHERE idaluno = ?';
-
-  connection.query(query, [idaluno], (error, results) => {
-    if (error) {
-      return res.status(500).json({ existe: false, error: 'Erro no banco de dados' });
-    }
-    if (results.length > 0) {
-      res.json({ existe: true, nome: results[0].nome });
-    } else {
-      res.json({ existe: false });
-    }
-  });
-});
-
-
-// Rota para verificar se a disciplina existe
-router.get('/verificarDisciplina/:disciplina_id', (req, res) => {
-  const iddisciplina = req.params.disciplina_id;
-  const query = 'SELECT nome FROM disciplina WHERE iddisciplina = ?';
-
-  connection.query(query, [iddisciplina], (error, results) => {
-    if (error) {
-      return res.status(500).json({ existe: false, error: 'Erro no banco de dados' });
-    }
-    if (results.length > 0) {
-      res.json({ existe: true, nome: results[0].nome });
-    } else {
-      res.json({ existe: false });
-    }
-  });
-});
-
-module.exports = router;
-
----------------------------------------- */ 
-
 
 // Iniciar o servidor
 app.listen(port, () => {

@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors')
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
-
+const path = require("path")
 
 const app = express();
+
 // Permitindo o uso de JSON
 app.use(express.json());
-// Habilitando CORS
-//app.use(cors());
+
 const port = 3000;
 
 
@@ -37,7 +36,7 @@ db.connect((err) => {
 
 // Configuração do EJS e Bootstrap
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', './views');
 
 
@@ -82,7 +81,6 @@ app.get('/delete/:idfalta', (req, res) => {
     res.redirect('/');
   });
 });
-
 
 // Iniciar o servidor
 app.listen(port, () => {
