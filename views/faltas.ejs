@@ -5,32 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
+  <script src="./js/dateformat.js" defer ></script>
   <title>Cadastro de Faltas - Casa da Música</title>
-  <link rel="stylesheet" href="/style.css">  
+  <link rel="stylesheet" href="./css/style__.css">  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css"         rel="stylesheet">
 
 </head>
 <body>
+
   <h1>Cadastro de Faltas</h1>
     <form action="/add" method="POST">
-      <div class="form-group">
-        <label for="idAluno">ID do Aluno:</label>
-        <input type="number" name="aluno_id" id="aluno_id" placeholder="ID Aluno" required>
-        <label for="idProfessor">ID do Professor:</label>
-        <input type="number" name="professor_id" id="professor_id" placeholder="ID Professor" required>
-      </div>
-      <div class="form-group">
-        <label for="idDisciplina">ID da Disciplina:</label>
-        <input type="number" name="disciplina_id" id="disciplina_id" placeholder="ID Disciplina" required>
-        <label for="dataFalta">Data:</label>
-        <input type="date" name="data_falta" id="data_falta" required>
-      </div>
+      <div class="input-container">
 
-      <div class="form-group">
-        <select name="mes_falta" id="mes_falta" placeholder="Mês falta" required>
+        <label for="idAluno">Código Aluno:</label>
+        <input type="text" name="aluno_id" id="aluno_id" required class="small-input" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        <span id="nomeAluno"></span>
+
+      </div>
+      <div class="input-container">
+        <label for="idProfessor">Código Professor:</label>        
+        <input type="text" name="professor_id" id="professor_id" required class="small-input" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        <span id="nomeProfessor"></span>
+      </div>
+      <div class="input-container">
+        <div class="input-row">
+          <label for="idDisciplina">Código Disciplina:</label>        
+          <input type="text" name="disciplina_id" id="disciplina_id" required class="small-input" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+          <span id="nomeDisciplina"></span>
+        </div>
+      </div>  
+      <div class="input-row">
+        <input type="date" name="data_falta" id="data_falta" class="input-date" required/>
+        <select name="mes_falta" id="mes_falta" placeholder="Mês falta" class="input-text" maxlength="10" required>
           <option value="">Mês falta</option>
           <option value="Janeiro">Janeiro</option>
           <option value="Fevereiro">Fevereiro</option>
@@ -45,13 +52,16 @@
           <option value="Novembro">Novembro</option>
           <option value="Dezembro">Dezembro</option>
         </select>
-        <input type="number" name="ano_falta" placeholder="Ano falta" required">
+        <input type="text" name="ano_falta"  placeholder="Ano" required class="input-number-small" maxlength="4" oninput="this.value = this.value.slice(0, 4)"/>
+        <label for="idfalta">Falta(s):</label>
+        <Label Falta(s)></Label>
+       <input type="number" class="small-input" name="falta" min="1" max="3" placeholder="Falta" value ='1' required/>
       </div>
-      <div class="form-group">
-        <textarea 
-          name="obs" placeholder="Observação" rows="4"></textarea>
-       </div>
- 
+
+    <div class="form-group">
+       <textarea name="obs" placeholder="Observação" rows="5"></textarea>
+    </div>
+
       <button type="submit" id="submit-btn"><i class="fas fa-plus"></i> Cadastrar Falta</button>
       <button type="button" onclick="voltarPagina()"><i class="fas fa-arrow-left"></i> Voltar</button>
 
@@ -62,23 +72,28 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Mês da falta</th>
-          <th>Ano da falta</th>
+          <th>(Id)</th>
+          <th>(Id)Alunos</th>
+          <th>(Id)Professores</th>
+          <th>(Id)Disciplinas</th>
+          <th>Data falta</th>
           <th>Ações</th>
-        </tr>
+      </tr>
       </thead>
       <tbody>
         <% faltas.forEach((falta) => { %>
 
         <tr>
           <td><%= falta.idfalta %></td>
-          <td><%= falta.mes_falta %></td>
-          <td><%= falta.ano_falta %></td>
+          <td><%= falta.aluno_nome %></td>
+          <td><%= falta.professor_nome %></td>
+          <td><%= falta.disciplina_nome %></td>
+          <td><%= falta.data_falta_data %></td>            
+
           <td>
             <div class="action-buttons">
    
-              <button class="button-update" onclick="openEditModal(<%= falta.idfalta %>, '<%= falta.mes_falta %>','<%= falta.ano_falta %>','<%= falta.data_falta %>','<%= falta.falta %>','<%= falta.obs %>')"><i class="fas fa-edit"></i> Editar</button>
+              <button class="button-update" onclick="openEditModal(<%= falta.idfalta %>, '<%= falta.mes_falta %>','<%= falta.ano_falta %>','<%= falta.data_falta %>','<%= falta.falta %>','<%= falta.obs %>')"><i class="fas fa-edit"></i> Atualizar</button>
       
               <button class="button-delete" onclick="openDeleteModal(<%= falta.idfalta %>)"><i class="fas fa-trash"></i> Excluir</button>
             </div>
@@ -95,7 +110,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Editar faltas</h5>
+          <h5 class="modal-title">Editar Faltas</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <form id="editForm" method="POST">
@@ -149,7 +164,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Excluir faltas</h5>
+          <h5 class="modal-title">Excluir Faltas</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
@@ -172,12 +187,13 @@
 
     // Função para abrir o modal de edição com os dados da falta
     function openEditModal(idfalta, mes_falta, ano_falta, data_falta, falta, obs) {
+      const dataFormatada = dateFormat(new Date(data_falta), 'yyyy-mm-dd');
 
       $('#edit-idfalta').val(idfalta);
 
       $('#edit-mes_falta').val(mes_falta);
       $('#edit-ano_falta').val(ano_falta);
-      $('#edit-data_falta').val(data_falta);
+      $('#edit-data_falta').val(dataFormatada);
       $('#edit-falta').val(falta);
       $('#edit-obs').val(obs);
 
@@ -192,37 +208,40 @@
     }
   </script>
 
-</body>
-</html>
-
-
-
-  <!-- JavaScript para conversão da data - desativado por enquanto
   <script>
-    function formatDate() {
-      // Seleciona o elemento <td> que contém a data
-      const dataCell = document.getElementById('dataCell');
-      const dateStr = dataCell.textContent;
+    /*------------------- Validar aluno, professor e disciplina (se existe) no cadastro de notas
+      Para aparecer na tela ------------------------------------------- */
 
-      // Converte para um objeto Date
-      const dateObj = new Date(dateStr);
-
-      // Extrai dia, mês e ano
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Mês ajustado
-      const year = dateObj.getFullYear();
-
-      // Formata a data como DD/MM/YYYY
-      const formattedDate = `${day}/${month}/${year}`;
-
-      // Substitui o conteúdo da <td> pela data formatada
-      dataCell.textContent = formattedDate;
+    async function verificarCampo(url, campoId, nomeSpanId, erroMensagem) {
+        const codigo = document.getElementById(campoId).value;
+        const response = await fetch(url + codigo);
+        const data = await response.json();
+        
+        if (data.existe) {
+            document.getElementById(nomeSpanId).innerText = `${data.nome}`;
+        } else {
+            alert(erroMensagem);
+            document.getElementById(campoId).value = '';
+            document.getElementById(campoId).focus();
+            document.getElementById(nomeSpanId).innerText = '';
+        }
     }
 
-    // Chama a função de formatação quando a página carrega
-    window.onload = formatDate;
+    document.getElementById('aluno_id').addEventListener('blur', () => {
+        verificarCampo('/verificar-aluno/', 'aluno_id', 'nomeAluno', 'Aluno não encontrado. Digite um código válido.');
+    });
+
+    document.getElementById('professor_id').addEventListener('blur', () => {
+        verificarCampo('/verificar-professor/', 'professor_id', 'nomeProfessor', 'Professor não encontrado. Digite um código válido.');
+    });
+
+    document.getElementById('disciplina_id').addEventListener('blur', () => {
+        verificarCampo('/verificar-disciplina/', 'disciplina_id', 'nomeDisciplina', 'Disciplina não encontrada. Digite um código válido.');
+    });
+
   </script>
 
-   -->
-
+  
+</body>
+</html>
 

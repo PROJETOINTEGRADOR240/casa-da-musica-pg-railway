@@ -49,14 +49,14 @@ section#imagemguitarra {
 button {
     font-size: 1.4em;
     background: white;
-    margin-bottom: 1em;
+    margin-bottom: .5em;
     color:rgb(14, 13, 87);
     padding:0px;
     box-shadow: 2px 2px 2px rgba(0, 0,0, 0.2);
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     text-align: center;
     border-radius: 15px;
-    width: 707px;
+    width: 606px;
     height:50px ;
     display: block;
     
@@ -65,5 +65,5 @@ button {
 fieldset {
     border: 0;
     margin-left: 50%;
-    margin-top: -200px;
+    margin-top: -300px;
 }
