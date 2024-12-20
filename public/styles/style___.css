@@ -1,0 +1,96 @@
+@charset "UTF8";
+
+*{
+    margin: 0px;
+    padding: 0px;
+    
+}
+
+.cadastro {
+    display:flexbox;
+    font-size:100px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-right: 20px;
+    padding: 0%;
+    margin-top: -28%;
+    color: white;
+    
+}
+ 
+
+body {
+    position: relative;
+    height: 100vh;
+    font-size: 1em;
+    background-color: rgb(31, 33, 139);
+    margin-top: 2%;
+    text-align: center;
+    color: aliceblue;
+    font-size: 30px;
+   
+
+    
+}
+
+section#imagemguitarra {
+    
+    height:402px;
+    width: 707px;
+    margin-top: 6em;
+    margin-left: 1em;
+    background-size: 100px;
+    border: 3px solid black;
+    background-position:left bottom;
+    background-color: rgb(40, 40, 75);
+    background: url('../images/Cadastro.jpeg') no-repeat;
+}
+
+button {
+    font-size: 1.4em;
+    background: white;
+    margin-bottom: .5em;
+    color:rgb(14, 13, 87);
+    padding:0px;
+    box-shadow: 2px 2px 2px rgba(0, 0,0, 0.2);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    border-radius: 15px;
+    width: 606px;
+    height:50px ;
+    display: block;
+    
+}
+
+fieldset {
+    border: 0;
+    margin-left: 50%;
+    margin-top: -400px;
+}
+
+
+/* Estilizando o contêiner */
+
+.button-container {
+    display: flex; /* ou block para empilhar os botões */
+    flex-wrap: wrap; /* Permite quebrar linha, se necessário */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    gap: 10px; /* Espaço entre os botões */
+    position: relative; /* Necessário para mover o grupo */
+    top: 20px; /* Ajuste para baixo */
+    /* Use top: -20px para mover para cima */
+  }
+  
+  /* Estilo dos botões */
+  .button-container input {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button-container input:hover {
+    background-color: #f0f0f0;
+  }
+  

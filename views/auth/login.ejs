@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASA DA MÚSICA</title>
+    <link rel="stylesheet" href="/styles/estilos.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+
+<body> 
+ 
+    <div class="wrapper">
+        <form action="">
+            <h1>CASA DA MÚSICA</h1>
+        </form>
+
+    </div>
+   <div class="wrapper">
+        <form action="/login" method="POST">
+            <h1>Login</h1>
+            <% if (message) { %>
+                <p style="color: red;"><%= message %></p>
+            <% } %>
+                    
+            <div class="input-box">
+                <input type="text" id="username" name="username" placeholder="Usuário" required>
+                <i class='bx bxs-user'></i>
+
+            </div>
+            <div class="input-box">
+                    <input type="password" id="password" name="password" placeholder="Senha" required> 
+                    <i class='bx bxs-lock-alt' ></i>  
+            </div>
+            <button type="submit" class="btn">Acessar</button>
+        </form>
+        <a href="/forgot-password">Esqueceu a senha?</a>
+    </div>
+    
+</body>
+</html>

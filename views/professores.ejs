@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
+  <script src="./js/dateformat.js" defer ></script>
   <title>Cadastro de Professores - Casa da Música</title>
-  <link rel="stylesheet" href="./css/style__.css">
+  <link rel="stylesheet" href="./styles/style__.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css"         rel="stylesheet">
@@ -15,7 +15,9 @@
 </head>
 <body>
   <h1>Cadastro de Professores</h1>
-  <form action="/add" method="POST">
+  <form action="/professores/inserir" method="POST">
+    <a href="/menu" class="btn btn-secondary mb-3">Voltar</a>
+
   <div class="form-group">
     <input type="text" name="nome" placeholder="Nome" required >
     <input type="text" name="cpf_cnpj"  placeholder="CPF" required maxlength="11">
@@ -55,9 +57,6 @@
        name="obs" placeholder="Observação" rows="4"></textarea>
   </div>
   <button type="submit" id="submit-btn"><i class="fas fa-plus"></i> Cadastrar Professor</button>
-  <button type="button" onclick="voltarPagina()">
-      <i class="fas fa-arrow-left"></i> Voltar
-  </button>
 </form>
 
 <!-- Tabela de professores -->
@@ -68,8 +67,8 @@
         <tr>
           <th>ID</th>
           <th>Nome</th>
-          <th>CPF</th>
           <th>Telefone</th>
+          <th>Email</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -79,12 +78,13 @@
         <tr>
           <td><%= professor.idprofessor %></td>
           <td><%= professor.nome %></td>
-          <td><%= professor.cpf_cnpj %></td>
-          <td><%= professor.telefone %></td>       
+          <td><%= professor.telefone %></td>     
+          <td><%= professor.email %></td>
+  
           <td>
 
           <!-- Botão de Editar -->
-          <button class="button-update" onclick="openEditModal(<%= professor.idprofessor %>, '<%= professor.nome %>', '<%= professor.cpf_cnpj %>', '<%= professor.telefone %>', '<%= professor.email %>','<%= professor.data_nasc %>','<%= professor.idade %>', '<%= professor.sexo %>', '<%= professor.cor %>', '<%= professor.cep %>', '<%= professor.endereco %>', '<%= professor.numero %>', '<%= professor.bairro %>', '<%= professor.cidade %>', '<%= professor.estado %>','<%= professor.complemento %>','<%= professor.obs %>')"><i class="fas fa-edit"></i> Aualizar</button>
+          <button class="button-update" onclick="openEditModal(<%= professor.idprofessor %>, '<%= professor.nome %>', '<%= professor.cpf_cnpj %>', '<%= professor.telefone %>', '<%= professor.email %>','<%= professor.data_nasc %>','<%= professor.idade %>', '<%= professor.sexo %>', '<%= professor.cor %>', '<%= professor.cep %>', '<%= professor.endereco %>', '<%= professor.numero %>', '<%= professor.bairro %>', '<%= professor.cidade %>', '<%= professor.estado %>','<%= professor.complemento %>','<%= professor.obs %>')"><i class="fas fa-edit"></i> Atualizar</button>
 
           <!-- Botão de Excluir -->
           <button class="button-delete" onclick="openDeleteModal(<%= professor.idprofessor %>)"><i class="fas fa-trash"></i> Excluir</button>
@@ -104,7 +104,7 @@
           <h5 class="modal-title">Editar professor</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        <form id="editForm" method="POST">
+        <form id="editForm" action="/professores/atualizar/<%= professores.idprofessor %>" method="POST">
           <div class="modal-body">
             <input type="hidden" id="edit-id" name="idprofessor">
             <div class="form-group">
@@ -181,41 +181,45 @@
     </div>
   </div>
 
-  <!-- Modal de Exclusão -->
-  <div class="modal" id="deleteModal" tabindex="-1">
+  <!-- Modal de Confirmação de Exclusão -->
+  <div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Excluir Professor</h5>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Deseja realmente excluir esta professor(a)?
+            </div>
+            <div class="modal-footer">
+                <form id="formExcluir" action="/professores/excluir/<%= professores.idprofessor %>" method="POST">
+                    <input type="hidden" name="idprofessor" id="idprofessorExcluir">
+                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/professores';">Cancelar</button>
+                </form>
+  
+              </div>
         </div>
-        <div class="modal-body">
-          <p>Tem certeza de que deseja excluir este professor(a)</p>
-        </div>
-        <div class="modal-footer">
-          <form id="deleteForm" method="GET">
-            <button type="submit" class="btn btn-danger">Excluir</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          </form>
-        </div>
-      </div>
     </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
 
     // Função para abrir o modal de edição com os dados do professor
-    function openEditModal(idprofessor, nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo,
-                           cor, cep, endereco, numero, bairro, cidade,
-                           estado, complemento, obs) {
+    function openEditModal(idprofessor, nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, cor, cep, endereco, numero, bairro, cidade, estado, complemento, obs) {
+
+      const dataFormatada = dateFormat(new Date(data_nasc), 'yyyy-mm-dd');
+                            
       $('#edit-id').val(idprofessor);
       $('#edit-nome').val(nome);
       $('#edit-cpf_cnpj').val(cpf_cnpj);
       $('#edit-telefone').val(telefone);
       $('#edit-email').val(email);
-      $('#edit-data_nasc').val(data_nasc);
+      $('#edit-data_nasc').val(dataFormatada);
       $('#edit-idade').val(idade);
       $('#edit-sexo').val(sexo);
       $('#edit-cor').val(cor);
@@ -228,41 +232,17 @@
       $('#edit-complemento').val(complemento);
       $('#edit-obs').val(obs);
       
-      $('#editForm').attr('action', '/update/' + idprofessor);
+      $('#editForm').attr('action', '/professores/atualizar/' + idprofessor);
       $('#editModal').modal('show');
     }
 
-    // Função para abrir o modal de exclusão
-    function openDeleteModal(idprofessor) {
-      $('#deleteForm').attr('action', '/delete/' + idprofessor);
-      $('#deleteModal').modal('show');
+   // Função para abrir o modal de exclusão
+   function openDeleteModal(idprofessor) {
+      $('#formExcluir').attr('action', '/professores/excluir/' + idprofessor);
+      $('#modalExcluir').modal('show');
     }
+
   </script>
 </body>
 </html>
 
-  <!-- JavaScript para conversão da data - desativado por enquanto -->
-  <script>
-    function formatDate() {
-      // Seleciona o elemento <td> que contém a data
-      const dataCell = document.getElementById('dataCell');
-      const dateStr = dataCell.textContent;
-
-      // Converte para um objeto Date
-      const dateObj = new Date(dateStr);
-
-      // Extrai dia, mês e ano
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Mês ajustado
-      const year = dateObj.getFullYear();
-
-      // Formata a data como DD/MM/YYYY
-      const formattedDate = `${day}/${month}/${year}`;
-
-      // Substitui o conteúdo da <td> pela data formatada
-      dataCell.textContent = formattedDate;
-    }
-
-    // Chama a função de formatação quando a página carrega
-    window.onload = formatDate;
-  </script>

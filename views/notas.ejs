@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./js/dateformat.js" defer ></script>
   <title>Cadastro de Notas - Casa da Música</title>
-  <link rel="stylesheet" href="./css/style__.css">
+  <link rel="stylesheet" href="./styles/style__.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -15,24 +15,26 @@
 <body>
 
   <h1>Cadastro de Notas</h1>
-    <form action="/add" method="POST">
+    <form action="/notas" method="POST">
+      <a href="/menu" class="btn btn-secondary mb-3">Voltar</a>
+      
       <div class="input-container">
 
         <label for="idAluno">Código Aluno:</label>
-        <input type="text" name="aluno_id" id="aluno_id" required class="small-input" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-        <span id="nomeAluno"></span>
+        <input type="text" name="aluno_id" id="aluno" class="small-input" maxlength="3" required onblur="validateInput('aluno')" />
+        <span id="aluno-msg"></span>
 
       </div>
       <div class="input-container">
         <label for="idProfessor">Código Professor:</label>        
-        <input type="text" name="professor_id" id="professor_id" required class="small-input" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-        <span id="nomeProfessor"></span>
+        <input type="text" name="professor_id" id="professor" class="small-input" maxlength="3" required onblur="validateInput('professor')" />
+        <span id="professor-msg"></span>
       </div>
       <div class="input-container">
         <div class="input-row">
           <label for="idDisciplina">Código Disciplina:</label>        
-          <input type="text" name="disciplina_id" id="disciplina_id" required class="small-input" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-          <span id="nomeDisciplina"></span>
+          <input type="text" name="disciplina_id" id="disciplina" required class="small-input" maxlength="3" required onblur="validateInput('disciplina')" />
+          <span id="disciplina-msg"></span>
         </div>
       </div>  
       <div class="input-row">
@@ -62,9 +64,7 @@
       </div>
 
       <button type="submit" id="submit-btn"><i class="fas fa-plus"></i> Cadastrar Nota</button>
-      <button type="button" onclick="voltarPagina()"><i class="fas fa-arrow-left"></i> Voltar</button>
     </form> 
-
 
     <!-- Tabela de notas -->
     <div class="table-container">
@@ -89,7 +89,7 @@
             <td><%= nota.aluno_nome %></td>
             <td><%= nota.professor_nome %></td>
             <td><%= nota.disciplina_nome %></td>
-            <td><%= nota.data_nota_data %></td>
+            <td><%= nota.data_nota_formatada %></td>
             <td><%= nota.nota %></td>            
             <td>
             <div class="action-buttons">
@@ -97,7 +97,7 @@
                 <!-- Botão de Editar -->
               <button class="button-update" onclick="openEditModal(<%= nota.idnota %>, '<%= nota.mes_nota %>','<%= nota.ano_nota %>','<%= nota.data_nota %>','<%= nota.nota %>','<%= nota.obs %>')"><i class="fas fa-edit"></i> Atualizar</button>
 
-                  <!-- Botão de Excluir -->
+                <!-- Botão de Excluir -->
               <button class="button-delete" onclick="openDeleteModal(<%= nota.idnota %>)"><i class="fas fa-trash"></i> Excluir</button>
             </div>
   
@@ -109,14 +109,14 @@
   </div>
   
   <!-- Modal de Edição -->
-  <div class="modal" id="editModal" tabindex="-1">
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Editar Notas</h5>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        <form id="editForm" method="POST">
+        <form id="editForm" action="/notas/<%= notas.idnota %>?_method=PUT" method="POST">
           <div class="modal-body">
             <input type="hidden" id="edit-idnota" name="idnota">
 
@@ -167,94 +167,59 @@
     </div>
   </div>
 
-  <!-- Modal de Exclusão -->
-  <div class="modal" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
+<!-- Modal de Confirmação de Exclusão -->
+<div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
+  <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Excluir Notas</h5>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p>Tem certeza de que deseja excluir esta nota</p>
-        </div>
-        <div class="modal-footer">
-          <form id="deleteForm" method="GET">
-            <button type="submit" class="btn btn-danger">Excluir</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          </form>
-        </div>
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              Deseja realmente excluir esta nota?
+          </div>
+          <div class="modal-footer">
+              <form id="formExcluir" action="/notas/<%= notas.idnota %>?_method=DELETE" method="POST">
+                  <input type="hidden" name="idnota" id="idnotaExcluir">
+                  <button type="submit" class="btn btn-danger">Confirmar</button>
+                  <button type="button" class="btn btn-secondary" onclick="window.location.href='/notas';">Cancelar</button>
+              </form>
+
+            </div>
       </div>
-    </div>
   </div>
+</div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
+  <script src="/js/validation.js"></script>
   
   <script>
 
     // Função para abrir o modal de edição com os dados da nota
     function openEditModal(idnota, mes_nota, ano_nota, data_nota, nota, obs) {
 
-      //console.log("antes")
       const dataFormatada = dateFormat(new Date(data_nota), 'yyyy-mm-dd');
-      //console.log(dataFormatada)
-      //console.log(data_nota)     
-      //console.log("depois")
 
       $('#edit-idnota').val(idnota);
 
       $('#edit-mes_nota').val(mes_nota);
       $('#edit-ano_nota').val(ano_nota);
 
-      //$('#edit-data_nota').val(dataFormatada);
       $('#edit-data_nota').val(dataFormatada);
       $('#edit-nota').val(nota);
       $('#edit-obs').val(obs);
 
-      $('#editForm').attr('action', '/update/' + idnota);
-      $('#editModal').modal('show');
+     $('#editForm').attr('action', '/notas/' + idnota + '?_method=PUT');
+     $('#editModal').modal('show');
+
     }
 
-    // Função para abrir o modal de exclusão
-    function openDeleteModal(idnota) {
-      $('#deleteForm').attr('action', '/delete/' + idnota);
-      $('#deleteModal').modal('show');
+     // Função para abrir o modal de exclusão
+     function openDeleteModal(idnota) {
+      $('#formExcluir').attr('action', '/notas/' + idnota + '?_method=DELETE');
+      $('#modalExcluir').modal('show');
     }
-    
-  </script>
-
-  <script>
-    /*------------------- Validar aluno, professor e disciplina (se existe) no cadastro de notas
-     Para aparecer na tela ------------------------------------------- */
-
-    async function verificarCampo(url, campoId, nomeSpanId, erroMensagem) {
-        const codigo = document.getElementById(campoId).value;
-        const response = await fetch(url + codigo);
-        const data = await response.json();
-        
-        if (data.existe) {
-            document.getElementById(nomeSpanId).innerText = `${data.nome}`;
-        } else {
-            alert(erroMensagem);
-            document.getElementById(campoId).value = '';
-            document.getElementById(campoId).focus();
-            document.getElementById(nomeSpanId).innerText = '';
-        }
-    }
-
-    document.getElementById('aluno_id').addEventListener('blur', () => {
-        verificarCampo('/verificar-aluno/', 'aluno_id', 'nomeAluno', 'Aluno não encontrado. Digite um código válido.');
-    });
-
-    document.getElementById('professor_id').addEventListener('blur', () => {
-        verificarCampo('/verificar-professor/', 'professor_id', 'nomeProfessor', 'Professor não encontrado. Digite um código válido.');
-    });
-
-    document.getElementById('disciplina_id').addEventListener('blur', () => {
-        verificarCampo('/verificar-disciplina/', 'disciplina_id', 'nomeDisciplina', 'Disciplina não encontrada. Digite um código válido.');
-    });
 
   </script>
 
