@@ -6,7 +6,6 @@
     0">
     <link rel="stylesheet" href="./styles/style___.css">
     <title>Página Inicial</title>
-
 </head>
 <body>
     <h1>CASA  DA  MÚSICA</h1>
@@ -59,11 +58,14 @@
         </div>
 
         <div>
-            <button type="button" class="solid" >Relatórios Estatísticos</button>
+            <form action="/reports" method="GET">
+                <button type="submit" class="btn btn-primary btn-lg">Relatórios Estatísticos</button>
+            </form>
         </div>
 
         <div>
-            <button type="button" class="solid" >Usuários do Sistema</button>
+            <form action="/usuarios" method="GET">
+                <button type="submit" class="btn btn-primary btn-lg">Usuários do Sistema</button>
             </form>
         </div>
 

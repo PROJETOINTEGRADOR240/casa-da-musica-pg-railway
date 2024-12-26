@@ -29,6 +29,7 @@ exports.processLogin = async (req, res) => {
         req.session.user = {
             id: user.id,
             username: user.username,
+            email:user.email, // colocado aora 25/12/2024
             nivel: user.nivel
         };
 

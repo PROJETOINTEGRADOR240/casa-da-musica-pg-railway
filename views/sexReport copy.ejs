@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/stylesReports.css">
+    <title>Relatório por Sexo</title>
+</head>
+<body>
+    <header>
+        <h1>Relatório por Sexo</h1>
+    </header>
+    <div class="container">
+        <form action="/reports/sex/generate" method="post">
+            <label>Sexo:</label>
+            <div>
+                <input type="radio" id="male" name="sex" value="Masculino" required>
+                <label for="male">Masculino</label>
+            </div>
+            <div>
+                <input type="radio" id="female" name="sex" value="Feminino" required>
+                <label for="female">Feminino</label>
+            </div>
+            <div>
+                <input type="radio" id="both" name="sex" value="Ambos" required>
+                <label for="both">Ambos</label>
+            </div>
+            <button type="submit" class="btn">Gerar Relatório</button>
+        </form>
+        <button onclick="window.history.back()" class="btn back-btn">Voltar</button>
+    </div>
+</body>
+</html>

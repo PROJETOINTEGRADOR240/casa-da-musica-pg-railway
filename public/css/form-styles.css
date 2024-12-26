@@ -1,0 +1,91 @@
+/* Encapsulamento do formulário */
+#form-cadastro {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f9;
+}
+
+/* Estilo do título */
+.titulo-formulario {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Layout do formulário */
+.formulario {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Grupo de campos do formulário */
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Ajuste do grupo de rádio para alinhamento correto */
+.form-group-radio {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o rótulo e as opções horizontalmente */
+    margin-left: 100px; /* Move o grupo para a direita */
+}
+
+/* Estilo para os rótulos */
+.form-label,
+.form-label-radio {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Grupo de botões de rádio */
+.form-radio-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Botões de radio */
+.form-radio-input {
+    margin-right: 5px;
+}
+
+/* Rótulo dos botões de radio */
+.form-radio-label {
+    font-size: 14px;
+}
+
+/* Estilo do botão */
+.form-button {
+    padding: 10px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.form-button:hover {
+    background: #0056b3;
+}
+
+.form-button:active {
+    background: #003f88;
+}
+
+/* Exclusivamente para a página de atualização do cadastro de usuários */
+.form-radio-usuario {
+    margin-left: -200px; /* Move todo o grupo para a direita */
+}

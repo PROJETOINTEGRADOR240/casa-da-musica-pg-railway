@@ -40,13 +40,13 @@ exports.atualizarAluno =  async (req, res) => {
     [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs, idaluno]);
     res.redirect('/alunos');
 
-   } catch (err) {
-     console.error(err);
-     res.status(500).send('Erro ao atualizar aluno');
-   }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao atualizar aluno');
+  }
 };
 
-
+/*
 // Excluir aluno
 
 exports.excluirAluno = async (req, res) => {
@@ -61,5 +61,4 @@ exports.excluirAluno = async (req, res) => {
     res.status(500).send('Erro ao excluir aluno');
   }
 };
-
-
+*/

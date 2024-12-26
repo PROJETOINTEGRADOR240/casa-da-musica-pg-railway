@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatório por Sexo</title>
+</head>
+<body>
+  <h1>Relatório por Sexo</h1>
+  <form action="/generateGenderReport" method="POST">
+    <label>
+      <input type="radio" name="gender" value="masculino" required> Masculino
+    </label>
+    <label>
+      <input type="radio" name="gender" value="feminino" required> Feminino
+    </label>
+    <label>
+      <input type="radio" name="gender" value="ambos" required> Ambos
+    </label>
+    <button type="submit">Gerar Relatório</button>
+  </form>
+  <a href="/reports">Voltar ao Menu de Relatórios</a>
+</body>
+</html>
