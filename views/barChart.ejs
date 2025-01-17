@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Barras</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        #barChart {
+            max-width: 1000px;
+            max-height: 500px;
+            margin: auto;
+            display: block;
+        }
+        .btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #save-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #save-btn:hover {
+            background-color: #45a049;
+        }
+        #back-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        #back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <p id="date-time" style="float: left;"></p>
+        <h1 style="text-align: center;">Gráfico das Médias das Faixas Etárias</h1>
+    </header>
+
+    <canvas id="barChart"></canvas>
+
+    <!-- Botões para salvar o gráfico e voltar -->
+    <button id="save-btn" class="btn" onclick="saveChart()">Salvar Gráfico</button>
+
+
+    <script>
+        let chart;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('barChart').getContext('2d');
+
+            const chartData = <%- JSON.stringify(chartData) %>;
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                drawOnChartArea: true,
+                                color: '#ddd',
+                            },
+                            ticks: {
+                                padding: 10,
+                            },
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 80,
+                            ticks: {
+                                stepSize: 10,
+                            },
+                            title: {
+                                display: true,
+                                text: 'Idade',
+                                font: {
+                                    size: 16,
+                                }
+                            }
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                }
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            right: 50,
+                        }
+                    }
+                },
+            });
+
+            document.getElementById("date-time").textContent = `Data e Hora: ${new Date().toLocaleString()}`;
+        });
+
+        function saveChart() {
+            const canvas = document.getElementById('barChart');
+            const ctx = canvas.getContext('2d');
+
+            // Criar um novo canvas temporário com fundo branco
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.fillStyle = '#FFFFFF'; // Define o fundo branco
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height); // Preenche todo o fundo com branco
+            tempCtx.drawImage(canvas, 0, 0); // Copia o gráfico original
+
+            // Gera a imagem com fundo branco
+            const imageURL = tempCanvas.toDataURL('image/png');
+
+            // Nome do arquivo
+            const now = new Date();
+            const formattedDate = now.toISOString().slice(0, 19).replace(/:/g, '-');
+            const fileName = `grafico-barra-${formattedDate}.png`;
+
+            // Baixa a imagem
+            const a = document.createElement('a');
+            a.href = imageURL;
+            a.download = fileName;
+            a.click();
+        }
+
+    </script>
+</body>
+</html>

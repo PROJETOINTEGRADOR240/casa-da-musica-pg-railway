@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório por Idade</title>
+    <title>Relatório por Faixa Etária</title>
     <link rel="stylesheet" href="/css/stylesReports.css">
     <style>
         .form-group {
@@ -23,6 +23,8 @@
 
         .btn-container {
             margin-top: 20px; /* Espaçamento acima dos botões */
+            display: flex; /* Flexbox para alinhar botões */
+            gap: 10px; /* Espaçamento entre os botões */
         }
 
         .btn-primary {
@@ -48,11 +50,42 @@
         .btn-secondary:hover {
             background-color: #545b62; /* Cinza mais escuro no hover */
         }
+
+        .btn-barras {
+            background-color: #28a745; /* Verde */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .btn-barras:hover {
+            background-color: #1e7e34; /* Verde ainda mais escuro no hover */
+        }
+
+        .btn-pizza {
+            background-color: #e0a800; /* Amarelo mais escuro */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .btn-pizza:hover {
+            background-color: #a87800; /* Amarelo mais escuro no hover */
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+            color: red;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Relatório por Idade</h1>
+        <h1>Relatório por Faixa Etária</h1>
         <form action="/reports/age/generate" method="post">
             <div class="form-group form-inline">
                 <label for="ageStart">Idade Inicial:</label>
@@ -74,8 +107,13 @@
                     required 
                     placeholder="Ex: 18">
             </div>
+            <div id="validationMessage" class="message">Por favor, preencha os campos Idade Inicial e Idade Final para habilitar o botão de relatório.</div>
             <div class="btn-container">
                 <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+
+                <button type="button" class="btn btn-barras" onclick="window.open('/reports/age/bar-chart', '_blank')">Gerar Gráfico de Barras</button>
+
+                <button type="button" class="btn btn-pizza" onclick="window.open('/reports/age/pie-chart', '_blank')">Gerar Gráfico de Pizza</button>
             </div>
             <div class="btn-container">
                 <a href="/reports" class="btn btn-secondary">Voltar</a>

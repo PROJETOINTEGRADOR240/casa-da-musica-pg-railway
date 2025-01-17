@@ -16,10 +16,10 @@ exports.listarAlunos =  async (req, res) => {
 
 // Inserir aluno
 exports.inserirAluno = async (req, res) => {
-  const {  nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
+  const {  nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
    try {
-        await pool.query(`INSERT INTO alunos (nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs]);
+        await pool.query(`INSERT INTO alunos (nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs]);
         res.redirect('/alunos');
     } catch (err) {
         console.error(err);
@@ -31,13 +31,13 @@ exports.inserirAluno = async (req, res) => {
 // Atualizar aluno
 exports.atualizarAluno =  async (req, res) => {
   const { idaluno } = req.params;
-  const { nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
+  const { nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
 
   try {
 
     await pool.query(`UPDATE alunos SET nome = ?, cpf_cnpj = ?, telefone = ?, email = ?, data_nasc = ?, idade = ?,
-    sexo = ?, cor = ?, cpf_cnpj_resp = ?, nome_resp = ?, cep = ?, endereco = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ?, obs = ? WHERE idaluno = ?`,
-    [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs, idaluno]);
+    sexo = ?, genero = ?, cor = ?, cpf_cnpj_resp = ?, nome_resp = ?, cep = ?, endereco = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ?, obs = ? WHERE idaluno = ?`,
+    [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs, idaluno]);
     res.redirect('/alunos');
 
   } catch (err) {
@@ -46,9 +46,7 @@ exports.atualizarAluno =  async (req, res) => {
   }
 };
 
-/*
 // Excluir aluno
-
 exports.excluirAluno = async (req, res) => {
   const { idaluno } = req.params; 
 
@@ -61,4 +59,3 @@ exports.excluirAluno = async (req, res) => {
     res.status(500).send('Erro ao excluir aluno');
   }
 };
-*/

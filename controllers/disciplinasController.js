@@ -46,7 +46,6 @@ exports.atualizarDisciplina =  async (req, res) => {
 };
 
 // Excluir disciplina 
-
   exports.excluirDisciplina = async (req, res) => {
       const { iddisciplina } = req.params; 
 

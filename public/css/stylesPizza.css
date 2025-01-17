@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  header {
+    margin-bottom: 20px;
+  }
+  
+  footer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  button {
+    margin: 10px;
+  }
+  
+  /* stylesPizza.css */
+canvas#pieChart {
+  display: block;
+  margin: auto;
+  max-width: 400px;
+  max-height: 400px;
+}

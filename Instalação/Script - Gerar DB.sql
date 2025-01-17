@@ -23,12 +23,13 @@ DROP TABLE IF EXISTS `casadamusica`.`alunos` ;
 CREATE TABLE IF NOT EXISTS `casadamusica`.`alunos` (
   `idaluno` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `cpf_cnpj` VARCHAR(14) NULL,
-  `nome` VARCHAR(45) NULL,
+  `nome` VARCHAR(45) NOT NULL,
   `telefone` VARCHAR(20) NULL,
   `email` VARCHAR(33) NULL,
   `data_nasc` DATE NULL,
   `idade` INT NULL,
-  `sexo` VARCHAR(10) NULL,
+  `sexo` VARCHAR(10) NOT NULL,
+  `genero` VARCHAR(20) NULL,
   `cor` VARCHAR(10) NULL,
   `cpf_cnpj_resp` VARCHAR(14) NULL,
   `nome_resp` VARCHAR(45) NULL,
@@ -37,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `casadamusica`.`alunos` (
   `numero` VARCHAR(15) NULL,
   `bairro` VARCHAR(30) NULL,
   `cidade` VARCHAR(30) NULL,
-  `estado` VARCHAR(25) NULL,
+  `estado` VARCHAR(20) NULL,
   `complemento` VARCHAR(45) NULL,
   `obs` VARCHAR(145) NULL,
   PRIMARY KEY (`idaluno`))
@@ -52,19 +53,20 @@ DROP TABLE IF EXISTS `casadamusica`.`professores` ;
 CREATE TABLE IF NOT EXISTS `casadamusica`.`professores` (
   `idprofessor` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `cpf_cnpj` VARCHAR(14) NULL,
-  `nome` VARCHAR(45) NULL,
+  `nome` VARCHAR(45) NOT NULL,
   `telefone` VARCHAR(20) NULL,
   `email` VARCHAR(33) NULL,
   `data_nasc` DATE NULL,
   `idade` INT NULL,
-  `sexo` VARCHAR(10) NULL,
+  `sexo` VARCHAR(10) NOT NULL,
+  `genero` VARCHAR(20) NULL,
   `cor` VARCHAR(10) NULL,
   `cep` VARCHAR(9) NULL,
   `endereco` VARCHAR(45) NULL,
   `numero` VARCHAR(15) NULL,
   `bairro` VARCHAR(13) NULL,
   `cidade` VARCHAR(30) NULL,
-  `estado` VARCHAR(25) NULL,
+  `estado` VARCHAR(20) NULL,
   `complemento` VARCHAR(45) NULL,
   `obs` VARCHAR(145) NULL,
   PRIMARY KEY (`idprofessor`))
@@ -96,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `casadamusica`.`usuarios` (
   `idusuario` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(70) NOT NULL,
   `email` VARCHAR(70) NOT NULL,
+  `telefone` VARCHAR(20) NULL,
   `senha` VARCHAR(30) NULL,
   `nivel` INT(1) NOT NULL,
   `ativo` ENUM("SIM", "NÃO") NOT NULL,
@@ -149,12 +152,13 @@ DROP TABLE IF EXISTS `casadamusica`.`matriculas` ;
 
 CREATE TABLE IF NOT EXISTS `casadamusica`.`matriculas` (
   `idmatricula` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `data_matricula` DATETIME NOT NULL,
-  `nome` VARCHAR(45) NOT NULL,
-  `cpf_cnpj` VARCHAR(14) NULL,
-  `data_nasc` DATE NOT NULL,
-  `status` ENUM("Sim", "Não") NOT NULL,
-  `aluno` ENUM("Sim", "Naõ") NOT NULL,
+  `idaluno` INT NOT NULL,
+  `nome_aluno` VARCHAR(45) NULL,
+  `iddisciplina` INT NOT NULL,
+  `nome_disciplina` VARCHAR(45) NULL,
+  `data_matricula` DATE NOT NULL,
+  `ativo` ENUM("Sim", "Não") NOT NULL,
+  `obs` VARCHAR(145) NULL,
   PRIMARY KEY (`idmatricula`))
 ENGINE = InnoDB;
 
@@ -183,6 +187,7 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
 
 USE casadamusica;
 INSERT INTO users (id, username, password, email, level, status, created_at, updated_at)

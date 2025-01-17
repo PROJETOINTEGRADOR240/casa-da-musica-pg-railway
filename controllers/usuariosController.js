@@ -46,7 +46,6 @@ exports.atualizarUsuario =  async (req, res) => {
 };
 
 // Excluir usuario 
-
 exports.excluirUsuario = async (req, res) => {
     const { idusuario } = req.params; 
 

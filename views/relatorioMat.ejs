@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Matrículas por Disciplinas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .mensagem {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <h1 style="text-align: center;">Relatório de Matrículas por Disciplinas</h1>
+    <p>Data e Hora: <%= new Date().toLocaleString() %></p>
+
+    <% if (registros.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 7%;">(ID)Aluno</th>
+                    <th style="width: 45%;">Nome</th>
+                    <th style="width: 7%;">(ID)Disciplina</th>
+                    <th style="width: 41%;">Nome da Disciplina</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% registros.forEach(registro => { %>
+                    <tr>
+                        <td><%= registro.idaluno %></td>
+                        <td><%= registro.aluno_nome %></td>
+                        <td><%= registro.iddisciplina %></td>
+                        <td><%= registro.disciplina_nome %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p class="mensagem">Nenhum registro encontrado.</p>
+    <% } %>
+
+    <div class="btn-container">
+        <button class="btn" onclick="window.history.back()">Voltar para o Menu</button>
+        <button class="btn" onclick="salvarComoPDF()">Salvar em PDF</button>
+    </div>
+
+    <script>
+        async function salvarComoPDF() {
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+
+                // Adiciona o título ao PDF
+                pdf.setFontSize(18);
+                pdf.text('Relatório de Matrículas por Disciplinas', pdf.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
+
+                // Adiciona data e hora
+                pdf.setFontSize(12);
+                pdf.text(`Data e Hora: ${new Date().toLocaleString()}`, 10, 20);
+
+                // Cabeçalhos e dados da tabela
+                const cabecalhos = [['(ID)Aluno', 'Nome', '(ID)Disciplina', 'Nome da Disciplina']];
+                const dados = <%- JSON.stringify(registros.map(reg => [reg.idaluno, reg.aluno_nome, reg.iddisciplina, reg.disciplina_nome])) %>;
+
+                // Cria tabela usando autoTable
+                pdf.autoTable({
+                    head: cabecalhos,
+                    body: dados,
+                    startY: 30,
+                    theme: 'grid',
+                    headStyles: { fillColor: [0, 123, 255] },
+                    styles: { fontSize: 10 },
+                    margin: { top: 10, left: 10, right: 10 }
+                });
+
+                // Gera nome do arquivo com timestamp
+                const date = new Date();
+                const timestamp = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}_${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(2, '0')}${String(date.getSeconds()).padStart(2, '0')}`;
+                const fileName = `Relatorio_MatriculaPorDisciplina_${timestamp}.pdf`;
+
+                // Salva o PDF
+                pdf.save(fileName);
+            } catch (error) {
+                console.error('Erro ao salvar o PDF:', error);
+                alert('Ocorreu um erro ao tentar salvar o PDF. Verifique os dados e tente novamente.');
+            }
+        }
+    </script>
+</body>
+</html>

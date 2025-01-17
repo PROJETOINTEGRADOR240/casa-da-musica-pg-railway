@@ -1,0 +1,102 @@
+<!-- Atualização do código HTML original com o botão adicional -->
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Relatório por Sexo</title> 
+<link rel="stylesheet" href="/css/stylesReports.css"> 
+<style> 
+.form-group { 
+    margin-bottom: 20px; /* Espaçamento inferior entre os grupos */ 
+} 
+.form-inline { 
+    display: flex; /* Ativa o flexbox */ 
+    gap: 15px; /* Espaçamento entre os elementos */ 
+    align-items: center; /* Alinha verticalmente os itens */ 
+} 
+.radio-options { 
+    display: flex; /* Alinha as opções horizontalmente */ 
+    gap: 20px; /* Espaçamento entre os botões de rádio */ 
+} 
+.btn-container { 
+    margin-top: 20px; /* Espaçamento acima dos botões */ 
+    display: flex; 
+    gap: 15px; /* Espaço entre os botões */ 
+} 
+.btn-primary { 
+    background-color: #007bff; /* Azul */ 
+    color: #fff; 
+    border: none; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+} 
+.btn-primary:hover { 
+    background-color: #0056b3; /* Azul mais escuro no hover */ 
+} 
+.btn-secondary { 
+    background-color: #6c757d; /* Cinza */ 
+    color: #fff; 
+    border: none; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+} 
+
+.btn-barra {
+    background-color: #e0a800; /* Amarelo mais escuro */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn-barra:hover {
+    background-color: #a87800; /* Amarelo mais escuro no hover */
+}
+
+.btn-secondary:hover { 
+    background-color: #545b62; /* Cinza mais escuro no hover */ 
+} 
+.btn-info { 
+    background-color: #17a2b8; /* Ciano */ 
+    color: #fff; 
+    border: none; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+} 
+.btn-info:hover { 
+    background-color: #117a8b; /* Ciano mais escuro no hover */ 
+} 
+</style> 
+</head> 
+<body> 
+<div class="container"> 
+    <h1>Relatório por Sexo</h1> 
+    <form action="/reports/gender/generate" method="post"> 
+        <div class="form-group"> 
+            <label>Selecione o Sexo:</label> 
+            <div class="radio-options"> 
+                <label> 
+                    <input type="radio" name="gender" value="Masculino" required> Masculino 
+                </label> 
+                <label> 
+                    <input type="radio" name="gender" value="Feminino" required> Feminino 
+                </label> 
+                <label> 
+                    <input type="radio" name="gender" value="Todos" checked required> Todos 
+                </label> 
+            </div> 
+        </div> 
+        <div class="btn-container"> 
+            <button type="submit" class="btn btn-primary">Gerar Relatório</button> 
+            <button type="button" class="btn btn-barra" onclick="window.open('/reports/gender/chart',
+            '_blank')">Gerar Gráfico de Barras Agrupadas</button>
+        </div> 
+        <div class="btn-container">
+            <a href="/reports" class="btn btn-secondary">Voltar</a>
+        </div>
+
+    </form> 
+</div> 
+</body> 
+</html>

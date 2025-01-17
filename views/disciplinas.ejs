@@ -16,7 +16,7 @@
 <body>
   <h1>Cadastro de Disciplinas</h1>
   <form action="/disciplinas/inserir" method="POST">
-    <a href="/menu" class="btn btn-secondary mb-3">Voltar</a>
+    <a href="/menuCadastro" class="btn btn-secondary mb-3">Voltar</a>
 
     <div class="form-group">
       <label for="nome">Nome da Disciplina:</label>
@@ -181,28 +181,4 @@
 </body>
 </html>
 
-  <!-- JavaScript para conversão da data - desativado por enquanto -->
-  <script>
-    function formatDate() {
-      // Seleciona o elemento <td> que contém a data
-      const dataCell = document.getElementById('dataCell');
-      const dateStr = dataCell.textContent;
-
-      // Converte para um objeto Date
-      const dateObj = new Date(dateStr);
-
-      // Extrai dia, mês e ano
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Mês ajustado
-      const year = dateObj.getFullYear();
-
-      // Formata a data como DD/MM/YYYY
-      const formattedDate = `${day}/${month}/${year}`;
-
-      // Substitui o conteúdo da <td> pela data formatada
-      dataCell.textContent = formattedDate;
-    }
-
-    // Chama a função de formatação quando a página carrega
-    window.onload = formatDate;
-  </script>
+ 

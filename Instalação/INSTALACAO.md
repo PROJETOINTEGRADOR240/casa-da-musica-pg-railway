@@ -34,12 +34,11 @@ ATENÇÃO INSTALAR SEMPRE A ÚLTIMA VERSÃO DO NODE (LTS).
                 npm init -y
                 npm install
                 npm install express mysql2 ejs body-parser chart.js pdfkit
-                npm install express-validator
+                npm install express-validator electron-app luxon moment
                 npm install dotenv express-session nodemailer connect-flash 
                 npm install bcrypt bcryptjs canvas method-override connect-mysql
-
-
-
+                npm install -g ejs-lint chartjs-plugin-datalabels
+                
 5 - Para entrar na aplicação:
 
     Dentro do seu VSCode abrir um terminal e digitar:

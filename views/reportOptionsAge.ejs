@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/stylesReports.css">
+    <style>
+        .btn-download {
+            background-color: #28a745; /* Verde */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            display: inline-block;
+        }
+        .btn-download:hover {
+            background-color: #218838;
+        }
+
+        .btn-view {
+            background-color: #007bff; /* Azul */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            display: inline-block;
+        }
+        .btn-view:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-back {
+            background-color: #6c757d; /* Cinza */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            display: inline-block;
+        }
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4"><%= title %></h1>
+        <div class="text-center">
+            <!-- Botão para baixar o relatório -->
+            <a href="<%= downloadUrl %>" class="btn-download" download>
+                Baixar Relatório
+            </a>
+
+            <!-- Botão para visualizar o relatório -->
+            <a href="<%= viewUrl %>" class="btn-view" target="_blank">
+                Visualizar Relatório
+            </a>
+
+            <!-- Botão para voltar -->
+            <a href="<%= backUrl %>" class="btn-back">
+                Voltar
+            </a>
+        </div>
+    </div>
+</body>
+</html>

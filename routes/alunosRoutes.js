@@ -13,8 +13,7 @@ router.post('/inserir', alunosController.inserirAluno);
 router.post('/atualizar/:idaluno', alunosController.atualizarAluno);
 
 // Rota para excluir uma alunos
-//
-// router.post('/excluir/:idaluno', alunosController.excluirAluno);
+ router.post('/excluir/:idaluno', alunosController.excluirAluno);
 
 module.exports = router;
 

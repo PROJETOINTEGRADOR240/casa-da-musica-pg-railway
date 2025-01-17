@@ -45,7 +45,7 @@ exports.listarFaltas =  async (req, res) => {
   };
   
   
-  // Excluir nptas
+  // Excluir faltas
   exports.excluirFalta = async (req, res) => {
 
     const { idfalta } = req.params; // Obtém o ID da URL
@@ -70,8 +70,11 @@ exports.renderFaltasPage = async (req, res) => {
       for (let falta of faltas) {
 
           falta.aluno_nome = `${falta.aluno_id}- ${await getAlunoName(falta.aluno_id)}`;
+
           falta.professor_nome = `${falta.professor_id}- ${await getProfessorName(falta.professor_id)}`;
+
           falta.disciplina_nome = `${falta.disciplina_id}- ${await getDisciplinaName(falta.disciplina_id)}`;
+
           falta.data_falta_formatada = format(new Date(falta.data_falta), 'dd/MM/yyyy'); // Formata a data.
       }
       res.render('faltas', { faltas }); 

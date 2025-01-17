@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico Percentual e Quantidade por Sexo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #barChart {
+            max-width: 800px;
+            margin: auto;
+            display: block;
+        }
+        #save-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #save-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <p id="date-time" style="float: left;"></p>
+        <h1 style="text-align: center;">Gráfico de Percentual e Quantidade por Sexo</h1>
+    </header>
+    <canvas id="barChart"></canvas>
+
+    <!-- Botão para salvar o gráfico -->
+    <button id="save-btn" onclick="saveChart()">Salvar Gráfico</button>
+
+    <script>
+        let chart; // Variável global para o gráfico
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('barChart').getContext('2d');
+
+            // Dados do gráfico enviados pelo servidor
+            const chartData = <%- JSON.stringify(chartData) %>;
+
+            // Inicializa o gráfico
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Masculino', 'Feminino'],
+                    datasets: [
+                        {
+                            label: 'Quantidade',
+                            data: [chartData.datasets[0].data[0], chartData.datasets[0].data[1]],
+                            backgroundColor: ['#66b2ff', '#66b2ff'],
+                        },
+                        {
+                            label: 'Percentual (%)',
+                            data: [chartData.datasets[1].data[0], chartData.datasets[1].data[1]],
+                            backgroundColor: ['#0056b3', '#0056b3'],
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                    },
+                    scales: {
+                        x: {
+                            stacked: false,
+                        },
+                        y: {
+                            beginAtZero: true,
+                            stacked: false,
+                        },
+                    }
+                }
+            });
+
+            // Atualizar data e hora
+            document.getElementById("date-time").textContent = `Data e Hora: ${new Date().toLocaleString()}`;
+        });
+
+        // Função para salvar o gráfico com fundo branco
+        function saveChart() {
+            if (!chart) {
+                alert('O gráfico ainda não foi carregado.');
+                return;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 800;
+            canvas.height = 600;
+
+            const ctx = canvas.getContext('2d');
+
+            // Preenche o fundo com branco
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Desenha o gráfico original no canvas com fundo branco
+            ctx.drawImage(document.getElementById('barChart'), 0, 0);
+
+            // Gera a imagem do canvas
+            const imageURL = canvas.toDataURL('image/png');
+
+            // Gera um nome dinâmico para o arquivo
+            const now = new Date();
+            const formattedDate = now.toISOString().slice(0, 19).replace(/:/g, '-');
+            const fileName = `grafico-barra-${formattedDate}.png`;
+
+            // Cria um elemento de link para realizar o download
+            const a = document.createElement('a');
+            a.href = imageURL;
+            a.download = fileName;
+            a.click();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Pizza</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #pieChart {
+            max-width: 400px;
+            max-height: 400px;
+            margin: auto;
+            display: block;
+        }
+        .btn {
+            display: inline-block;
+            margin: 20px 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #save-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #save-btn:hover {
+            background-color: #45a049;
+        }
+        #back-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        #back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <p id="date-time" style="float: left;"></p>
+        <h1 style="text-align: center;">Gráfico dos Percentuais das Faixas Etárias</h1>
+    </header>
+
+    <canvas id="pieChart" width="400" height="400"></canvas>
+
+    <!-- Botões de ação -->
+    <div id="buttons-container" style="text-align: center; margin-top: 20px; display: none;">
+        <button id="save-btn" class="btn" onclick="saveChart()">Salvar Gráfico</button>
+    </div>
+
+    <script>
+        let chart;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            const chartData = <%- JSON.stringify(chartData) %>;
+
+            // Inicializa o gráfico
+            chart = new Chart(ctx, {
+                type: 'pie',
+                data: chartData,
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Exibe os botões após carregar o gráfico
+            document.getElementById('buttons-container').style.display = 'block';
+
+            // Atualiza a data e hora
+            document.getElementById("date-time").textContent = `Data e Hora: ${new Date().toLocaleString()}`;
+        });
+
+        // Função para salvar o gráfico como PNG
+        function saveChart() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 400;
+
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(document.getElementById('pieChart'), 0, 0);
+
+            const imageURL = canvas.toDataURL('image/png');
+            const now = new Date();
+            const formattedDate = now.toISOString().slice(0, 19).replace(/:/g, '-');
+            const fileName = `grafico-pizza-${formattedDate}.png`;
+
+            const a = document.createElement('a');
+            a.href = imageURL;
+            a.download = fileName;
+            a.click();
+        }
+
+    </script>
+</body>
+</html>

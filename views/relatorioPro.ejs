@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Professore(a)s</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        .mensagem { color: red; text-align: center; font-weight: bold; margin-top: 20px; }
+        .total { font-size: 16px; font-weight: bold; text-align: center; margin-top: 20px; }
+        .btn { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; margin-top: 20px; }
+        .btn:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Relatório de Professore(a)s</h1>
+    <p style="text-align: left;">Data e Hora: <%= new Date().toLocaleString() %></p>
+
+    <% if (professores.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 7%;">(ID)Prof.</th>
+                    <th style="width: 45%;">Nome</th>
+                    <th style="width: 20%;">Telefone</th>
+                    <th style="width: 33%;">E-mail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% professores.forEach(professor => { %>
+                    <tr>
+                        <td><%= professor.idprofessor %></td>
+                        <td><%= professor.nome %></td>
+                        <td><%= professor.telefone %></td>
+                        <td><%= professor.email %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+
+        <p class="total">Total de Professore(a)s: <%= totalProfessores %></p>
+    <% } else { %>
+        <p class="mensagem"><%= mensagem %></p>
+    <% } %>
+
+    <div style="text-align: center;">
+        <button class="btn" onclick="window.history.back()">Voltar para o Menu</button>
+        <button class="btn" onclick="salvarComoPDF()">Salvar em PDF</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        async function salvarComoPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            // Adicionando título
+            pdf.setFontSize(18);
+            pdf.text('Relatório de Professore(a)s', pdf.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
+
+            // Adicionando data e hora
+            pdf.setFontSize(12);
+            pdf.text(`Data e Hora: ${new Date().toLocaleString()}`, 10, 20);
+
+            // Adicionando tabela de professores
+            const professores = <%- JSON.stringify(professores) %>;
+            let startY = 30;
+
+            pdf.setFontSize(10);
+            pdf.text('(ID)Código', 10, startY);
+            pdf.text('Nome', 30, startY);
+            pdf.text('Telefone', 120, startY);
+            pdf.text('E-mail', 160, startY);
+            
+            startY += 10; // Move para a próxima linha
+            
+            professores.forEach(professor => {
+                pdf.text(`${professor.idprofessor}`, 10, startY);
+                pdf.text(`${professor.nome}`, 30, startY);
+                pdf.text(`${professor.telefone}`, 120, startY);
+                pdf.text(`${professor.email}`, 160, startY);
+                startY += 10;
+            });
+
+            // Adicionando total de professores
+            pdf.setFontSize(12);
+            pdf.text(`Total de Professore(a)s: ${professores.length}`, 10, startY + 10);
+
+            // Gerando nome dinâmico para o arquivo
+            const date = new Date();
+            const timestamp = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}_${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(2, '0')}${String(date.getSeconds()).padStart(2, '0')}`;
+            const fileName = `Relatorio_de_Professores_${timestamp}.pdf`;
+
+            // Salvando o PDF
+            pdf.save(fileName);
+        }
+    </script>
+</body>
+</html>
