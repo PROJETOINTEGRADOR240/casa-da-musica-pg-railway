@@ -8,6 +8,9 @@
     <title>Página Inicial</title>
 </head>
 <body>
+  <!-- Incluir VLibras automaticamente -->
+  <%- vlibras %>
+
 <h1>CASA  DA  MÚSICA - Relatórios Estatísticos</h1>
 
 <main><section id="imagemguitarra"> </section></main>
@@ -18,22 +21,21 @@
     <br>
     <br>
     <br>
-    <br>
     <div>
       <form action="/reports/age" method="GET">
-        <button type="submit" class="btn btn-primary btn-lg">Aluno(a) por Faixa Etária</button>
+        <button type="submit" class="btn btn-primary btn-lg">Aluno(a)s por Faixa Etária</button>
       </form>
     </div>
 
     <div> 
       <form action="/reports/gender" method="GET">
-        <button type="submit" class="btn btn-primary btn-lg">Aluno(a) por Sexo</button>
+        <button type="submit" class="btn btn-primary btn-lg">Aluno(a)s por Sexo</button>
       </form>
     </div>
 
     <div> 
       <form action="/reports/filtro-relatorio-demanda" method="GET">
-        <button type="submit" class="btn btn-primary btn-lg">Demanda por Disciplina(s)</button>
+        <button type="submit" class="btn btn-primary btn-lg">Demanda(s) por Disciplina(s)</button>
       </form>
     </div>
 

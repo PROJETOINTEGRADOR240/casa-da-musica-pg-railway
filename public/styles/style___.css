@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 @charset "UTF8";
 
 *{
@@ -52,7 +59,8 @@ button {
     margin-bottom: .5em;
     color:rgb(14, 13, 87);
     padding:0px;
-    box-shadow: 2px 2px 2px rgba(0, 0,0, 0.2);
+    -webkit-box-shadow: 2px 2px 2px rgba(0, 0,0, 0.2);
+            box-shadow: 2px 2px 2px rgba(0, 0,0, 0.2);
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     text-align: center;
     border-radius: 15px;
@@ -72,9 +80,14 @@ fieldset {
 /* Estilizando o contêiner */
 
 .button-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex; /* ou block para empilhar os botões */
-    flex-wrap: wrap; /* Permite quebrar linha, se necessário */
-    justify-content: center; /* Centraliza os botões horizontalmente */
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap; /* Permite quebrar linha, se necessário */
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center; /* Centraliza os botões horizontalmente */
     gap: 10px; /* Espaço entre os botões */
     position: relative; /* Necessário para mover o grupo */
     top: 20px; /* Ajuste para baixo */

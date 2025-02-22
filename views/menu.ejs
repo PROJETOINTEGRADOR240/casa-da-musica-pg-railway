@@ -8,6 +8,9 @@
     <title>Página Inicial</title>
 </head>
 <body>
+    <!-- Incluir VLibras automaticamente -->
+    <%- vlibras %>
+
     <h1>CASA  DA  MÚSICA</h1>
     
     <main>
@@ -32,10 +35,11 @@
             </form>
         </div>
         <div>
-            <button onclick="window.location.href='/relatorioMenu';">Relatórios Gerenciais</button>
+            <button onclick="window.location.href='/relatorioMenu';">Relatórios Gerênciais</button>
         </div>
         <div>
-            <button type="button" class="solid" >Lista de Presença</button>
+
+            <button onclick="window.location.href='/menuEspecifico';">Específicos</button>
         </div>
 
         <div>

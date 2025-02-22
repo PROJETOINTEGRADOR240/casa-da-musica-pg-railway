@@ -8,16 +8,16 @@
 
 </head>
 <body>
-<h1>CASA  DA  MÚSICA - Relatórios Gerenciais</h1>
+  <!-- Incluir VLibras automaticamente -->
+  <%- vlibras %>
+
+<h1>CASA  DA  MÚSICA - Relatórios Gerênciais</h1>
 
 <main><section id="imagemguitarra"> </section></main>
 <fieldset>
   <div class="button">
 
     <div class="cadastro"></div>
-    <br>
-    <br>
-    <br>
     <br>
     <div>
       <form action="/relatorio/filtro-relatorio" method="GET">
@@ -31,7 +31,7 @@
     </div>
     <div>
       <form action="/relatorio/filtro-relatorio-matridisci" method="GET">
-        <button type="submit" class="btn btn-primary btn-lg">Aluno(a)s por Disciplina</button>
+        <button type="submit" class="btn btn-primary btn-lg">Aluno(a)s por Disciplina(s)</button>
       </form>
     </div>
 
@@ -43,6 +43,11 @@
     <div> 
       <form action="/relatorio/filtro-relatorio-disciplina" method="GET">
         <button type="submit" class="btn btn-primary btn-lg">Disciplina(s)</button>
+      </form>
+    </div>
+    <div> 
+      <form action="/relatorio/filtro-relatorio-disciplina-professor" method="GET">
+        <button type="submit" class="btn btn-primary btn-lg">Disciplina(s) vs Professore(a)s</button>
       </form>
     </div>
     

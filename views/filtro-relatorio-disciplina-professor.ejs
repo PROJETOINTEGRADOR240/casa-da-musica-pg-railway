@@ -68,12 +68,12 @@
 
     <div class="container">
         <h1>Filtro de Relatório</h1>
-        <form action="/relatorio/gerar-relatorio-matridisci" method="POST">
-            <label for="alunoInicial">Aluno(a) Inicial:</label>
-            <input type="text" id="alunoInicial" name="alunoInicial" maxlength="4" required>
+        <form action="/relatorio/gerar-relatorio-disciplina-professor" method="POST">
+            <label for="disciplinaInicial">Disciplina Inicial:</label>
+            <input type="text" id="disciplinaInicial" name="disciplinaInicial" maxlength="4" required>
 
-            <label for="alunoFinal">Aluno(a) Final:</label>
-            <input type="text" id="alunoFinal" name="alunoFinal" maxlength="4" required>
+            <label for="disciplina Final">Disciplina Final:</label>
+            <input type="text" id="disciplinaFinal" name="disciplinaFinal" maxlength="4" required>
 
             <button type="submit">Gerar Relatório</button>
             <button type="button" class="btn-secondary" onclick="window.location.href='/relatorioMenu';">Voltar</button>

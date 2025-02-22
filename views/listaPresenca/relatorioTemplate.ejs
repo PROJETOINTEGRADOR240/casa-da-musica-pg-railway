@@ -1,0 +1,49 @@
+<div class="page">
+    <!-- Cabeçalho com o logotipo e informações -->
+    <div class="header">
+      <img src="/images/logoCasaMusica.png" alt="Logotipo" class="logo">
+      <!-- Adicionando mais espaço abaixo do logotipo -->
+      <h4>Disciplina: <%= item.disciplina %></h4>
+      <h5>Professor: <%= item.professor %></h5>
+    </div>
+  
+    <!-- Lista de Alunos -->
+    <ul>
+      <% alunos.forEach((aluno, index) => { %>
+        <li><%= index + 1 %>. <%= aluno %></li>
+      <% }); %>
+    </ul>
+  </div>
+  
+  <style>
+    /* Estilos para a página */
+    .page {
+      width: 100%; /* Largura total da página */
+      margin: 0 auto; /* Centraliza a página */
+      padding: 20px;
+      page-break-after: always; /* Força quebra de página na impressão */
+      background-color: white;
+    }
+  
+    /* Estilos para o cabeçalho */
+    .header {
+      margin-bottom: 20px; /* Aumentei o espaço abaixo do cabeçalho */
+    }
+  
+    .logo {
+      width: 150px; /* Tamanho do logotipo */
+      margin-bottom: 20px; /* Espaço abaixo do logotipo */
+    }
+  
+    /* Lista */
+    ul {
+      list-style-type: none; /* Remove bullets da lista */
+      padding: 0;
+    }
+  
+    li {
+      font-size: 12px; /* Tamanho de fonte para os alunos */
+      margin-bottom: 5px; /* Espaço entre os itens */
+    }
+  </style>
+  

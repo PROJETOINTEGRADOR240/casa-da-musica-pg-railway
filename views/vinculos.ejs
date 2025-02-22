@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./js/dateformat.js" defer ></script>
+  <title>Cadastro de Vinculos - Casa da Música</title>
+  <link rel="stylesheet" href="./styles/style__.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+  <!-- Incluir VLibras automaticamente -->
+  <%- vlibras %>
+
+  <h1>Cadastro Disciplina(s) vs Professore(a)s</h1>
+
+  <!-- Mensagem de erro -->
+  <% if (typeof errorMessage !== 'undefined') { %>
+    <div id="error-message" class="alert alert-danger" role="alert">
+      <%= errorMessage %>
+    </div>
+  <% } %>
+
+
+    <form action="/vinculos" method="POST">
+      <a href="/menuCadastro" class="btn btn-secondary mb-3">Voltar</a>
+
+      <div class="input-container">
+        <div class="input-row">
+          <label for="idDisciplina">Código Disciplina:</label>        
+          <input type="text" name="iddisciplina" id="disciplina" required class="small-input" maxlength="3" required onblur="validateInput('disciplina')" />
+          <span id="disciplina-msg"></span>
+        </div>
+      </div>  
+
+      <div class="input-container">
+        <label for="idProfessor">Código Professor(a):</label>        
+        <input type="text" name="idprofessor" id="professor" class="small-input" maxlength="3" required onblur="validateInput('professor')" />
+        <span id="professor-msg"></span>
+      </div>
+      <div class="input-row">
+        <input type="date" name="data_vinculo" id="data_vinculo" class="input-date" required value="<%= new Date().toISOString().split('T')[0] %>"/>
+      </div>
+
+      <div class="form-group">
+         <textarea name="obs" placeholder="Observação" rows="4"></textarea>
+      </div>
+
+      <button type="submit" id="submit-btn"><i class="fas fa-plus"></i> Cadastrar Vinculo</button>
+    </form> 
+
+    <!-- Tabela de vinculos -->
+    <div class="table-container">
+      <h1>Lista Disciplina(s) vs Professore(a)s</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>(Id)Vínculo</th>
+            <th>(Id)Disciplinas</th>
+            <th>(Id)Professores</th>
+            <th>Data Vínculo</th>
+         </tr>
+        </thead>
+        <tbody>
+          <% vinculos.forEach((vinculo) => { %>
+  
+          <tr>
+            <td><%= vinculo.idvinculo %></td>
+            <td><%= vinculo.disciplina_nome %></td>
+            <td><%= vinculo.professor_nome %></td>
+            <td><%= vinculo.data_vinculo_formatada %></td>
+            <td>
+            <div class="action-buttons">
+
+                <!-- Botão de Editar -->
+              <button class="button-update" onclick="openEditModal(<%= vinculo.idvinculo %>, '<%= vinculo.iddisciplina %>','<%= vinculo.idprofessor %>','<%= vinculo.data_vinculo %>','<%= vinculo.obs %>')"><i class="fas fa-edit"></i> Atualizar</button>
+
+                <!-- Botão de Excluir -->
+              <button class="button-delete" onclick="openDeleteModal(<%= vinculo.idvinculo %>)"><i class="fas fa-trash"></i> Excluir</button>
+            </div>
+  
+            </td>
+          </tr>  
+         <% }); %>
+        </tbody>
+      </table>
+  </div>
+  
+  <!-- Modal de Edição -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Vinculo</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form id="editForm" action="/vinculos/<%= vinculos.idvinculo %>?_method=PUT" method="POST">
+          <div class="modal-body">
+            <input type="hidden" id="edit-idvinculo" name="idvinculo">
+
+            <div class="input-container">
+              <label>(ID) Disciplina :</label>
+              <input type="text" id="edit-iddisciplina" name="iddisciplina" size="2" readonly>
+            </div>
+
+            <div class="input-container">
+              <label>(ID) Professor(a) :</label>
+              <input type="text" id="edit-idprofessor" name="idprofessor" size="2" readonly>
+            </div>
+            <div><br></div>
+            <div class="form-group">
+              <label>Data Vínculo :</label>
+              <input type="date" id="edit-data_vinculo" name="data_vinculo" class="form-control" required/>
+            </div>
+
+            <div class="form-group">
+              <label>Observação :</label>
+              <input type="text" id="edit-obs" name="obs" class="form-control">
+            </div>>
+
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="bi bi-door-closed"></i> Fechar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal de Confirmação de Exclusão -->
+<div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              Deseja realmente excluir este vinculo?
+          </div>
+          <div class="modal-footer">
+              <form id="formExcluir" action="/vinculos/<%= vinculos.idvinculo %>?_method=DELETE" method="POST">
+                  <input type="hidden" name="idvinculo" id="idvinculoExcluir">
+                  <button type="submit" class="btn btn-danger">Confirmar</button>
+                  <button type="button" class="btn btn-secondary" onclick="window.location.href='/vinculos';">Cancelar</button>
+              </form>
+
+            </div>
+      </div>
+  </div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/validation.js"></script>
+  
+  <script>
+
+    // Função para abrir o modal de edição com os dados dos vinculos
+    function openEditModal(idvinculo, iddisciplina, idprofessor, data_vinculo, obs) {
+
+      const dataFormatada = dateFormat(new Date(data_vinculo), 'yyyy-mm-dd');
+
+      $('#edit-idvinculo').val(idvinculo);
+
+      $('#edit-iddisciplina').val(iddisciplina);
+      $('#edit-idprofessor').val(idprofessor);
+
+      $('#edit-data_vinculo').val(dataFormatada);
+      $('#edit-obs').val(obs);
+
+     $('#editForm').attr('action', '/vinculos/' + idvinculo + '?_method=PUT');
+     $('#editModal').modal('show');
+
+    }
+
+     // Função para abrir o modal de exclusão
+     function openDeleteModal(idvinculo) {
+      $('#formExcluir').attr('action', '/vinculos/' + idvinculo + '?_method=DELETE');
+      $('#modalExcluir').modal('show');
+    }
+
+  </script>
+
+  <script>
+    // Oculta a mensagem de erro após 2 segundos
+    const errorMessageDiv = document.getElementById('error-message');
+    if (errorMessageDiv) {
+      setTimeout(() => {
+        errorMessageDiv.style.display = 'none';
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
+

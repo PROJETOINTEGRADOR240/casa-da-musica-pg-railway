@@ -1,25 +1,32 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-  }
-  
-  header {
-    margin-bottom: 20px;
-  }
-  
-  footer {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  button {
-    margin: 10px;
-  }
-  
-  /* stylesPizza.css */
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+button {
+  margin: 10px;
+}
+
+/* stylesPizza.css */
 canvas#pieChart {
-  display: block;
-  margin: auto;
-  max-width: 400px;
-  max-height: 400px;
+display: block;
+margin: auto;
+max-width: 400px;
+max-height: 400px;
 }

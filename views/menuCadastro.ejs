@@ -8,6 +8,9 @@
 
 </head>
 <body>
+    <!-- Incluir VLibras automaticamente -->
+    <%- vlibras %>
+
     <h1>CASA  DA  MÚSICA - Cadastros</h1>
     
     <main>
@@ -41,8 +44,14 @@
         </div>
 
         <div>
+            <form action="/vinculos" method="GET">
+                <button type="submit" class="btn btn-primary btn-lg">Disciplina(s) vs Professore(a)s</button>
+            </form>
+        </div>
+
+        <div>
             <form action="/matriculas" method="GET">
-                <button type="submit" class="btn btn-primary btn-lg">Matricula(s)</button>
+                <button type="submit" class="btn btn-primary btn-lg">Matrícula(s)</button>
             </form>
         </div>
 
@@ -56,12 +65,6 @@
         <div>
             <form action="/faltas" method="GET">
                 <button type="submit" class="btn btn-primary btn-lg">Falta(s)</button>
-            </form>
-        </div>
-
-        <div>
-            <form action="/usuarios" method="GET">
-                <button type="submit" class="btn btn-primary btn-lg">Usuário(s) do Sistema</button>
             </form>
         </div>
 

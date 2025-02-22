@@ -184,6 +184,22 @@ CREATE TABLE IF NOT EXISTS `casadamusica`.`users` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `casadamusica`.`vinculos`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `casadamusica`.`vinculos` ;
+
+CREATE TABLE IF NOT EXISTS `casadamusica`.`vinculos` (
+  `idvinculo` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `iddisciplina` INT NULL,
+  `idprofessor` INT NULL,
+  `data_vinculo` DATE NOT NULL,
+  `obs` VARCHAR(145) NULL,
+  UNIQUE (iddisciplina, idprofessor),
+  PRIMARY KEY (`idvinculo`))
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

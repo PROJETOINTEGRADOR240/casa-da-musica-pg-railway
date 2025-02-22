@@ -16,6 +16,9 @@
     </style>
 </head>
 <body>
+    <!-- Incluir VLibras automaticamente -->
+    <%- vlibras %>
+
     <h1 style="text-align: center;">Relatório de Disciplina(s)</h1>
     <p style="text-align: left;">Data e Hora: <%= new Date().toLocaleString() %></p>
 
@@ -91,7 +94,7 @@
 
             // Adicionando total de disciplinas
             pdf.setFontSize(12);
-            pdf.text(`Total de Disciplinasa(s): ${disciplinas.length}`, 10, startY + 10);
+            pdf.text(`Total de Disciplina(s): ${disciplinas.length}`, 10, startY + 10);
 
             // Gerando nome dinâmico para o arquivo
             const date = new Date();

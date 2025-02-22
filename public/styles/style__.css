@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -19,23 +26,32 @@ form {
     background: #93deff; /* Azul claro */
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+    -webkit-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
     margin-bottom: 20px;
 }
 
 .form-group {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     margin-bottom: 20px;
 }
 
 .form-group input, .form-group select, .form-group textarea {
-    flex: 1;
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
     padding: 10px;
     border: 1px solid #606470; /* Cinza médio */
     border-radius: 5px;
     margin-right: 10px;
     font-size: 1em;
+    -webkit-transition: border-color 0.3s;
+    -o-transition: border-color 0.3s;
     transition: border-color 0.3s; /* Efeito suave na borda */
 }
 
@@ -57,6 +73,8 @@ button {
     border-radius: 5px;
     width: 100%;
     font-size: 1em;
+    -webkit-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
     transition: background-color 0.3s; /* Efeito suave na cor do botão */
     margin-top: 10px;
 }
@@ -71,7 +89,8 @@ button:hover {
     background: #93deff; /* Azul claro */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+    -webkit-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
 }
 
 table {
@@ -94,6 +113,8 @@ th {
 }
 
 .action-buttons {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     gap: 10px; /* Espaço entre os botões */
 }
@@ -106,6 +127,8 @@ th {
     cursor: pointer;
     border-radius: 5px;
     font-size: 0.9em;
+    -webkit-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
     transition: background-color 0.3s; /* Efeito suave na cor do botão */
 }
 
@@ -121,6 +144,8 @@ th {
     cursor: pointer;
     border-radius: 5px;
     font-size: 0.9em;
+    -webkit-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
     transition: background-color 0.3s; /* Efeito suave na cor do botão */
 }
 
@@ -129,6 +154,8 @@ th {
 }
 
 .input-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     gap: 10px;  /* Espaço entre os campos */
 }
@@ -164,6 +191,8 @@ th {
 }
 
 .input-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     gap: 15px;  /* Espaço entre os campos */
     margin-bottom: 20px;  /* Espaço entre a linha atual e a linha de baixo */
@@ -194,5 +223,4 @@ th {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
 
