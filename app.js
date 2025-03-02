@@ -5,6 +5,8 @@ const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+
+const cepRoutes = require('./routes/cepRoutes'); 
 const authRoutes = require('./routes/authRoutes'); // Módulo autenticação
 const notasRoutes = require('./routes/notasRoutes'); // Módulo notas
 const faltasRoutes = require('./routes/faltasRoutes'); // Módulo faltas
@@ -18,7 +20,7 @@ const validateRoutes = require('./routes/validate');
 const menuRoutes = require('./routes/menuRoutes');
 const ageReportRoutes = require('./routes/ageReportRoutes'); // Rota para relatórios por alunos - (Idade)
 const ageChartRoutes = require('./routes/ageChartRoutes'); // Relatorio gráfico de barras por alunos - (Idade)
-const agePieRoutes = require('./routes/agePieRoutes'); // Relatorio gráfico de pizza por alunos (Idade)
+const agePieRoutes = require('./routes/agePieRoutes'); // Relatorio gráfico de Rosca por alunos (Idade)
 const genderReportRoutes = require('./routes/genderReportRoutes'); // Rota para relatórios - por (genero)
 const genderChartRoutes = require('./routes/genderChartRoutes'); // Rota para gráfico - por (genero)
 const relatorioRoutes = require('./routes/relatorioRoutes');
@@ -126,6 +128,9 @@ app.get('/relatorioMenu', (req, res) => {
 app.get('/ageReport', (req, res) => {
   res.render('ageReport');
 });
+
+// Rota para buscar o CEP
+app.use('/', cepRoutes);
 
 
 // Configurando as rotas e faltas na validação dos inputs na tela

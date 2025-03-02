@@ -5,13 +5,13 @@ const listaPresencaController = require("../controllers/listaPresencaController"
 
 router.get("/", listaPresencaController.exibirFiltro);
 
-// Rota para gerar a lista e exibir o relatório
+// Rota para gerar a lista e exibir
 router.post("/gerar", listaPresencaController.gerarLista);
 
-// Rota para visualizar o relatório (opcional)
-router.post("/visualizar", listaPresencaController.visualizarRelatorio);
+// Rota para visualizar a lista (opcional)
+// router.post("/visualizar", listaPresencaController.visualizarRelatorio);
 
-// Rota para exportar o PDF
+// Rota para exportar em PDF
 router.post("/pdf", listaPresencaController.exportarPDF);
 
 

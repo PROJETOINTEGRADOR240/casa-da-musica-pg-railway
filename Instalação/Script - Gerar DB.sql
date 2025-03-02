@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `casadamusica`.`alunos` (
   `email` VARCHAR(33) NULL,
   `data_nasc` DATE NULL,
   `idade` INT NULL,
-  `sexo` VARCHAR(10) NOT NULL,
+  `sexo` VARCHAR(10) NULL,
   `genero` VARCHAR(20) NULL,
   `cor` VARCHAR(10) NULL,
   `cpf_cnpj_resp` VARCHAR(14) NULL,

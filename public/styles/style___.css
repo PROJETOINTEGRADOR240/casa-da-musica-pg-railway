@@ -106,4 +106,14 @@ fieldset {
   .button-container input:hover {
     background-color: #f0f0f0;
   }
-  
+
+.input-pequeno { width: 100px; }  /* Para campos pequenos, ex: VARCHAR(10) */
+.input-medio   { width: 200px; }  /* Para campos médios, ex: VARCHAR(45) */
+.input-grande  { width: 300px; }  /* Para campos grandes, ex: VARCHAR(100) */
+.input-enorme  { width: 500px; }  /* Para TEXT ou VARCHAR(255) */
+
+
+.grupo-pequeno { width: 120px; }
+.grupo-medio   { width: 220px; }
+.grupo-grande  { width: 320px; }
+.grupo-enorme  { width: 520px; }
