@@ -27,7 +27,7 @@ exports.inserirVinculo = async (req, res) => {
 
     } catch (err) {
         if (err.code === 'ER_DUP_ENTRY') {
-          const errorMessage = 'Erro: Essa combinação de disciplina e professor já existe!';
+          const errorMessage = 'Essa combinação de disciplina e professor já existe!';
           const [vinculos] = await pool.query('SELECT * FROM vinculos');
           res.render('vinculos', { vinculos, errorMessage });
         } else {
@@ -68,59 +68,6 @@ exports.atualizarVinculo =  async (req, res) => {
     }
   };
 
-/* ------------------------------------
-
-// Função para renderizar a página de vinculos com os dados formatados.
-exports.renderVinculosPage = async (req, res) => {
-
-  try {
-      const [vinculos] = await pool.query('SELECT * FROM vinculos'); 
-
-      for (let vinculo of vinculos) {
-
-        vinculo.disciplina_nome = `${vinculo.iddisciplina}- ${await getDisciplinaName(vinculo.iddisciplina)}`;
-        vinculo.professor_nome = `${vinculo.idprofessor}- ${await getProfessorName(vinculo.idprofessor)}`;
-        vinculo.data_vinculo_formatada = format(new Date(vinculo.data_vinculo), 'dd/MM/yyyy'); // Formata a data.
-
-      }
-      res.render('vinculos', { vinculos }); 
-  } catch (error) {
-      console.error('Erro ao renderizar a página de vinculos:', error);
-      res.status(500).send('Erro ao carregar a página de vinculos');
-  }
-};
-
-
-
-
-// Função para renderizar a página de vínculos com os dados formatados.
-exports.renderVinculosPage = async (req, res) => {
-  try {
-    const [vinculos] = await pool.query('SELECT * FROM vinculos'); 
-
-    for (let vinculo of vinculos) {
-      try {
-        // Tenta buscar e formatar os dados do vínculo
-        vinculo.disciplina_nome = `${vinculo.iddisciplina} - ${await getDisciplinaName(vinculo.iddisciplina)}`;
-        vinculo.professor_nome = `${vinculo.idprofessor} - ${await getProfessorName(vinculo.idprofessor)}`;
-        vinculo.data_vinculo_formatada = format(new Date(vinculo.data_vinculo), 'dd/MM/yyyy'); // Formata a data.
-      } catch (innerError) {
-        console.error(`Erro ao processar o vínculo com ID ${vinculo.idvinculo}:`, innerError);
-        // Define valores padrão ou exibe uma mensagem de erro para evitar quebra
-        vinculo.disciplina_nome = 'Erro ao obter disciplina';
-        vinculo.professor_nome = 'Erro ao obter professor';
-        vinculo.data_vinculo_formatada = 'Data inválida';
-      }
-    }
-
-    res.render('vinculos', { vinculos }); 
-  } catch (error) {
-    console.error('Erro ao renderizar a página de vínculos:', error);
-    res.status(500).send('Erro ao carregar a página de vínculos');
-  }
-};
-
---------------------------*/
 
 // Função para renderizar a página de vínculos com os dados formatados.
 exports.renderVinculosPage = async (req, res) => {

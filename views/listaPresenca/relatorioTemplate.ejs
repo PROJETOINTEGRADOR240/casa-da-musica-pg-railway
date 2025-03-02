@@ -4,13 +4,13 @@
       <img src="/images/logoCasaMusica.png" alt="Logotipo" class="logo">
       <!-- Adicionando mais espaço abaixo do logotipo -->
       <h4>Disciplina: <%= item.disciplina %></h4>
-      <h5>Professor: <%= item.professor %></h5>
+      <h5>Professor(a): <%= item.professor %></h5>
     </div>
   
     <!-- Lista de Alunos -->
     <ul>
       <% alunos.forEach((aluno, index) => { %>
-        <li><%= index + 1 %>. <%= aluno %></li>
+        <li><%= index + 1 %>. <strong><%= aluno.toUpperCase() %></strong></li>
       <% }); %>
     </ul>
   </div>

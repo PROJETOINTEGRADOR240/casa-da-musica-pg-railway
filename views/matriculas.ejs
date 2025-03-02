@@ -39,9 +39,8 @@
       </div>
     </div>  
     <div class="input-row">
-      <input type="date" name="data_matricula" id="data_matricula" class="input-date" required/>
-
-        <!-- Opções de Radio -->
+      <input type="date" name="data_matricula" id="data_matricula" class="input-date" required value="<%= new Date().toISOString().split('T')[0] %>"/>
+      <!-- Opções de Radio -->
         <div class="form-group-radio">
           <label class="form-label-radio">Ativo</label>
           <div class="form-radio-group">

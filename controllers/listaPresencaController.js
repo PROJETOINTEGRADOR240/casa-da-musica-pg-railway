@@ -61,6 +61,8 @@ exports.gerarLista = async (req, res) => {
 };
 
 
+/* --------- Opcional - está comentada tambem listaPresencaRoutes -----------
+
 exports.visualizarRelatorio = async (req, res) => {
   try {
 
@@ -78,6 +80,8 @@ exports.visualizarRelatorio = async (req, res) => {
     res.status(500).send("Erro ao exibir o relatório.");
   }
 };
+
+---------------------------------------------*/
 
 exports.exportarPDF = async (req, res) => {
   try {
