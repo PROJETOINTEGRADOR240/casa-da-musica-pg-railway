@@ -1,0 +1,23 @@
+name: Deploy Local no Windows
+
+on:
+  workflow_dispatch:  # Permite rodar manualmente no GitHub
+
+jobs:
+  deploy:
+    runs-on: self-hosted  # Usa o runner no seu PC
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Iniciar servidor local
+        run: start npm start  # Executa o servidor
+
+      - name: Abrir no navegador (Windows)
+        run: start http://localhost:3000  # Abre a aplicação no navegador
+
+      - name: Exibir mensagem de sucesso
+        run: echo "Deploy local concluído no Windows!"
