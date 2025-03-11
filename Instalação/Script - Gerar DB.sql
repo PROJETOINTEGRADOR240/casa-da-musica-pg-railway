@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS `casadamusica`.`notas` (
   `ano_nota` INT NULL,
   `nota` DECIMAL(3,1) NOT NULL,
   `obs` VARCHAR(145) NULL,
+  CONSTRAINT `unique_nota` UNIQUE (`aluno_id`, `professor_id`, `disciplina_id`, `data_nota`),
   PRIMARY KEY (`idnota`))
 ENGINE = InnoDB;
 
@@ -141,6 +142,7 @@ CREATE TABLE IF NOT EXISTS `casadamusica`.`faltas` (
   `ano_falta` INT NULL,
   `falta` INT NULL,
   `obs` VARCHAR(145) NULL,
+  CONSTRAINT `unique_falta` UNIQUE (`aluno_id`, `professor_id`, `disciplina_id`, `data_falta`),
   PRIMARY KEY (`idfalta`))
 ENGINE = InnoDB;
 
@@ -159,6 +161,7 @@ CREATE TABLE IF NOT EXISTS `casadamusica`.`matriculas` (
   `data_matricula` DATE NOT NULL,
   `ativo` ENUM("Sim", "Não") NOT NULL,
   `obs` VARCHAR(145) NULL,
+  CONSTRAINT `unique_matricula` UNIQUE (`idaluno`, `iddisciplina`),
   PRIMARY KEY (`idmatricula`))
 ENGINE = InnoDB;
 
@@ -195,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `casadamusica`.`vinculos` (
   `idprofessor` INT NULL,
   `data_vinculo` DATE NOT NULL,
   `obs` VARCHAR(145) NULL,
-  UNIQUE (iddisciplina, idprofessor),
+  CONSTRAINT `unique_vinculo` UNIQUE (`iddisciplina`, `idprofessor`),
   PRIMARY KEY (`idvinculo`))
 ENGINE = InnoDB;
 
@@ -208,3 +211,70 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 USE casadamusica;
 INSERT INTO users (id, username, password, email, level, status, created_at, updated_at)
 VALUES (1, 'admin', '$2a$10$gscWfptKpPQbjSBzSpkb7eGEdXq5WKdW8.Gieuf9M/F58UVPKrXay', 'admin@teste.com', 1, 'ativado', '2024-12-13 10:46:08', '2024-12-13 10:46:08');
+
+
+-- -----------------------------------------------------
+-- Excluir a tabela `monitoramento` primeiro para evitar erro de chave estrangeira
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `casadamusica`.`monitoramento`;
+
+-- -----------------------------------------------------
+-- Excluir as tabelas `salas` e `sensores`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `casadamusica`.`salas`;
+DROP TABLE IF EXISTS `casadamusica`.`sensores`;
+
+-- -----------------------------------------------------
+-- Criar a tabela `salas`
+-- -----------------------------------------------------
+CREATE TABLE `casadamusica`.`salas` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+-- -----------------------------------------------------
+-- Criar a tabela `sensores`
+-- -----------------------------------------------------
+CREATE TABLE `casadamusica`.`sensores` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(100) NOT NULL
+);
+
+-- -----------------------------------------------------
+-- Criar a tabela `monitoramento` após as tabelas dependentes
+-- -----------------------------------------------------
+CREATE TABLE `casadamusica`.`monitoramento` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sala_id INT NOT NULL,
+    sensor_id INT NOT NULL,
+    qualidade_ar INT CHECK (qualidade_ar BETWEEN 0 AND 100),
+    data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sala_id) REFERENCES `casadamusica`.`salas`(id) ON DELETE CASCADE,
+    FOREIGN KEY (sensor_id) REFERENCES `casadamusica`.`sensores`(id) ON DELETE CASCADE
+);
+
+-- Inserir dados de exemplo na tabela Salas
+INSERT INTO salas (nome) VALUES
+('Sala 101'),
+('Sala 102'),
+('Laboratório de Ciências'),
+('Sala 201'),
+('Biblioteca');
+
+-- Inserir dados de exemplo na tabela Sensores
+INSERT INTO sensores (descricao) VALUES
+('Sensor de CO2 - Modelo A'),
+('Sensor de CO2 - Modelo B'),
+('Sensor de Umidade - Modelo X'),
+('Sensor de Temperatura - Modelo Y');
+
+-- Inserir dados de exemplo na tabela Monitoramento
+INSERT INTO monitoramento (sala_id, sensor_id, qualidade_ar) VALUES
+(1, 1, 85),
+(1, 2, 78),
+(2, 1, 90),
+(3, 3, 65),
+(3, 4, 72),
+(4, 1, 88),
+(5, 2, 74),
+(5, 3, 80);

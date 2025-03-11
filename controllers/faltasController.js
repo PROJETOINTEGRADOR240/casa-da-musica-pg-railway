@@ -20,12 +20,21 @@ exports.listarFaltas =  async (req, res) => {
   
     try {
        await pool.query(`INSERT INTO faltas (aluno_id, professor_id, disciplina_id, data_falta, mes_falta, ano_falta, falta, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [aluno_id, professor_id, disciplina_id, data_falta, mes_falta, ano_falta, falta, obs]);
+
        res.redirect('/faltas');
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Erro ao inserir falta');
-    }  
+
+      } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+          const errorMessage = 'Aluno, Professor, Disciplina e Data já existe!';
+          const [faltas] = await pool.query('SELECT * FROM faltas');
+          res.render('faltas', { faltas, errorMessage });
+        } else {  
+          console.error('Erro ao inserir falta', err);
+          res.status(500).json({ message: 'Erro no servidor' });
+        }  
+      }
   };
+  
   
   
   // Atualizar faltas

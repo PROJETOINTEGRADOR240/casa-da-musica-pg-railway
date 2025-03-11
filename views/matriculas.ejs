@@ -6,6 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/dateformat.js" defer ></script>
+    <script src="/js/teclaEnterDesabilitada.js"></script>
     <title>Cadastro de Matriculas - Casa da Música</title>
     <link rel="stylesheet" href="./styles/style__.css">
     <link rel="stylesheet" href="/css/form-styles.css">
@@ -21,6 +22,14 @@
   <%- vlibras %>
 
   <h1>Cadastro de Matriculas</h1>
+
+  <!-- Mensagem de erro -->
+  <% if (typeof errorMessage !== 'undefined') { %>
+    <div id="error-message" class="alert alert-danger" role="alert">
+      <%= errorMessage %>
+    </div>
+  <% } %>
+
   <form action="/matriculas" method="POST">
     <a href="/menuCadastro" class="btn btn-secondary mb-3">Voltar</a>
     
@@ -210,6 +219,17 @@
     }
 
  </script>
+
+  <script>
+    // Oculta a mensagem de erro após 2 segundos
+    const errorMessageDiv = document.getElementById('error-message');
+    if (errorMessageDiv) {
+      setTimeout(() => {
+        errorMessageDiv.style.display = 'none';
+      }, 2000);
+    }
+  </script>
+
 
 </body>
 </html>

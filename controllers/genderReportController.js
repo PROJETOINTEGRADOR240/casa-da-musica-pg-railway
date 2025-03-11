@@ -37,7 +37,7 @@ exports.generateGenderReport = async (req, res) => {
 
     // Configuração do PDF
     const timestamp = Date.now();
-    const fileName = `genderChart_${timestamp}.pdf`;
+    const fileName = `Relatorio_Sexo_${timestamp}.pdf`;
     const filePath = path.join(__dirname, '../public/reports', fileName);
 
     const reportsDir = path.dirname(filePath);

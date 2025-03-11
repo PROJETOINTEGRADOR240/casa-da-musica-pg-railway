@@ -4,6 +4,7 @@ const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const path = require('path');
+const pool = require('./models/db');
 
 const cepRoutes = require('./routes/cepRoutes'); 
 const authRoutes = require('./routes/authRoutes'); // Módulo autenticação
@@ -30,6 +31,11 @@ const relatorioTaxRoutes = require('./routes/relatorioTaxRoutes');
 const relatorioMatRoutes = require('./routes/relatorioMatRoutes');
 const demandasRoutes = require('./routes/demandasRoutes');
 const listaPresencaRoutes = require("./routes/listaPresencaRoutes");
+
+// Importando rotas - Rotina IoT
+const salasRoutes = require('./routes/salasRoutes');
+const sensoresRoutes = require('./routes/sensoresRoutes');
+const monitoramentoRoutes = require('./routes/monitoramentoRoutes');
 
 const app = express();
 
@@ -63,7 +69,6 @@ app.use((req, res, next) => {
   `;
   next();
 });
-
 
 
 app.use(session({
@@ -104,6 +109,10 @@ app.use('/relatorio', relatorioTaxRoutes); // Relatórios gerencial  qtde de fal
 app.use('/relatorio', relatorioMatRoutes); // Relatórios gerencial  matricula em varias disciplinas
 app.use("/lista-presenca", listaPresencaRoutes); // Lista de preseça dos alunos
 
+// Rotas para IoT
+app.use(salasRoutes);
+app.use(sensoresRoutes);
+app.use(monitoramentoRoutes);
 
 // Rotas do menu
 app.use('/menu', menuRoutes);
@@ -128,9 +137,17 @@ app.get('/ageReport', (req, res) => {
   res.render('ageReport');
 });
 
-// Rota para buscar o CEP
-app.use('/', cepRoutes);
 
+// Rota para buscar o CEP
+app.use('/busca-cep', cepRoutes);
+
+// Rota para a página inicial (index)
+app.get('/home', async (req, res) => {
+  const [salas] = await pool.query('SELECT * FROM salas');  // Consulta a tabela salas
+  const [sensores] = await pool.query('SELECT * FROM sensores');  // Consulta a tabela sensores
+  const [dados] = await pool.query('SELECT * FROM monitoramento');  // Consulta a tabela monitoramento
+  res.render('indexMonitoramento', { salas, sensores, dados });  // Passa a variável salas para o EJS
+});
 
 // Configurando as rotas e faltas na validação dos inputs na tela
 app.use('/validate', validateRoutes);

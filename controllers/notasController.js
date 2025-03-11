@@ -21,13 +21,20 @@ exports.inserirNota = async (req, res) => {
 
   try {
       await pool.query(`INSERT INTO notas (aluno_id, professor_id, disciplina_id, data_nota, mes_nota, ano_nota, nota, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [aluno_id, professor_id, disciplina_id, data_nota, mes_nota, ano_nota, nota, obs]);
-      res.redirect('/notas');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Erro ao inserir nota');
-  }  
-};
 
+      res.redirect('/notas');
+
+  } catch (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        const errorMessage = 'Aluno, Professor, Disciplina e Data já existe!';
+        const [notas] = await pool.query('SELECT * FROM notas');
+        res.render('notas', { notas, errorMessage });
+      } else {  
+        console.error('Erro ao inserir nota', err);
+        res.status(500).json({ message: 'Erro no servidor' });
+      }  
+    }
+  };
 
 // Atualizar notas
 exports.atualizarNota =  async (req, res) => {

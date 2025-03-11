@@ -15,7 +15,7 @@ exports.listarVinculos =  async (req, res) => {
     }
 };
   
-// Inserir notas
+// Inserir vinculos
 exports.inserirVinculo = async (req, res) => {
   const { iddisciplina, idprofessor, data_vinculo, obs } = req.body;
 
@@ -27,7 +27,7 @@ exports.inserirVinculo = async (req, res) => {
 
     } catch (err) {
         if (err.code === 'ER_DUP_ENTRY') {
-          const errorMessage = 'Essa combinação de disciplina e professor já existe!';
+          const errorMessage = 'Disciplina Professor já existe!';
           const [vinculos] = await pool.query('SELECT * FROM vinculos');
           res.render('vinculos', { vinculos, errorMessage });
         } else {
@@ -69,10 +69,10 @@ exports.atualizarVinculo =  async (req, res) => {
   };
 
 
-// Função para renderizar a página de vínculos com os dados formatados.
-exports.renderVinculosPage = async (req, res) => {
-  try {
-    const [vinculos] = await pool.query('SELECT * FROM vinculos');
+    // Função para renderizar a página de vínculos com os dados formatados.
+    exports.renderVinculosPage = async (req, res) => {
+      try {
+        const [vinculos] = await pool.query('SELECT * FROM vinculos');
 
     // Use Promise.all para garantir que todas as operações assíncronas sejam concluídas
     const vinculosFormatados = await Promise.all(
@@ -100,5 +100,3 @@ exports.renderVinculosPage = async (req, res) => {
     res.status(500).send('Erro ao carregar a página de vínculos');
   }
 };
-
-

@@ -20,12 +20,21 @@ exports.listarMatriculas =  async (req, res) => {
   
     try {
        await pool.query(`INSERT INTO matriculas (idaluno, nome_aluno, iddisciplina, nome_disciplina, data_matricula, ativo, obs) VALUES (?, ?, ?, ?, ?, ?, ?)`, [idaluno, nome_aluno, iddisciplina, nome_disciplina, data_matricula, ativo, obs]);
+
        res.redirect('/matriculas');
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Erro ao inserir matricula');
-    }  
+
+      } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+          const errorMessage = 'Aluno(a) Disciplina já existe!';
+          const [matriculas] = await pool.query('SELECT * FROM matriculas');
+          res.render('matriculas', { matriculas, errorMessage });
+        } else {  
+          console.error('Erro ao inserir matricula', err);
+          res.status(500).json({ message: 'Erro no servidor' });
+        }  
+      }
   };
+  
   
   // Atualizar matriculas
   exports.atualizarMatricula =  async (req, res) => {
