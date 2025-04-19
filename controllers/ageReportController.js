@@ -26,7 +26,7 @@ exports.generateAgeReport = async (req, res) => {
 
     try {
         const [rows] = await db.query(
-            'SELECT idaluno, nome, idade FROM alunos WHERE idade BETWEEN ? AND ? ORDER BY idade ASC',
+            'SELECT idaluno, nome, idade, sexo, pcd, ativo FROM alunos WHERE idade BETWEEN ? AND ? ORDER BY idade ASC',
             [ageStart, ageEnd]
         );
 
@@ -62,8 +62,9 @@ exports.generateAgeReport = async (req, res) => {
         doc.fontSize(16).text(title, xPosition, doc.y).moveDown(2);
 
         // Cabeçalhos
-        const headers = ['Matrícula', 'Nome', 'Idade'];
-        const columnWidths = [100, 300, 100]; // Ajuste das larguras
+        const headers = ['Matr.', 'Nome', 'Ativo', 'PCD', 'Idade'];
+
+        const columnWidths = [51, 150, 50, 50, 50]; // Ajuste das larguras
         let xPositionHeader = 50; // Margem inicial
         const initialY = doc.y;
 
@@ -90,6 +91,11 @@ exports.generateAgeReport = async (req, res) => {
 
             doc.text(row.nome, xPositionHeader, currentY, { width: columnWidths[1], align: 'left' });
             xPositionHeader += columnWidths[1] + 20;
+
+            doc.text(row.ativo, xPositionHeader, currentY, { width: columnWidths[1], align: 'left' });
+            xPositionHeader += columnWidths[1] - 77;
+            doc.text(row.pcd, xPositionHeader, currentY, { width: columnWidths[1], align: 'left' });
+            xPositionHeader += columnWidths[1] - 77;
 
             doc.text(row.idade.toString(), xPositionHeader, currentY, { width: columnWidths[2], align: 'left' });
 

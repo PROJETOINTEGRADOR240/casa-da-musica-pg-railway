@@ -65,10 +65,13 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 7%;">(ID)Disciplina</th>
-                    <th style="width: 45%;">Nome da Disciplina</th>
-                    <th style="width: 7%;">(ID)Professor(a)</th>
-                    <th style="width: 41%;">Nome do(a) Professor(a)</th>
+                    <th style="width: 3%;">(ID)Disc.</th>
+                    <th style="width: 25%;">Nome</th>
+                    <th style="width: 10%;">Inicio</th>
+                    <th style="width: 10%;">Fim</th>
+                    <th style="width: 10%;">Dia</th>
+                    <th style="width: 3%;">(ID)Prof.</th>
+                    <th style="width: 41%;">Nome</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,6 +79,9 @@
                     <tr>
                         <td><%= registro.iddisciplina %></td>
                         <td><%= registro.disciplina_nome %></td>
+                        <td><%= registro.hora_aula_inicio %></td>
+                        <td><%= registro.hora_aula_fim %></td>
+                        <td><%= registro.dia_semana %></td>
                         <td><%= registro.idprofessor %></td>
                         <td><%= registro.professor_nome %></td>
                     </tr>
@@ -107,8 +113,8 @@
                 pdf.text(`Data e Hora: ${new Date().toLocaleString()}`, 10, 20);
 
                 // Cabeçalhos e dados da tabela
-                const cabecalhos = [['(ID)Disciplina', 'Nome da Disciplina', '(ID)Professor(a)', 'Nome do(a) Professor(a)']];
-                const dados = <%- JSON.stringify(registros.map(reg => [reg.iddisciplina, reg.disciplina_nome, reg.idprofessor, reg.professor_nome])) %>;
+                const cabecalhos = [['(ID)Disc.', 'Nome', 'Inicio', 'Fim', 'Dia', '(ID)Prof.', 'Nome']];
+                const dados = <%- JSON.stringify(registros.map(reg => [reg.iddisciplina, reg.disciplina_nome, reg.hora_aula_inicio, reg.hora_aula_fim, reg.dia_semana, reg.idprofessor, reg.professor_nome])) %>;
 
                 // Cria tabela usando autoTable
                 pdf.autoTable({

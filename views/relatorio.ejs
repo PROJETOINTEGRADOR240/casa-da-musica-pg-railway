@@ -27,9 +27,12 @@
             <thead>
                 <tr>
                     <th style="width: 7%;">Matrícula</th>
-                    <th style="width: 45%;">Nome</th>
-                    <th style="width: 20%;">Telefone</th>
-                    <th style="width: 33%;">E-mail</th>
+                    <th style="width: 30%;">Nome</th>
+                    <th style="width: 5%;">Idade</th>
+                    <th style="width: 7%;">PCD</th>
+                    <th style="width: 7%;">Ativo</th>
+                    <th style="width: 17%;">Telefone</th>
+                    <th style="width: 30%;">E-mail</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +40,9 @@
                     <tr>
                         <td><%= aluno.idaluno %></td>
                         <td><%= aluno.nome %></td>
+                        <td><%= aluno.idade %></td>
+                        <td><%= aluno.pcd %></td>
+                        <td><%= aluno.ativo %></td>
                         <td><%= aluno.telefone %></td>
                         <td><%= aluno.email %></td>
                     </tr>
@@ -73,18 +79,25 @@
             let startY = 30;
 
             pdf.setFontSize(10);
+            pdf.setFont('helvetica', 'bold');
             pdf.text('Matrícula', 10, startY);
             pdf.text('Nome', 30, startY);
-            pdf.text('Telefone', 120, startY);
-            pdf.text('E-mail', 160, startY);
-            
+            pdf.text('Idade', 88, startY);
+            pdf.text('PCD', 105, startY);
+            pdf.text('Ativo', 120, startY);
+            pdf.text('Telefone', 134, startY);
+            pdf.text('E-mail', 171, startY);
+            pdf.setFont('helvetica', 'normal');
             startY += 10; // Move para a próxima linha
             
             alunos.forEach(aluno => {
                 pdf.text(`${aluno.idaluno}`, 10, startY);
                 pdf.text(`${aluno.nome}`, 30, startY);
-                pdf.text(`${aluno.telefone}`, 120, startY);
-                pdf.text(`${aluno.email}`, 160, startY);
+                pdf.text(`${aluno.idade}`, 91, startY);
+                pdf.text(`${aluno.pcd}`, 105, startY);
+                pdf.text(`${aluno.ativo}`, 120, startY);
+                pdf.text(`${aluno.telefone}`, 134, startY);
+                pdf.text(`${aluno.email}`, 171, startY);
                 startY += 10;
             });
 

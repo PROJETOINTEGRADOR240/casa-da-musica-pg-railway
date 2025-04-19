@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Gráfico de Círculos Proporcionais - Aluno(a)s Ativo(s)/Inativo(s)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+
+    .circulo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+      margin-top: 40px;
+    }
+
+    .circulo {
+      border-radius: 50%;
+      line-height: 1;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .ativo {
+      background-color: #4CAF50; /* verde */
+    }
+
+    .inativo {
+      background-color: #F44336; /* vermelho */
+    }
+
+    .legenda {
+      font-size: 1.1em;
+      margin-top: 40px;
+    }
+
+    .btn-voltar {
+      display: block;
+      margin: 30px auto 0 auto;
+      padding: 10px 20px;
+      background-color: #1b74c7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-voltar:hover {
+      background-color: #a02727;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Gráfico de Círculos Proporcionais - Aluno(a)s Ativo(s)/Inativo(s)</h1>
+  <p style="text-align: left;">Data e Hora: <%= new Date().toLocaleString() %></p>
+
+  <div class="circulo-container">
+    <div class="circulo ativo" style="width: <%= simPercent * 3 %>px; height: <%= simPercent * 3 %>px;">
+      <%= simPercent %>%<br>Ativo
+    </div>
+
+    <div class="circulo inativo" style="width: <%= naoPercent * 3 %>px; height: <%= naoPercent * 3 %>px;">
+      <%= naoPercent %>%<br>Inativo
+    </div>
+  </div>
+
+  <div class="legenda">
+    <p><strong>Total de Aluno(a)s Ativo:</strong> <%= simCount %></p>
+    <p><strong>Total de Aluno(a)s Inativo:</strong> <%= naoCount %></p>
+    <p><strong>Total Geral de Aluno(a)s:</strong> <%= total %></p>
+  </div>
+
+  <a href="/alunos-ativo/relatorio-menu">
+    <button class="btn-voltar">Voltar</button>
+  </a>
+
+</body>
+</html>

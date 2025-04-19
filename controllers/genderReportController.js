@@ -9,7 +9,7 @@ exports.generateGenderReport = async (req, res) => {
 
   try {
     // Configurar consulta SQL
-    let query = 'SELECT idaluno, nome, LOWER(sexo) AS sexo FROM alunos';
+    let query = 'SELECT idaluno, nome, ativo, pcd, idade, LOWER(sexo) AS sexo FROM alunos';
     const params = [];
 
     if (gender !== 'Todos') {
@@ -63,8 +63,8 @@ exports.generateGenderReport = async (req, res) => {
       doc.moveDown(1);
 
       // Cabeçalhos das colunas
-      const headers = ['Matrícula', 'Nome', 'Sexo'];
-      const columnWidths = [100, 300, 100];
+      const headers = ['Matr.', 'Nome', 'Ativo', 'PCD', 'Idade',  'Sexo'];
+      const columnWidths = [51, 150, 50, 50, 50, 50]; // Ajuste das larguras
       let xPosition = 50;
       const initialY = doc.y;
 
@@ -94,10 +94,21 @@ exports.generateGenderReport = async (req, res) => {
       const currentY = doc.y;
 
       doc.text(row.idaluno.toString(), xPosition, currentY, { width: 100, align: 'left' });
-      xPosition += 120;
+      xPosition += 73;
 
       doc.text(row.nome, xPosition, currentY, { width: 300, align: 'left' });
-      xPosition += 320;
+      xPosition += 170;
+
+
+      doc.text(row.ativo, xPosition, currentY, { width: 300, align: 'left' });
+      xPosition += 71;
+
+      doc.text(row.pcd, xPosition, currentY, { width: 300, align: 'left' });
+      xPosition += 80;
+
+      doc.text(row.idade, xPosition, currentY, { width: 300, align: 'left' });
+      xPosition += 60;
+
 
       const formattedSexo = row.sexo === 'masculino' || row.sexo === 'm' ? 'Masculino' : 'Feminino';
       doc.text(formattedSexo, xPosition, currentY, { width: 100, align: 'left' });
@@ -107,7 +118,7 @@ exports.generateGenderReport = async (req, res) => {
     });
 
     // Exibir contadores no final da última página
-    doc.moveDown(2);
+    doc.moveDown(4);
     doc.font('Helvetica-Bold').fontSize(12);
     doc.text(`Quantidade de aluno(s): ${totalMasculino}`, 50, doc.y, { align: 'left' });
     doc.text(`Quantidade de aluna(s): ${totalFeminino}`, 50, doc.y + 3, { align: 'left' });

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Salas e Sensores</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .container { margin-top: 20px; }
+        .btn-voltar { position: fixed; left: 20px; top: 20px; z-index: 1000; }
+        
+        /* Cor de fundo - altere aqui para mudar a cor */
+        body { background-color: #e6f0fa; } /* Azul claro suave */
+    </style>
+</head>
+<body class="container">
+      <!-- Incluir VLibras automaticamente -->
+  <%- vlibras %>
+
+    <button class="btn btn-danger btn-voltar" onclick="window.history.back()">Voltar</button>
+    <h2 class="text-center">Cadastro de Salas e Sensores</h2>
+
+    <!-- Formulário para Salas -->
+    <div class="card p-3 mt-4">
+        <h4>Salas</h4>
+        <form id="formSala" action="/salas" method="POST">
+            <input type="text" name="nome" id="nomeSala" class="form-control mb-2" placeholder="Nome da Sala" required>
+            <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
+        </form>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr><th>ID</th><th>Nome</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="tabelaSalas">
+                <% salas.forEach(sala => { %>
+                    <tr data-id="<%= sala.id %>">
+                        <td><%= sala.id %></td>
+                        <td><%= sala.nome %></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editarSala(<%= sala.id %>)">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="excluirSala(<%= sala.id %>)">Excluir</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulário para Sensores -->
+    <div class="card p-3 mt-4">
+        <h4>Sensores</h4>
+        <form id="formSensor" action="/sensores" method="POST">
+            <input type="text" name="descricao" id="nomeSensor" class="form-control mb-2" placeholder="Descrição do Sensor" required>
+            <button type="submit" class="btn btn-primary">Cadastrar Sensor</button>
+        </form>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr><th>ID</th><th>Descrição</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="tabelaSensores">
+                <% sensores.forEach(sensor => { %>
+                    <tr data-id="<%= sensor.id %>">
+                        <td><%= sensor.id %></td>
+                        <td><%= sensor.descricao %></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editarSensor(<%= sensor.id %>)">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="excluirSensor(<%= sensor.id %>)">Excluir</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Funções para Salas
+        async function editarSala(id) {
+            const nome = prompt('Novo nome da sala:');
+            if (nome) {
+                await fetch(`/salas/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome })
+                });
+                window.location.reload();
+            }
+        }
+
+        async function excluirSala(id) {
+            if (confirm('Confirma a exclusão da sala?')) {
+                await fetch(`/salas/${id}`, { method: 'DELETE' });
+                window.location.reload();
+            }
+        }
+
+        // Funções para Sensores
+        async function editarSensor(id) {
+            const descricao = prompt('Nova descrição do sensor:');
+            if (descricao) {
+                await fetch(`/sensores/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ descricao })
+                });
+                window.location.reload();
+            }
+        }
+
+        async function excluirSensor(id) {
+            if (confirm('Confirma a exclusão do sensor?')) {
+                await fetch(`/sensores/${id}`, { method: 'DELETE' });
+                window.location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -60,9 +60,12 @@
             <thead>
                 <tr>
                     <th style="width: 7%;">(ID)Aluno</th>
-                    <th style="width: 45%;">Nome</th>
-                    <th style="width: 7%;">(ID)Disciplina</th>
-                    <th style="width: 41%;">Nome da Disciplina</th>
+                    <th style="width: 30%;">Nome</th>
+                    <th style="width: 5%;">(ID)Disc.</th>
+                    <th style="width: 30%;">Nome</th>
+                    <th style="width: 5%;">(ID)Prof.</th>
+                    <th style="width: 30%;">Nome</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -72,6 +75,9 @@
                         <td><%= registro.aluno_nome %></td>
                         <td><%= registro.iddisciplina %></td>
                         <td><%= registro.disciplina_nome %></td>
+                        <td><%= registro.idprofessor %></td>
+                        <td><%= registro.professor_nome %></td>
+
                     </tr>
                 <% }); %>
             </tbody>
@@ -100,8 +106,8 @@
                 pdf.text(`Data e Hora: ${new Date().toLocaleString()}`, 10, 20);
 
                 // Cabeçalhos e dados da tabela
-                const cabecalhos = [['(ID)Aluno', 'Nome', '(ID)Disciplina', 'Nome da Disciplina']];
-                const dados = <%- JSON.stringify(registros.map(reg => [reg.idaluno, reg.aluno_nome, reg.iddisciplina, reg.disciplina_nome])) %>;
+                const cabecalhos = [['(ID)Aluno', 'Nome', '(ID)Disc.', 'Nome', '(ID)Prof.', 'Nome']];
+                const dados = <%- JSON.stringify(registros.map(reg => [reg.idaluno, reg.aluno_nome, reg.iddisciplina, reg.disciplina_nome, reg.idprofessor, reg.professor_nome])) %>;
 
                 // Cria tabela usando autoTable
                 pdf.autoTable({

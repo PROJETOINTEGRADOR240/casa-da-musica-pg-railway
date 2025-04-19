@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Aluno(a) Ativo(s) Inativo(s)</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #007bff; color: white; }
+    .mensagem { color: red; text-align: center; font-weight: bold; margin-top: 20px; }
+    .total { font-size: 16px; font-weight: bold; text-align: center; margin-top: 20px; }
+    .btn { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; margin-top: 20px; }
+    .btn:hover { background-color: #0056b3; }
+</style>
+
+</head>
+<body>
+    <!-- Incluir VLibras automaticamente -->
+    <%- vlibras %>
+
+    <h1 style="text-align: center;">Relatório de Aluno(a)s Ativo(s)/Inativo(s)</h1>
+    <p style="text-align: left;">Data e Hora: <%= new Date().toLocaleString() %></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 5%;">Matrícula</th>
+        <th style="width: 25%;">Nome</th>
+        <th style="width: 1%;">Idade</th>
+        <th style="width: 13%;">Telefone</th>
+        <th style="width: 07%;">Ativo</th>
+        <th style="width: 50%;">PCD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% alunos.forEach(aluno => { %>
+        <tr>
+          <td><%= aluno.idaluno %></td>
+          <td><%= aluno.nome %></td>
+          <td><%= aluno.idade %></td>
+          <td><%= aluno.telefone %></td>
+          <td><%= aluno.ativo %></td>
+          <td><%= aluno.pcd %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <div style="text-align: center;">
+    <form action="/alunos-ativo/pdf-filtrado" method="GET" style="display: inline;">
+      <input type="hidden" name="filtro" value="<%= filtro %>">
+      <button type="submit" class="btn">Salvar em PDF</button>
+    </form>
+
+    <a href="/alunos-ativo/relatorio-menu"><button class="btn">Voltar</button></a>
+  </div>
+
+</body>
+</html>

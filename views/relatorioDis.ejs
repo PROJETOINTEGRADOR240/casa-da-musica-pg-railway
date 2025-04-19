@@ -26,11 +26,13 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 7%;">(ID)Código</th>
-                    <th style="width: 45%;">Nome</th>
-                    <th style="width: 15%;">Carga Horária</th>
+                    <th style="width: 7%;">Codigo</th>
+                    <th style="width: 30%;">Nome</th>
+                    <th style="width: 10%;">Duração</th>
+                    <th style="width: 10%;">Hora Inicial</th>
+                    <th style="width: 10%;">Hora Final</th>
                     <th style="width: 10%;">Turno</th>
-                    <th style="width: 13%;">Dia da Semana</th>
+                    <th style="width: 133%;">Dia Semana</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +41,8 @@
                         <td><%= disciplina.iddisciplina %></td>
                         <td><%= disciplina.nome %></td>
                         <td><%= disciplina.carga_horaria %></td>
+                        <td><%= disciplina.hora_aula_inicio %></td>
+                        <td><%= disciplina.hora_aula_fim %></td>
                         <td><%= disciplina.turno %></td>
                         <td><%= disciplina.dia_semana %></td>
                     </tr>
@@ -75,20 +79,28 @@
             let startY = 30;
 
             pdf.setFontSize(10);
-            pdf.text('(ID)Código', 10, startY);
-            pdf.text('Nome', 30, startY);
-            pdf.text('Carga Horária', 120, startY);
-            pdf.text('Turno', 151, startY);
-            pdf.text('Dia da Semanal', 169, startY);
-            
+            pdf.setFont('helvetica', 'bold'); // Define a fonte como negrito
+            pdf.text('Código', 7, startY);
+            pdf.text('Nome', 25, startY);
+            pdf.text('Duração', 80, startY);
+            pdf.text('Hora Inicial', 105, startY);
+            pdf.text('Hora Final', 133, startY);
+            pdf.text('Turno', 160, startY);
+            pdf.text('Dia', 185, startY);
+            pdf.setFont('helvetica', 'normal'); // Volta para o estilo normal
+                       
             startY += 10; // Move para a próxima linha
             
             disciplinas.forEach(disciplina => {
                 pdf.text(`${disciplina.iddisciplina}`, 10, startY);
-                pdf.text(`${disciplina.nome}`, 30, startY);
-                pdf.text(`${disciplina.carga_horaria}`, 120, startY);
-                pdf.text(`${disciplina.turno}`, 151, startY);
-                pdf.text(`${disciplina.dia_semana}`, 169, startY);
+                pdf.text(`${disciplina.nome}`, 25, startY);
+                pdf.text(`${disciplina.carga_horaria}`, 80, startY);
+
+                pdf.text(`${disciplina.hora_aula_inicio}`, 105, startY);
+                pdf.text(`${disciplina.hora_aula_fim}`, 133, startY);
+
+                pdf.text(`${disciplina.turno}`, 160, startY);
+                pdf.text(`${disciplina.dia_semana}`, 185, startY);
                 startY += 10;
             });
 

@@ -3,8 +3,10 @@ const router = express.Router();
 const pool = require('../models/db');
 const monitoramentoController = require('../controllers/monitoramentoController');
 
+// Registrar uma nova medição
 router.post('/monitoramento', monitoramentoController.registrarMedicao);
 
+// Buscar os últimos 10 registros de monitoramento
 router.get('/monitoramento/dados', async (req, res) => {
     try {
         const [dados] = await pool.query(`
@@ -19,29 +21,32 @@ router.get('/monitoramento/dados', async (req, res) => {
             ORDER BY m.data_hora DESC
             LIMIT 10
         `);
-
-        res.json(dados); // Envia os dados como JSON
+        res.json(dados);
     } catch (error) {
         console.error('Erro ao buscar registros:', error);
         res.status(500).json({ erro: 'Erro ao buscar os registros' });
     }
 });
 
-
-// Rota para registrar medição
+// Excluir registros excedentes (mantém apenas os últimos 10)
 router.get('/monitoramento/excluiMaiorqueDez', async (req, res) => {
-
-    // Verificar o número de registros na tabela monitoramento
-    const [rows] = await pool.query('SELECT COUNT(*) as count FROM monitoramento');
-
-    if (rows[0].count > 11) {
-        // Apagar o registro mais antigo (FIFO)
-        await pool.query('DELETE FROM monitoramento ORDER BY data_hora ASC LIMIT 1');
+    try {
+        await pool.query(`
+            DELETE FROM monitoramento
+            WHERE data_hora NOT IN (
+                SELECT data_hora FROM (
+                    SELECT data_hora 
+                    FROM monitoramento 
+                    ORDER BY data_hora DESC 
+                    LIMIT 10
+                ) AS ultimos_dez
+            )
+        `);
+        res.status(200).json({ mensagem: 'Registros excedentes excluídos com sucesso' });
+    } catch (error) {
+        console.error('Erro ao excluir registros excedentes:', error);
+        res.status(500).json({ erro: 'Erro ao excluir registros excedentes' });
     }
-
-    // Redirecionar de volta para a página
-    res.redirect('/');
 });
-
 
 module.exports = router;

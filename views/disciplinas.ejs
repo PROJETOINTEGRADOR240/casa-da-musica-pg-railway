@@ -25,7 +25,7 @@
     <div class="form-group">
       <label for="nome">Nome da Disciplina:</label>
       <input type="text" name="nome" id="nome" placeholder="Nome" required>
-      <label for="carga_horaria">Horário:</label>
+      <label for="carga_horaria">Duração:</label>
       <input type="time" name="carga_horaria" id="carga_horaria" required>
       <select type="text" name="turno" id="turno" required>
         <option value="">Turno</option>
@@ -44,6 +44,11 @@
         <option value="Sexta  ">Sexta</option>
         <option value="Sábado ">Sábado</option>
       </select>
+      <label for="carga_horaria">Hora Inicial:</label>
+      <input type="time" name="hora_aula_inicio" id="hora_aula_inicio" required>
+      <label for="carga_horaria">Hora final:</label>
+      <input type="time" name="hora_aula_fim" id="hora_aula_fim" required>
+
       <p></p>
       <div class="form-group">
         <textarea name="obs" placeholder="Observação" rows="4"></textarea>
@@ -61,9 +66,11 @@
           <tr>
             <th>ID</th>
             <th>Nome</th>
-            <th>Horário</th>
+            <th>Duração</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fim</th>
             <th>Turno</th>
-            <th>Dia Semana</th>
+            <th>Dia(s)</th>
             <th>Ações</th>
           </tr>
         </thead>
@@ -74,13 +81,14 @@
             <td><%= disciplina.iddisciplina %></td>
             <td><%= disciplina.nome %></td>
             <td><%= disciplina.carga_horaria %></td>
+            <td><%= disciplina.hora_aula_inicio %></td>
+            <td><%= disciplina.hora_aula_fim %></td>       
             <td><%= disciplina.turno %></td>
             <td><%= disciplina.dia_semana %></td>       
             <td>
             <div class="action-buttons">
-
               <!-- Botão de Editar -->
-              <button class="button-update" onclick="openEditModal(<%= disciplina.iddisciplina %>, '<%= disciplina.nome %>','<%= disciplina.carga_horaria %>','<%= disciplina.turno %>','<%= disciplina.dia_semana %>','<%= disciplina.obs %>')"><i class="fas fa-edit"></i> Atualizar</button>
+              <button class="button-update" onclick="openEditModal(<%= disciplina.iddisciplina %>, '<%= disciplina.nome %>','<%= disciplina.carga_horaria %>','<%= disciplina.turno %>','<%= disciplina.dia_semana %>','<%= disciplina.hora_aula_inicio %>','<%= disciplina.hora_aula_fim %>','<%= disciplina.obs %>')"><i class="fas fa-edit"></i> Atualizar</button>
  
                <!-- Botão de Excluir -->
               <button class="button-delete" onclick="openDeleteModal(<%= disciplina.iddisciplina %>)"><i class="fas fa-trash"></i> Excluir</button>
@@ -117,8 +125,16 @@
              <input type="text" id="edit-turno" name="turno" class="form-control" required>
             </div>
             <div class="form-group">
-             <label>Dia da semana</label>
-             <input type="text" id="edit-dia_semana" name="dia_semana" class="form-control" required>
+              <label>Dia da semana</label>
+              <input type="text" id="edit-dia_semana" name="dia_semana" class="form-control" required>
+            </div>
+            <div class="form-group">            
+              <label>Hora Inicial</label>
+              <input type="text" id="edit-hora_aula_inicio" name="hora_aula_inicio" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Hora Final</label>
+              <input type="text" id="edit-hora_aula_fim" name="hora_aula_fim" class="form-control" required>
             </div>
             <div class="form-group">
               <label>Observação</label>
@@ -162,13 +178,15 @@
   <script>
 
     // Função para abrir o modal de edição com os dados do disciplina
-    function openEditModal(iddisciplina, nome, carga_horaria, turno, dia_semana, obs) {
+    function openEditModal(iddisciplina, nome, carga_horaria, turno, dia_semana, hora_aula_inicio, hora_aula_fim, obs) {
 
       $('#edit-id').val(iddisciplina);
       $('#edit-nome').val(nome);
       $('#edit-carga_horaria').val(carga_horaria);
       $('#edit-turno').val(turno);
       $('#edit-dia_semana').val(dia_semana);
+      $('#edit-hora_aula_inicio').val(hora_aula_inicio);
+      $('#edit-hora_aula_fim').val(hora_aula_fim);
       $('#edit-obs').val(obs);
       
       $('#editForm').attr('action', '/disciplinas/atualizar/' + iddisciplina);

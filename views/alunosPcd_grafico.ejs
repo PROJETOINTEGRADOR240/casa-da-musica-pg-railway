@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Gráfico Termômetro - Aluno(a) PCD</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .grafico-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+      border: 1px solid #ccc;
+      background-color: #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 40px;
+      display: flex;
+    }
+    .barra-sim {
+      background-color: #7599b9;
+      height: 100%;
+      color: white;
+      text-align: center;
+      line-height: 40px;
+      font-weight: bold;
+    }
+    .barra-nao {
+      background-color: #766ba7;
+      height: 100%;
+      color: white;
+      text-align: center;
+      line-height: 40px;
+      font-weight: bold;
+    }
+    .legenda {
+      text-align: center;
+      font-size: 1.1em;
+    }
+    .btn-voltar {
+      display: block;
+      margin: 30px auto 0 auto;
+      padding: 10px 20px;
+      background-color: #1b74c7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-voltar:hover {
+      background-color: #a02727;
+    }
+  </style>
+</head>
+<body>
+    <!-- Incluir VLibras automaticamente -->
+    <%- vlibras %>
+
+    <h1 style="text-align: center;">Gráfico de Termômetro - Aluno(a)s PCD</h1>
+    <p style="text-align: left;">Data e Hora: <%= new Date().toLocaleString() %></p>
+
+
+  <div class="grafico-container">
+    <div class="barra-sim" style="width: <%= simPercent %>%;">
+      <%= simPercent %>% PCD
+    </div>
+    <div class="barra-nao" style="width: <%= naoPercent %>%;">
+      <%= naoPercent %>% Não PCD
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="legenda">
+    <p><strong>Total de Aluno(a)s PCD:</strong> <%= simCount %></p>
+    <p><strong>Total de Aluno(a)s Não PCD:</strong> <%= naoCount %></p>
+    <p><strong>Total Geral de Aluno(a)s:</strong> <%= total %></p>
+  </div>
+
+  <a href="/alunos-pcd/relatorio-menu">
+    <button class="btn-voltar">Voltar</button>
+  </a>
+
+</body>
+</html>

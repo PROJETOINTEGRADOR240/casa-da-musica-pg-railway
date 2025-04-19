@@ -16,10 +16,10 @@ exports.listarDisciplinas =  async (req, res) => {
 
 // Inserir disciplina
 exports.inserirDisciplina = async (req, res) => {
-  const { nome, carga_horaria, turno, dia_semana, obs } = req.body;
+  const { nome, carga_horaria, turno, dia_semana, hora_aula_inicio, hora_aula_fim, obs } = req.body;
   
   try {
-    await pool.query(`INSERT INTO disciplinas (nome, carga_horaria, turno, dia_semana, obs) VALUES (?, ?, ?, ?, ?)`, [nome, carga_horaria, turno, dia_semana, obs]);
+    await pool.query(`INSERT INTO disciplinas (nome, carga_horaria, turno, dia_semana, hora_aula_inicio, hora_aula_fim, obs) VALUES (?, ?, ?, ?, ?, ?, ?)`, [nome, carga_horaria, turno, dia_semana, hora_aula_inicio, hora_aula_fim, obs]);
     res.redirect('/disciplinas');
   } catch (err) {
     console.error(err);
@@ -31,12 +31,12 @@ exports.inserirDisciplina = async (req, res) => {
 // Atualizar disciplina
 exports.atualizarDisciplina =  async (req, res) => {
   const { iddisciplina } = req.params;
-  const { nome, carga_horaria, turno, dia_semana, obs } = req.body;
+  const { nome, carga_horaria, turno, dia_semana, hora_aula_inicio, hora_aula_fim, obs } = req.body;
 
   try {
 
-  await pool.query(`UPDATE disciplinas SET nome = ?, carga_horaria = ?, turno = ?, dia_semana = ?, obs = ? WHERE iddisciplina = ?`,
-  [nome, carga_horaria, turno, dia_semana, obs, iddisciplina]); 
+  await pool.query(`UPDATE disciplinas SET nome = ?, carga_horaria = ?, turno = ?, dia_semana = ?, hora_aula_inicio = ?, hora_aula_fim = ?, obs = ? WHERE iddisciplina = ?`,
+  [nome, carga_horaria, turno, dia_semana, hora_aula_inicio, hora_aula_fim, obs, iddisciplina]); 
   res.redirect('/disciplinas');
 
   } catch (err) {

@@ -13,12 +13,13 @@
             top: 20px;
             z-index: 1000;
         }
-
         .grafico-container {
             width: 100%;
             max-width: 900px;
             height: 500px;
             margin: auto;
+        }
+        body { background-color: #e6f0fa; /* Cor de fundo altere aqui para mudar - Azul claro suave */
         }
     </style>
 </head>
@@ -30,23 +31,6 @@
 
     <h2 class="text-center">Monitoramento da Qualidade do Ar</h2>
 
-    <!-- Formulário para Adicionar Sala -->
-    <div class="card p-3 mt-4">
-        <h4>Adicionar Sala</h4>
-        <form action="/salas" method="POST">
-            <input type="text" name="nome" class="form-control mb-2" placeholder="Nome da Sala" required>
-            <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
-        </form>
-    </div>
-
-    <!-- Formulário para Adicionar Sensor -->
-    <div class="card p-3 mt-4">
-        <h4>Adicionar Sensor</h4>
-        <form action="/sensores" method="POST">
-            <input type="text" name="descricao" class="form-control mb-2" placeholder="Descrição do Sensor" required>
-            <button type="submit" class="btn btn-primary">Cadastrar Sensor</button>
-        </form>
-    </div>
 
     <!-- Formulário para Registrar Qualidade do Ar -->
     <div class="card p-3 mt-4">
@@ -58,14 +42,12 @@
                     <option value="<%= sala.id %>"><%= sala.nome %></option>
                 <% }); %>
             </select>
-
             <select name="sensor_id" class="form-control mb-2" required>
                 <option value="">Selecione o Sensor</option>
                 <% sensores.forEach(sensor => { %>
                     <option value="<%= sensor.id %>"><%= sensor.descricao %></option>
                 <% }); %>
             </select>
-
             <input type="number" name="qualidade_ar" class="form-control mb-2" placeholder="Índice de Qualidade do Ar (0-100)" required>
             <button type="submit" class="btn btn-success">Registrar Medição</button>
         </form>
@@ -88,23 +70,38 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Gráficos de Relatórios -->
+    <div class="card p-3 mt-4">
+        <h4>Gráficos de Monitoramento</h4>
+        <div class="grafico-container">
+            <canvas id="graficoLinha"></canvas>
+        </div>
+        <div class="grafico-container mt-4">
+            <canvas id="graficoBarra"></canvas>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <canvas id="graficoPizza" style="max-width: 550px; max-height: 550px;"></canvas>
+        </div>
+    </div>
+
     <script>
         async function carregarDados() {
             try {
-                const decimo = await fetch('/monitoramento/excluiMaiorqueDez'); // Chama a API
-                const resposta = await fetch('/monitoramento/dados'); // Chama a API
+                await fetch('/monitoramento/excluiMaiorqueDez'); // Exclui registros excedentes
+                const resposta = await fetch('/monitoramento/dados');
                 const dados = await resposta.json();
-            
+
                 let tabela = document.getElementById("tabela-dados");
                 tabela.innerHTML = ""; // Limpa antes de adicionar novos registros
-            
+
                 dados.forEach(registro => {
                     let linha = `
                         <tr>
                             <td>${registro.sala_nome}</td>
                             <td>${registro.sensor_desc}</td>
                             <td>${registro.qualidade_ar}</td>
-                            <td>${new Date(registro.data_hora).toLocaleString()}</td>
+                            <td>${new Date(registro.data_hora).toLocaleString('pt-BR')}</td>
                         </tr>
                     `;
                     tabela.innerHTML += linha;
@@ -113,82 +110,83 @@
                 console.error("Erro ao carregar os dados:", erro);
             }
         }
-        
-        carregarDados(); // Chama a função ao carregar a página
+
+        async function carregarGraficos() {
+            try {
+                await fetch('/monitoramento/excluiMaiorqueDez'); // Exclui registros excedentes
+                const resposta = await fetch('/monitoramento/dados');
+                const dados = await resposta.json();
+
+                // Gráfico de Linha: Qualidade do Ar por Sala
+                const salas = dados.map(d => d.sala_nome); // Eixo X: Todas as salas, com repetições
+                const qualidadeSalas = dados.map(d => d.qualidade_ar); // Valores Y: Qualidade do ar
+
+                const ctxLinha = document.getElementById('graficoLinha').getContext('2d');
+                new Chart(ctxLinha, {
+                    type: 'line',
+                    data: {
+                        labels: salas, // Eixo X: Nomes das salas
+                        datasets: [{
+                            label: 'Qualidade do Ar por Sala',
+                            data: qualidadeSalas,
+                            borderColor: 'blue',
+                            borderWidth: 2,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: { beginAtZero: true, max: 100 }
+                        }
+                    }
+                });
+
+                // Gráfico de Barras: Qualidade do Ar por Sensor
+                const sensores = dados.map(d => d.sensor_desc); // Eixo X: Todos os sensores, com repetições
+                const qualidadeSensores = dados.map(d => d.qualidade_ar); // Valores Y: Qualidade do ar
+
+                const ctxBarra = document.getElementById('graficoBarra').getContext('2d');
+                new Chart(ctxBarra, {
+                    type: 'bar',
+                    data: {
+                        labels: sensores, // Eixo X: Descrição dos sensores
+                        datasets: [{
+                            label: 'Qualidade do Ar por Sensor',
+                            data: qualidadeSensores,
+                            backgroundColor: 'mediumseagreen'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: { beginAtZero: true, max: 100 }
+                        }
+                    }
+                });
+
+                // Gráfico de Pizza: Qualidade do Ar por Data e Hora
+                const labelsPizza = dados.map(d => new Date(d.data_hora).toLocaleString('pt-BR'));
+                const valoresPizza = dados.map(d => d.qualidade_ar);
+
+                const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
+                new Chart(ctxPizza, {
+                    type: 'pie',
+                    data: {
+                        labels: labelsPizza, // Labels: Data e hora
+                        datasets: [{
+                            label: 'Qualidade do Ar',
+                            data: valoresPizza,
+                            backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue', '#FF7F7F', '#800080', '#FFFF99', '#90EE90', '#87CEFA']
+                        }]
+                    }
+                });
+            } catch (erro) {
+                console.error("Erro ao carregar os gráficos:", erro);
+            }
+        }
+
+        // Chama as funções ao carregar a página
+        carregarDados();
+        carregarGraficos();
     </script>
-<!-- Gráficos de Relatórios -->
-<div class="card p-3 mt-4">
-    <h4>Gráficos de Monitoramento</h4>
-    <div class="grafico-container">
-        <canvas id="graficoLinha"></canvas>
-    </div>
-    <div class="grafico-container mt-4">
-        <canvas id="graficoBarra"></canvas>
-    </div>
-<!---
-    <div class="grafico-container mt-4">
-        <canvas id="graficoPizza"></canvas>
-    </div>
--->
-<div style="display: flex; justify-content: center;">
-    <canvas id="graficoPizza" style="max-width: 550px; max-height: 550px;"></canvas>
-</div>
-
-</div>
-
-<script>
-    async function carregarGraficos() {
-        const decimo = await fetch('/monitoramento/excluiMaiorqueDez'); // Chama a API
-        const resposta = await fetch('/monitoramento/dados');
-        const dados = await resposta.json();
-
-        const labels = dados.map(d => new Date(d.data_hora).toLocaleTimeString());
-        const valores = dados.map(d => d.qualidade_ar);
-
-        const ctxLinha = document.getElementById('graficoLinha').getContext('2d');
-        new Chart(ctxLinha, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Qualidade do Ar',
-                    data: valores,
-                    borderColor: 'blue',
-                    borderWidth: 2,
-                    fill: false
-                }]
-            }
-        });
-
-        const ctxBarra = document.getElementById('graficoBarra').getContext('2d');
-        new Chart(ctxBarra, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Qualidade do Ar',
-                    data: valores,
-                    backgroundColor: 'mediumseagreen'
-                }]
-            }
-        });
-
-        const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
-        new Chart(ctxPizza, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Qualidade do Ar',
-                    data: valores,
-                    backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue', '#FF7F7F', '#800080', '#FFFF99', '#90EE90', '#87CEFA']
-                }]
-            }
-        });
-    }
-
-    carregarGraficos(); // Chama a função ao carregar a página
-</script>
-
 </body>
 </html>

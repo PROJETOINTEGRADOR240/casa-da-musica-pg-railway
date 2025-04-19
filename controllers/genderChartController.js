@@ -25,6 +25,7 @@ exports.generateGenderChart = async (req, res) => {
                     label: 'Quantidade',
                     data: [masculino, feminino],
                     backgroundColor: ['#4CAF50', '#FFC107']
+
                 },
                 {
                     label: 'Percentual (%)',

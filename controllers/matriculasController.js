@@ -1,6 +1,6 @@
 const pool = require('../models/db'); // Certifique-se de configurar a conexão com o MySQL
 const { format } = require('date-fns');
-const { getAlunoName, getDisciplinaName } = require('../utils/formartarDados');
+const { getAlunoName, getProfessorName, getDisciplinaName } = require('../utils/formartarDados');
 
 // Página inicial - listar matriculas
 exports.listarMatriculas =  async (req, res) => {
@@ -16,16 +16,16 @@ exports.listarMatriculas =  async (req, res) => {
   
   // Inserir Matriculas
   exports.inserirMatricula = async (req, res) => {
-    const { idaluno, nome_aluno, iddisciplina, nome_disciplina, data_matricula, ativo, obs } = req.body;
+    const { idaluno, iddisciplina, idprofessor, data_matricula, ativo, obs } = req.body;
   
     try {
-       await pool.query(`INSERT INTO matriculas (idaluno, nome_aluno, iddisciplina, nome_disciplina, data_matricula, ativo, obs) VALUES (?, ?, ?, ?, ?, ?, ?)`, [idaluno, nome_aluno, iddisciplina, nome_disciplina, data_matricula, ativo, obs]);
+       await pool.query(`INSERT INTO matriculas (idaluno,iddisciplina, idprofessor, data_matricula, ativo, obs) VALUES (?, ?, ?, ?, ?, ?)`, [idaluno, iddisciplina, idprofessor, data_matricula, ativo, obs]);
 
        res.redirect('/matriculas');
 
       } catch (err) {
         if (err.code === 'ER_DUP_ENTRY') {
-          const errorMessage = 'Aluno(a) Disciplina já existe!';
+          const errorMessage = 'Aluno(a) Disciplina/Professor já existe!';
           const [matriculas] = await pool.query('SELECT * FROM matriculas');
           res.render('matriculas', { matriculas, errorMessage });
         } else {  
@@ -40,12 +40,12 @@ exports.listarMatriculas =  async (req, res) => {
   exports.atualizarMatricula =  async (req, res) => {
     const { idmatricula } = req.params; // Obtém o ID da URL
   
-    const { idaluno, nome_aluno, iddisciplina, nome_disciplina, data_matricula, obs } = req.body;
+    const { idaluno, iddisciplina, idprofessor, data_matricula, obs } = req.body;
     const ativo = req.body['edit-ativo']; // O valor será "SIM" ou "NÃO"
 
     try {
   
-      await pool.query(`UPDATE matriculas SET idaluno = ?, nome_aluno = ?, iddisciplina = ?, nome_disciplina = ?, data_matricula = ?, ativo = ?, obs = ? WHERE idmatricula = ?`, [idaluno, nome_aluno, iddisciplina, nome_disciplina, data_matricula, ativo, obs, idmatricula]);
+      await pool.query(`UPDATE matriculas SET idaluno = ?, iddisciplina = ?, idprofessor = ?, data_matricula = ?, ativo = ?, obs = ? WHERE idmatricula = ?`, [idaluno, iddisciplina, idprofessor, data_matricula, ativo, obs, idmatricula]);
       res.redirect('/matriculas');
   
     } catch (err) {
@@ -82,6 +82,9 @@ exports.renderMatriculasPage = async (req, res) => {
 
         matricula.aluno_nome = `${matricula.idaluno}- ${await 
           getAlunoName(matricula.idaluno)}`;
+
+          matricula.professor_nome = `${matricula.idprofessor}- ${await getProfessorName(matricula.idprofessor)}`;
+
 
           matricula.disciplina_nome = `${matricula.iddisciplina}- ${await getDisciplinaName(matricula.iddisciplina)}`;
 

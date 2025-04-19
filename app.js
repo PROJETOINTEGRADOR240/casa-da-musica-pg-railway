@@ -13,6 +13,8 @@ const faltasRoutes = require('./routes/faltasRoutes'); // Módulo faltas
 const disciplinasRoutes = require('./routes/disciplinasRoutes'); // Módulo disciplinas
 const professoresRoutes = require('./routes/professoresRoutes'); // Módulo professores 
 const alunosRoutes = require('./routes/alunosRoutes'); // Módulo alunos
+const alunosPcdRoutes = require('./routes/alunosPcdRoutes'); // Módulo alunos PCD
+const alunosAtivoRoutes = require('./routes/alunosAtivoRoutes'); // Módulo alunos Ativo/Inativo
 const matriculasRoutes = require('./routes/matriculasRoutes'); // Módulo matriculas 
 const vinculosRoutes = require('./routes/vinculosRoutes'); // Módulo Disciplinas vs Professores
 const usuariosRoutes = require('./routes/usuariosRoutes'); // Módulo do sistama
@@ -33,9 +35,8 @@ const demandasRoutes = require('./routes/demandasRoutes');
 const listaPresencaRoutes = require("./routes/listaPresencaRoutes");
 
 // Importando rotas - Rotina IoT
-const salasRoutes = require('./routes/salasRoutes');
-const sensoresRoutes = require('./routes/sensoresRoutes');
 const monitoramentoRoutes = require('./routes/monitoramentoRoutes');
+const salasSensoresRoutes = require('./routes/salasSensoresRoutes');
 
 const app = express();
 
@@ -87,6 +88,8 @@ app.use('/faltas', faltasRoutes);
 app.use('/disciplinas', disciplinasRoutes);
 app.use('/professores', professoresRoutes);
 app.use('/alunos', alunosRoutes);
+app.use('/alunos-pcd', alunosPcdRoutes);
+app.use('/alunos-ativo', alunosAtivoRoutes);
 app.use('/matriculas', matriculasRoutes);
 app.use('/vinculos', vinculosRoutes);
 app.use('/usuarios', usuariosRoutes);
@@ -109,9 +112,9 @@ app.use('/relatorio', relatorioTaxRoutes); // Relatórios gerencial  qtde de fal
 app.use('/relatorio', relatorioMatRoutes); // Relatórios gerencial  matricula em varias disciplinas
 app.use("/lista-presenca", listaPresencaRoutes); // Lista de preseça dos alunos
 
+
 // Rotas para IoT
-app.use(salasRoutes);
-app.use(sensoresRoutes);
+app.use('/', salasSensoresRoutes);
 app.use(monitoramentoRoutes);
 
 // Rotas do menu
@@ -148,6 +151,23 @@ app.get('/home', async (req, res) => {
   const [dados] = await pool.query('SELECT * FROM monitoramento');  // Consulta a tabela monitoramento
   res.render('indexMonitoramento', { salas, sensores, dados });  // Passa a variável salas para o EJS
 });
+
+
+app.get('/verificarMatricula', async (req, res) => {
+  const { aluno, professor, disciplina } = req.query;
+
+  const [rows] = await pool.query(
+    'SELECT * FROM matriculas WHERE idaluno = ? AND idprofessor = ? AND iddisciplina = ?',
+    [aluno, professor, disciplina]
+  );
+
+  if (rows.length > 0) {
+    res.send('OK');
+  } else {
+    res.send('NAO');
+  }
+});
+
 
 // Configurando as rotas e faltas na validação dos inputs na tela
 app.use('/validate', validateRoutes);

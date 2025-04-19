@@ -41,6 +41,12 @@
 
     </div>
     <div class="input-container">
+      <label for="idProfessor">Código Professor:</label>        
+      <input type="text" name="idprofessor" id="professor" class="small-input" maxlength="3" required onblur="validateInput('professor')" />
+      <span id="professor-msg"></span>
+    </div>
+
+    <div class="input-container">
       <div class="input-row">
         <label for="idDisciplina">Código Disciplina:</label>        
         <input type="text" name="iddisciplina" id="disciplina" required class="small-input" maxlength="3" required onblur="validateInput('disciplina')" />
@@ -53,10 +59,10 @@
         <div class="form-group-radio">
           <label class="form-label-radio">Ativo</label>
           <div class="form-radio-group">
-            <input class="form-radio-input" type="radio" id="sim" name="ativo" value="Sim" checked>
+            <input class="form-radio-input" type="radio" id="sim" name="ativo" value="SIM" checked>
             <label class="form-radio-label" for="sim">Sim</label>
             
-            <input class="form-radio-input" type="radio" id="nao" name="ativo" value="Não">
+            <input class="form-radio-input" type="radio" id="nao" name="ativo" value="NÃO">
             <label class="form-radio-label" for="nao">Não</label>
           </div>
         </div>
@@ -76,9 +82,11 @@
     <table class="table table-striped">
       <thead>
         <tr>
+
           <th>(Id)</th>
           <th>(Id)Alunos</th>
-          <th>(Id)matriculas</th>
+          <th>(Id)Professores</th>
+          <th>(Id)Disciplinas</th>
           <th>Data Matricula</th>
           <th>Ativo</th>
           <th>Ações</th>
@@ -90,14 +98,15 @@
         <tr>
           <td><%= matricula.idmatricula %></td>
           <td><%= matricula.aluno_nome %></td>
+          <td><%= matricula.professor_nome %></td>
           <td><%= matricula.disciplina_nome %></td>
-          <td><%= matricula.data_matricula_formatada %></td>       
+          <td><%= matricula.data_matricula_formatada %></td> 
           <td><%= matricula.ativo %></td>        
           <td>
             <div class="action-buttons">
 
                <!-- Botão de Editar -->   
-              <button class="button-update" onclick="openEditModal(<%= matricula.idmatricula %>, '<%= matricula.idaluno %>','<%= matricula.nome_aluno %>','<%= matricula.iddisciplina %>','<%= matricula.nome_disciplina %>','<%= matricula.data_matricula %>','<%= matricula.ativo %>','<%= matricula.obs %>')"><i class="fas fa-edit"></i> Atualizar</button>
+              <button class="button-update" onclick="openEditModal(<%= matricula.idmatricula %>, '<%= matricula.idaluno %>','<%= matricula.iddisciplina %>','<%= matricula.idprofessor %>','<%= matricula.data_matricula %>','<%= matricula.ativo %>','<%= matricula.obs %>')"><i class="fas fa-edit"></i> Atualizar</button>
 
                 <!-- Botão de Excluir -->      
               <button class="button-delete" onclick="openDeleteModal(<%= matricula.idmatricula %>)"><i class="fas fa-trash"></i> Excluir</button>
@@ -123,6 +132,7 @@
 
             <input type="hidden" id="edit-idmatricula" name="idmatricula">
             <input type="hidden" id="edit-idaluno" name="idaluno">
+            <input type="hidden" id="edit-idprofessor" name="idprofessor">
             <input type="hidden" id="edit-iddisciplina" name="iddisciplina">
 
             <div class="form-group">
@@ -136,7 +146,7 @@
                 <input class="form-radio-input" type="radio" id="edit-radio-sim" name="edit-ativo" value="SIM">
                 <label class="form-radio-label" for="edit-radio-sim">Sim</label>
                 
-                <input class="form-radio-input" type="radio" id="edit-radio-nao" name="edit-ativo" value="NÂO">
+                <input class="form-radio-input" type="radio" id="edit-radio-nao" name="edit-ativo" value="NÃO">
                 <label class="form-radio-label" for="edit-radio-nao">Não</label>
 
               </div>
@@ -187,16 +197,15 @@
   <script>
 
     // Função para abrir o modal de edição com os dados da matricula
-    function openEditModal(idmatricula, idaluno, nome_aluno, iddisciplina, nome_disciplina, data_matricula, ativo, obs) {
+    function openEditModal(idmatricula, idaluno, idprofessor, iddisciplina, data_matricula, ativo, obs) {
 
 
       const dataFormatada = dateFormat(new Date(data_matricula), 'yyyy-mm-dd');
       console.log(dataFormatada);
       $('#edit-idmatricula').val(idmatricula);
       $('#edit-idaluno').val(idaluno);
-      $('#edit-nome_aluno').val(nome_aluno);
       $('#edit-iddisciplina').val(iddisciplina);
-      $('#edit-nome_disciplina').val(nome_disciplina);
+      $('#edit-idprofessor').val(idprofessor);
       $('#edit-data_matricula').val(dataFormatada);
 
       if (ativo.trim().toUpperCase() === 'SIM') {
@@ -204,7 +213,6 @@
       }   else if (ativo.trim().toUpperCase() === 'NÃO') {
         $('#edit-radio-nao').prop('checked', true);
       }
-
       $('#edit-obs').val(obs);
 
       $('#editForm').attr('action', '/matriculas/' + idmatricula + '?_method=PUT');

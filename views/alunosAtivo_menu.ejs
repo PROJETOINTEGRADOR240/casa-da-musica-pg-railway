@@ -1,0 +1,96 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Relatório Aluno(a)s Ativo/Inativo</title> 
+<link rel="stylesheet" href="/css/stylesReports.css"> 
+<style> 
+.form-group { 
+    margin-bottom: 20px; 
+} 
+.form-inline { 
+    display: flex; 
+    gap: 15px; 
+    align-items: center; 
+} 
+.radio-options { 
+    display: flex; 
+    gap: 20px; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+} 
+.btn-container { 
+    margin-top: 20px; 
+    display: flex; 
+    gap: 15px; 
+} 
+.btn-primary { 
+    background-color: #007bff; 
+    color: #fff; 
+    border: none; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+} 
+.btn-primary:hover { 
+    background-color: #0056b3; 
+} 
+.btn-secondary { 
+    background-color: #6c757d; 
+    color: #fff; 
+    border: none; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+} 
+
+.btn-barra {
+    background-color: #e0a800;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn-barra:hover {
+    background-color: #a87800;
+}
+
+.btn-secondary:hover { 
+    background-color: #545b62; 
+} 
+.btn-info { 
+    background-color: #17a2b8; 
+    color: #fff; 
+    border: none; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+} 
+.btn-info:hover { 
+    background-color: #117a8b; 
+} 
+</style> 
+</head> 
+<body> 
+    <!-- Incluir VLibras automaticamente -->
+    <%- vlibras %>
+
+<div class="container"> 
+    <h1>Relatório Aluno(a)s Ativo(s)/Inativo(s)</h1>
+
+    <form action="/alunos-ativo/relatorio-filtrado" method="GET">
+      <div class="radio-options">
+        <label><input type="radio" name="filtro" value="SIM"> Ativos</label>
+        <label><input type="radio" name="filtro" value="NÃO" checked> Inativos</label>
+        <label><input type="radio" name="filtro" value="AMBOS"> Ambos</label>
+      </div>
+
+      <div class="btn-container"> 
+          <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+          <a href="/alunos-ativo/grafico-ativo"><button type="button" class="btn btn-barra">Gerar Gráfico de Círculo</button></a>
+          <a href="/reports"><button type="button" class="btn btn-secondary">Voltar</button></a>
+      </div>
+    </form>
+</div>
+
+</body>
+</html>

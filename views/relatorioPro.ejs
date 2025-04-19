@@ -26,19 +26,23 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 7%;">(ID)Prof.</th>
-                    <th style="width: 45%;">Nome</th>
-                    <th style="width: 20%;">Telefone</th>
-                    <th style="width: 33%;">E-mail</th>
+                    <th style="width: 5%;">(ID)Prof.</th>
+                    <th style="width: 25%;">Nome</th>
+                    <th style="width: 15%;">Telefone</th>
+                    <th style="width: 20%;">E-mail</th>
+                    <th style="width: 5%;">(ID)Disc.</th>
+                    <th style="width: 25%;">Nome</th>
                 </tr>
             </thead>
             <tbody>
                 <% professores.forEach(professor => { %>
                     <tr>
                         <td><%= professor.idprofessor %></td>
-                        <td><%= professor.nome %></td>
+                        <td><%= professor.professor_nome %></td>
                         <td><%= professor.telefone %></td>
                         <td><%= professor.email %></td>
+                        <td><%= professor.iddisciplina %></td>
+                        <td><%= professor.disciplina_nome %></td>
                     </tr>
                 <% }); %>
             </tbody>
@@ -73,18 +77,24 @@
             let startY = 30;
 
             pdf.setFontSize(10);
-            pdf.text('(ID)Código', 10, startY);
+            pdf.text('(ID)Matr.', 10, startY);
             pdf.text('Nome', 30, startY);
-            pdf.text('Telefone', 120, startY);
-            pdf.text('E-mail', 160, startY);
+            pdf.text('Telefone', 100, startY);
+            pdf.text('E-mail', 100, startY);
+            pdf.text('(ID)Disc.', 10, startY);
+            pdf.text('Nome', 30, startY);
+
             
             startY += 10; // Move para a próxima linha
             
             professores.forEach(professor => {
                 pdf.text(`${professor.idprofessor}`, 10, startY);
-                pdf.text(`${professor.nome}`, 30, startY);
+                pdf.text(`${professor.professor_nome}`, 30, startY);
                 pdf.text(`${professor.telefone}`, 120, startY);
                 pdf.text(`${professor.email}`, 160, startY);
+                pdf.text(`${professor.iddisciplina}`, 10, startY);
+                pdf.text(`${professor.disciplina_nome}`, 30, startY);
+
                 startY += 10;
             });
 

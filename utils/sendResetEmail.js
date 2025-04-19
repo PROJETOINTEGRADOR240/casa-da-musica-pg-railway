@@ -5,8 +5,8 @@ const transporter = nodemailer.createTransport({
     service: 'smtp-mail.outlook.com', // Serviço de e-mail (exemplo: 'Gmail', 'Outlook')
     port: 587,
     auth: {
-        user: 'ma.leite@outlook.com.br', // Seu e-mail
-        pass: 'Patricianina13', // Sua senha ou token de aplicativo
+        user: '', // Seu e-mail
+        pass: '', // Sua senha ou token de aplicativo
     },
 });
 

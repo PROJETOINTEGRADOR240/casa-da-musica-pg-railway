@@ -13,8 +13,8 @@ exports.gerarTaxRelatorio = async (req, res) => {
         registros.forEach(registro => {
             if (registro.quantidade_faltas === 2) {
                 registro.idaluno = idaluno
-                registro.mensagem = 'Atenção quantidade de qtde de faltas críticas';
-                registro.cor = '#FFA500'; // Amarelo escuro
+                registro.mensagem = 'Atenção quantidade de faltas críticas';
+                registro.cor = 'yellow'; // Amarelo escuro
 
             } else if (registro.quantidade_faltas >= 3) {
                 registro.idaluno = idaluno

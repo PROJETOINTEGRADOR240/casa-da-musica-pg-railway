@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório de QTDEs de Faltas</title>
+    <title>Relatório de QTDE(s) de Falta(s)</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -18,26 +18,39 @@
     <!-- Incluir VLibras automaticamente -->
     <%- vlibras %>
 
-    <h1 style="text-align: center;">Relatório de QTDEs de Faltas</h1>
+    <h1 style="text-align: center;">Relatório de QTDE(s) de Falta(s)</h1>
     <p>Data e Hora: <%= new Date().toLocaleString() %></p>
 
     <% if (registros.length > 0) { %>
         <table>
             <thead>
                 <tr>
-                    <th>Nome do Aluno(a)</th>
-                    <th>Nome da Disciplina</th>
-                    <th>QTDE Faltas</th>
+                    <th>(ID)Matr.</th>
+                    <th>Nome</th>
+                    <th>(ID)Disc.</th>
+                    <th>Nome</th>
+                    <th>(ID)Prof.</th>
+                    <th>Nome</th>
+                    <th>Faltas</th>
                     <th>Mensagem</th>
                 </tr>
             </thead>
             <tbody>
                 <% registros.forEach(registro => { %>
                     <tr>
+                        <td><%= registro.idaluno %></td>
                         <td><%= registro.aluno_nome %></td>
+                        <td><%= registro.iddisciplina %></td>
                         <td><%= registro.disciplina_nome %></td>
+                        <td><%= registro.idprofessor %></td>
+                        <td><%= registro.professor_nome %></td>
                         <td><%= registro.total_faltas %></td>
-                        <td style="color: red;"><%= registro.mensagem %></td>
+
+                        <td style="color: 
+                            <%= registro.total_faltas == 2 ? '#b8860b' : 
+                                registro.total_faltas > 2 ? 'red' : 'black' %>;">
+                            <%= registro.mensagem %>
+                        </td>
                     </tr>
                 <% }); %>
             </tbody>
@@ -60,15 +73,15 @@
 
             // Adicionando título
             pdf.setFontSize(18);
-            pdf.text('Relatório de QTDEs de Faltas', pdf.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
+            pdf.text('Relatório de QTDE(s) de Falta(s)', pdf.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
 
             // Adicionando data e hora
             pdf.setFontSize(12);
             pdf.text(`Data e Hora: ${new Date().toLocaleString()}`, 10, 20);
 
             // Configurando os dados da tabela
-            const cabecalhos = [['Nome do Aluno(a)', 'Nome da Disciplina', 'QTDE Faltas', 'Mensagem']];
-            const dados = <%- JSON.stringify(registros.map(reg => [reg.aluno_nome, reg.disciplina_nome, reg.total_faltas, reg.mensagem])) %>;
+            const cabecalhos = [['(ID)Matr.', 'Nome', '(ID)Disc.', 'Nome', '(ID)Prof.', 'Nome','Faltas', 'Mensagem']];
+            const dados = <%- JSON.stringify(registros.map(reg => [reg.idaluno, reg.aluno_nome, reg.iddisciplina, reg.disciplina_nomer, reg.idprofessor, reg.professor_nome, reg.total_faltas, reg.mensagem])) %>;
 
             pdf.autoTable({
                 head: cabecalhos,

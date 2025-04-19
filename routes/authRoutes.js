@@ -50,8 +50,8 @@ const transporter = nodemailer.createTransport({
     port: 587,
     secure: true, 
     auth: {
-        user: 'ma.leite@outlook.com.br', // Substitua pelo seu e-mail
-        pass: 'Patricianina13' // Substitua pela senha do seu e-mail
+        user: '', // Substitua pelo seu e-mail
+        pass: '' // Substitua pela senha do seu e-mail
     }
 });
 
