@@ -55,7 +55,7 @@ app.set('view engine', 'ejs');
 
 // Middleware para definir vlibras antes das rotas
 app.use((req, res, next) => {
-  res.locals.vlibras = "
+  res.locals.vlibras = `
       <!-- VLibras Widget -->
       <div vw class="enabled">
           <div vw-access-button class="active"></div>
@@ -67,7 +67,7 @@ app.use((req, res, next) => {
       <script>
           new window.VLibras.Widget("https://vlibras.gov.br/app");
       </script>
-  ";
+  `;
   next();
 });
 
