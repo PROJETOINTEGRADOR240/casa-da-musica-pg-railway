@@ -38,7 +38,7 @@ ATENÇÃO INSTALAR SEMPRE A ÚLTIMA VERSÃO DO NODE (LTS).
                 npm install dotenv express-session nodemailer connect-flash 
                 npm install bcrypt bcryptjs canvas method-override connect-mysql
                 npm install -g ejs-lint chartjs-plugin-datalabels axios os
-                npm install --save-dev jest pg
+                npm install --save-dev jest pg puppeteer
                           
 5 - Para entrar na aplicação:
 

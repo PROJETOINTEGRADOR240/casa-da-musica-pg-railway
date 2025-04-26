@@ -45,6 +45,7 @@
     "node": "^20.18.0",
     "nodemailer": "^6.10.1",
     "pdfkit": "^0.15.2",
+    "puppeteer": "^24.7.2",
     "update": "^0.4.2"
   },
   "devDependencies": {
