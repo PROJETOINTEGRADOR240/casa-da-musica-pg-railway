@@ -4,11 +4,11 @@ exports.generateBarChartPage = async (req, res) => {
     
     try {
         // Consultar dados da tabela alunos
-        const [rows] = await db.query(`
+        const [rows] = await db.query("
             SELECT idade, sexo 
             FROM alunos 
             WHERE sexo IN ('M', 'm', 'Masculino', 'masculino', 'F', 'f', 'Feminino', 'feminino')
-        `);
+        ");
 
         // Filtrar e calcular médias
         const homens = rows.filter(row => ['M', 'm', 'Masculino', 'masculino'].includes(row.sexo));

@@ -16,7 +16,7 @@ INNER JOIN
 INNER JOIN 
     disciplinas d ON v.iddisciplina = d.iddisciplina
 WHERE 
-    p.idprofessor BETWEEN ? AND ?
+    p.idprofessor BETWEEN $1 AND $2
 ORDER BY 
     p.nome ASC, d.nome ASC;
     `;

@@ -115,8 +115,8 @@
     'longTime':              'h:MM:ss TT Z',
     'isoDate':               'yyyy-mm-dd',
     'isoTime':               'HH:MM:ss',
-    'isoDateTime':           'yyyy-mm-dd\'T\'HH:MM:sso',
-    'isoUtcDateTime':        'UTC:yyyy-mm-dd\'T\'HH:MM:ss\'Z\'',
+    'isoDateTime':           'yyyy-mm-dd''T''HH:MM:sso',
+    'isoUtcDateTime':        'UTC:yyyy-mm-dd''T''HH:MM:ss''Z''',
     'expiresHeaderFormat':   'ddd, dd mmm yyyy HH:MM:ss Z'
   };
 
@@ -146,7 +146,7 @@ function pad(val, len) {
  * Based on comments from
  * http://techblog.procurios.nl/k/n618/news/view/33796/14863/Calculate-ISO-8601-week-and-year-in-javascript.html
  *
- * @param  {Object} `date`
+ * @param  {Object} "date"
  * @return {Number}
  */
 function getWeek(date) {
@@ -175,7 +175,7 @@ function getWeek(date) {
  * Get ISO-8601 numeric representation of the day of the week
  * 1 (for Monday) through 7 (for Sunday)
  * 
- * @param  {Object} `date`
+ * @param  {Object} "date"
  * @return {Number}
  */
 function getDayOfWeek(date) {

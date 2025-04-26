@@ -8,15 +8,15 @@ async function fetchNames({ alunoIds, professorIds, disciplinaIds }) {
     try {
         // Consultas para obter os nomes
         const [alunos] = await pool.query(
-            'SELECT idaluno, nome FROM alunos WHERE idaluno IN (?)',
+            'SELECT idaluno, nome FROM alunos WHERE idaluno IN ($1)',
             [alunoIds]
         );
         const [professores] = await pool.query(
-            'SELECT idprofessor, nome FROM professores WHERE idprofessor IN (?)',
+            'SELECT idprofessor, nome FROM professores WHERE idprofessor IN ($1)',
             [professorIds]
         );
         const [disciplinas] = await pool.query(
-            'SELECT iddisciplina, nome FROM disciplinas WHERE iddisciplina IN (?)',
+            'SELECT iddisciplina, nome FROM disciplinas WHERE iddisciplina IN ($1)',
             [disciplinaIds]
         );
 

@@ -1,4 +1,4 @@
-// Este script será carregado na página `reportResult.ejs` para exibir o gráfico
+// Este script será carregado na página "reportResult.ejs" para exibir o gráfico
 const ctx = document.getElementById('myChart').getContext('2d');
 
 // Exemplo de gráfico de barras

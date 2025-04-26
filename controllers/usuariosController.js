@@ -18,7 +18,7 @@ exports.inserirUsuario = async (req, res) => {
   const { nome, email, telefone, nivel, ativo, senha, obs } = req.body;
 
   try {
-    await pool.query(`INSERT INTO usuarios (nome, email, telefone, nivel, ativo, senha, obs) VALUES (?, ?, ?, ?, ?, ?, ?)`, [nome, email, telefone, nivel, ativo, senha, obs]);
+    await pool.query("INSERT INTO usuarios (nome, email, telefone, nivel, ativo, senha, obs) VALUES ($1, $2, $3, $4, $5, $6, $7)", [nome, email, telefone, nivel, ativo, senha, obs]);
     res.redirect('/usuarios');
   } catch (err) {
     console.error(err);
@@ -35,7 +35,7 @@ exports.atualizarUsuario =  async (req, res) => {
 
   try {
     
-    await pool.query(`UPDATE usuarios SET nome = ?, email = ?, telefone = ?, nivel = ?, ativo = ?, senha = ?, obs = ? WHERE idusuario = ?`,
+    await pool.query("UPDATE usuarios SET nome = $8, email = $9, telefone = $10, nivel = $11, ativo = $12, senha = $13, obs = $14 WHERE idusuario = $15",
       [nome, email, telefone, nivel, ativo, senha, obs, idusuario]); 
     res.redirect('/usuarios');
 
@@ -50,7 +50,7 @@ exports.excluirUsuario = async (req, res) => {
     const { idusuario } = req.params; 
 
     try {
-      await pool.query(`DELETE FROM usuarios WHERE idusuario = ?`, [idusuario]);
+      await pool.query("DELETE FROM usuarios WHERE idusuario = $1", [idusuario]);
       res.redirect('/usuarios');
       
     } catch (err) {

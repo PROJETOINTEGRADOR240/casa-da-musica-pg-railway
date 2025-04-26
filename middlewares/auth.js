@@ -13,8 +13,8 @@ module.exports = function authorize(requiredLevels) {
             }
 
             // Busca o nível do usuário no banco de dados
-            const query = 'SELECT nivel FROM usuarios WHERE email = ?';
-            console.log(`Executando consulta SQL com email: ${email}`);
+            const query = 'SELECT nivel FROM usuarios WHERE email = $1';
+            console.log("Executando consulta SQL com email: ${email}");
             const [rows] = await db.query(query, [email]);
 
             if (rows.length === 0) {
@@ -25,7 +25,7 @@ module.exports = function authorize(requiredLevels) {
             }
 
             const userLevel = rows[0].nivel;
-            console.log(`Nível do usuário encontrado: ${userLevel}`);
+            console.log("Nível do usuário encontrado: ${userLevel}");
             // Verifica se o nível do usuário está entre os níveis permitidos
             if (!requiredLevels.includes(userLevel)) {
                 console.log('Nível não autorizado.');

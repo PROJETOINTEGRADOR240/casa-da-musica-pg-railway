@@ -4,7 +4,7 @@ exports.getDisciplinas = async (disciplinaInicial, disciplinaFinal) => {
     const query = `
         SELECT iddisciplina, nome, hora_aula_inicio, hora_aula_fim,carga_horaria, turno, dia_semana
         FROM disciplinas
-        WHERE iddisciplina BETWEEN ? AND ?
+        WHERE iddisciplina BETWEEN $1 AND $2
         ORDER BY nome ASC
     `;
     const [results] = await db.execute(query, [disciplinaInicial, disciplinaFinal]);

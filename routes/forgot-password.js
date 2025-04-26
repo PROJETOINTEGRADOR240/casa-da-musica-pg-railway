@@ -63,7 +63,7 @@ router.post(
 
             // Gera o token de redefinição
             const resetToken = crypto.randomBytes(32).toString('hex');
-            const tokenExpiration = new Date(Date.now() + 3600000); // 1 hora a partir de agora
+            const tokenExpiration = new Date(Date.CURRENT_TIMESTAMP + 3600000); // 1 hora a partir de agora
 
             // Atualiza o token e a validade no banco de dados
             await User.updateResetToken(email, resetToken, tokenExpiration);

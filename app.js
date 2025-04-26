@@ -55,7 +55,7 @@ app.set('view engine', 'ejs');
 
 // Middleware para definir vlibras antes das rotas
 app.use((req, res, next) => {
-  res.locals.vlibras = `
+  res.locals.vlibras = "
       <!-- VLibras Widget -->
       <div vw class="enabled">
           <div vw-access-button class="active"></div>
@@ -67,7 +67,7 @@ app.use((req, res, next) => {
       <script>
           new window.VLibras.Widget("https://vlibras.gov.br/app");
       </script>
-  `;
+  ";
   next();
 });
 
@@ -157,7 +157,7 @@ app.get('/verificarMatricula', async (req, res) => {
   const { aluno, professor, disciplina } = req.query;
 
   const [rows] = await pool.query(
-    'SELECT * FROM matriculas WHERE idaluno = ? AND idprofessor = ? AND iddisciplina = ?',
+    'SELECT * FROM matriculas WHERE idaluno = $1 AND idprofessor = ? AND iddisciplina = ?',
     [aluno, professor, disciplina]
   );
 
@@ -175,5 +175,5 @@ app.use('/validate', validateRoutes);
 
 // Inicialização do servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log("Servidor rodando na porta ${PORT}"));
 

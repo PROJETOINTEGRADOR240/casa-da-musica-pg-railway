@@ -6,7 +6,7 @@ exports.registrarMedicao = async (req, res) => {
     const { sala_id, sensor_id, qualidade_ar } = req.body;
     try {
         await pool.query(
-            'INSERT INTO monitoramento (sala_id, sensor_id, qualidade_ar, data_hora) VALUES (?, ?, ?, NOW())',
+            'INSERT INTO monitoramento (sala_id, sensor_id, qualidade_ar, data_hora) VALUES ($1, ?, ?, CURRENT_TIMESTAMP)',
             [sala_id, sensor_id, qualidade_ar]
         );
         res.redirect(req.get('Referer') || '/');

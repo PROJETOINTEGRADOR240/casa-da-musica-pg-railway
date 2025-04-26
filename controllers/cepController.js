@@ -3,7 +3,7 @@ const axios = require('axios');
 exports.buscaCep = async (req, res) => {
     try {
         const { cep } = req.params;
-        const url = `https://viacep.com.br/ws/${cep}/json/`;
+        const url = "https://viacep.com.br/ws/${cep}/json/";
         const response = await axios.get(url);
 
         if (response.data.erro) {

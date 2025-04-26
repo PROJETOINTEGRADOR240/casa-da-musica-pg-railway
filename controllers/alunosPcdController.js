@@ -12,11 +12,11 @@ exports.mostrarMenuRelatorio = (req, res) => {
 
 exports.gerarRelatorio = async (req, res) => {
     try {
-        const [rows] = await pool.query(`
+        const [rows] = await pool.query("
             SELECT idaluno, nome, idade, telefone, ativo, pcd, obs
             FROM alunos 
             WHERE pcd = "SIM"
-        `);
+        ");
         res.render('alunosPcd_relatorio', { alunos: rows }); // ← View correta
       } catch (error) {
         console.error('Erro ao gerar relatório PCD:', error);
@@ -32,7 +32,7 @@ exports.gerarGrafico = async (req, res) => {
     const simCount = rows.filter(a => a.pcd === 'SIM').length;
     const naoCount = total - simCount;
   
-    const simPercent = total > 0 ? ((simCount / total) * 100).toFixed(2) : 0;
+    const simPercent = total > 0 $1 ((simCount / total) * 100).toFixed(2) : 0;
     const naoPercent = total > 0 ? ((naoCount / total) * 100).toFixed(2) : 0;
   
     res.render('alunosPcd_grafico', {
@@ -48,11 +48,11 @@ exports.gerarGrafico = async (req, res) => {
 exports.baixarPDFRelatorio = async (req, res) => {
 
     try {
-        const [registros] = await pool.query(`
+        const [registros] = await pool.query("
         SELECT idaluno, nome, idade, telefone, pcd, ativo, obs
         FROM alunos 
         WHERE pcd = 'SIM'
-        `);
+        ");
     
         if (registros.length === 0) {
         return res.status(404).send('Nenhum aluno PCD encontrado.');
@@ -60,8 +60,8 @@ exports.baixarPDFRelatorio = async (req, res) => {
     
         const doc = new PDFDocument({ size: 'A4', margin: 50 });
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const filename = `Relatorio_Alunos_PCD_${timestamp}.pdf`;
-        const filepath = path.join(__dirname, `../temp/${filename}`);
+        const filename = "Relatorio_Alunos_PCD_${timestamp}.pdf";
+        const filepath = path.join(__dirname, "../temp/${filename}");
     
         if (!fs.existsSync(path.join(__dirname, '../temp'))) {
         fs.mkdirSync(path.join(__dirname, '../temp'));
@@ -73,7 +73,7 @@ exports.baixarPDFRelatorio = async (req, res) => {
         // Cabeçalho
         doc.fontSize(16).text('Relatório de Aluno(a)s PCD', { align: 'center' });
         doc.moveDown();
-        doc.fontSize(12).text(`Data/Hora: ${new Date().toLocaleString('pt-BR')}`);
+        doc.fontSize(12).text("Data/Hora: ${new Date().toLocaleString('pt-BR')}");
         doc.moveDown();
     
         // Cabeçalhos da tabela
@@ -128,7 +128,7 @@ exports.baixarPDFRelatorio = async (req, res) => {
           
         // Total
         y += 10;
-        doc.font('Helvetica-Bold').fontSize(11).text(`Total de Aluno(a)s PCD: ${registros.length}`, 50, y);
+        doc.font('Helvetica-Bold').fontSize(11).text("Total de Aluno(a)s PCD: ${registros.length}", 50, y);
     
         doc.end();
     

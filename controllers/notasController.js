@@ -20,7 +20,7 @@ exports.inserirNota = async (req, res) => {
   const { aluno_id, disciplina_id, professor_id, data_nota, mes_nota, ano_nota, nota, obs } = req.body;
 
   try {
-      await pool.query(`INSERT INTO notas (aluno_id, professor_id, disciplina_id, data_nota, mes_nota, ano_nota, nota, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [aluno_id, professor_id, disciplina_id, data_nota, mes_nota, ano_nota, nota, obs]);
+      await pool.query("INSERT INTO notas (aluno_id, professor_id, disciplina_id, data_nota, mes_nota, ano_nota, nota, obs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [aluno_id, professor_id, disciplina_id, data_nota, mes_nota, ano_nota, nota, obs]);
 
       res.redirect('/notas');
 
@@ -42,7 +42,7 @@ exports.atualizarNota =  async (req, res) => {
   const{ mes_nota, ano_nota, data_nota, nota, obs } = req.body;
   try {
 
-    await pool.query(`UPDATE notas SET mes_nota = ?, ano_nota = ?, data_nota = ?, nota = ?, obs = ? WHERE idnota = ?`, [mes_nota, ano_nota, data_nota, nota, obs, idnota]);
+    await pool.query("UPDATE notas SET mes_nota = $9, ano_nota = $10, data_nota = $11, nota = $12, obs = $13 WHERE idnota = $14", [mes_nota, ano_nota, data_nota, nota, obs, idnota]);
     res.redirect('/notas');
 
   } catch (err) {
@@ -58,7 +58,7 @@ exports.atualizarNota =  async (req, res) => {
 
     const { idnota } = req.params; // Obtém o ID da URL
     try {
-      await pool.query(`DELETE FROM notas WHERE idnota = ?`, [idnota]);
+      await pool.query("DELETE FROM notas WHERE idnota = $1", [idnota]);
       res.redirect('/notas');
       
     } catch (err) {
@@ -77,9 +77,9 @@ exports.renderNotasPage = async (req, res) => {
 
       for (let nota of notas) {
 
-          nota.aluno_nome = `${nota.aluno_id}- ${await getAlunoName(nota.aluno_id)}`;
-          nota.professor_nome = `${nota.professor_id}- ${await getProfessorName(nota.professor_id)}`;
-          nota.disciplina_nome = `${nota.disciplina_id}- ${await getDisciplinaName(nota.disciplina_id)}`;
+          nota.aluno_nome = "${nota.aluno_id}- ${await getAlunoName(nota.aluno_id)}";
+          nota.professor_nome = "${nota.professor_id}- ${await getProfessorName(nota.professor_id)}";
+          nota.disciplina_nome = "${nota.disciplina_id}- ${await getDisciplinaName(nota.disciplina_id)}";
           nota.data_nota_formatada = format(new Date(nota.data_nota), 'dd/MM/yyyy'); // Formata a data.
       }
       res.render('notas', { notas }); 

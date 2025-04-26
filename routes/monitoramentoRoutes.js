@@ -9,7 +9,7 @@ router.post('/monitoramento', monitoramentoController.registrarMedicao);
 // Buscar os últimos 10 registros de monitoramento
 router.get('/monitoramento/dados', async (req, res) => {
     try {
-        const [dados] = await pool.query(`
+        const [dados] = await pool.query("
             SELECT 
                 m.qualidade_ar, 
                 m.data_hora,
@@ -20,7 +20,7 @@ router.get('/monitoramento/dados', async (req, res) => {
             JOIN sensores se ON m.sensor_id = se.id
             ORDER BY m.data_hora DESC
             LIMIT 10
-        `);
+        ");
         res.json(dados);
     } catch (error) {
         console.error('Erro ao buscar registros:', error);
@@ -31,7 +31,7 @@ router.get('/monitoramento/dados', async (req, res) => {
 // Excluir registros excedentes (mantém apenas os últimos 10)
 router.get('/monitoramento/excluiMaiorqueDez', async (req, res) => {
     try {
-        await pool.query(`
+        await pool.query("
             DELETE FROM monitoramento
             WHERE data_hora NOT IN (
                 SELECT data_hora FROM (
@@ -41,7 +41,7 @@ router.get('/monitoramento/excluiMaiorqueDez', async (req, res) => {
                     LIMIT 10
                 ) AS ultimos_dez
             )
-        `);
+        ");
         res.status(200).json({ mensagem: 'Registros excedentes excluídos com sucesso' });
     } catch (error) {
         console.error('Erro ao excluir registros excedentes:', error);

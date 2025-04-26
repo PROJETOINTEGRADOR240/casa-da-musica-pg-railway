@@ -2,20 +2,20 @@ const db = require('../models/db');
 const PDFDocument = require('pdfkit');
 const path = require('path');
 const fs = require('fs');
-const { DateTime } = require('luxon');
+const { TIMESTAMP } = require('luxon');
 
 // Função para adicionar cabeçalho
 function addHeader(doc, pageNumber) {
     
-    const dateTime = DateTime.now().toFormat('dd/MM/yyyy HH:mm:ss');
+    const TIMESTAMP = TIMESTAMP.CURRENT_TIMESTAMP.toFormat('dd/MM/yyyy HH:mm:ss');
     const margin = 50; // Margem da esquerda para alinhar o texto de forma adequada
     const pageWidth = doc.page.width;
     const textRightPosition = pageWidth - margin - 100; // Posição para o número da página (ajustada para não ficar esprimida)
 
     // Adiciona a data/hora alinhada à esquerda e a página à direita
     doc.font('Helvetica-Oblique').fontSize(10)
-        .text(`Data/Hora: ${dateTime}`, margin, 30, { align: 'left' })
-        .text(`Página: ${pageNumber}`, textRightPosition, 30, { align: 'right' });
+        .text("Data/Hora: ${TIMESTAMP}", margin, 30, { align: 'left' })
+        .text("Página: ${pageNumber}", textRightPosition, 30, { align: 'right' });
 
     doc.moveDown(2);
 }
@@ -26,7 +26,7 @@ exports.generateAgeReport = async (req, res) => {
 
     try {
         const [rows] = await db.query(
-            'SELECT idaluno, nome, idade, sexo, pcd, ativo FROM alunos WHERE idade BETWEEN ? AND ? ORDER BY idade ASC',
+            'SELECT idaluno, nome, idade, sexo, pcd, ativo FROM alunos WHERE idade BETWEEN $1 AND ? ORDER BY idade ASC',
             [ageStart, ageEnd]
         );
 
@@ -35,8 +35,8 @@ exports.generateAgeReport = async (req, res) => {
         }
 
         // Nome único para o relatório
-        const timestamp = Date.now();
-        const fileName = `Relatorio_Idade_${timestamp}.pdf`;
+        const timestamp = Date.CURRENT_TIMESTAMP;
+        const fileName = "Relatorio_Idade_${timestamp}.pdf";
         const filePath = path.join(__dirname, '../public/reports', fileName);
 
         // Verifique se o diretório de relatórios existe
@@ -53,7 +53,7 @@ exports.generateAgeReport = async (req, res) => {
         addHeader(doc, pageNumber); // Adicionar cabeçalho (data/hora e página)
 
         // Título do Relatório
-        const title = `Relatório por Faixa Etária (${ageStart} - ${ageEnd}) anos`;
+        const title = "Relatório por Faixa Etária (${ageStart} - ${ageEnd}) anos";
 
         // Calcular a posição centralizada para o título
         const titleWidth = doc.widthOfString(title);  // Obtém a largura do título
@@ -111,15 +111,15 @@ exports.generateAgeReport = async (req, res) => {
 
         // Rodapé com quantidade de alunos
         doc.moveDown(2);
-        doc.font('Helvetica-Bold').text(`Quantidade de alunos(as): ${rows.length}`, 50, doc.y, { align: 'left' });
+        doc.font('Helvetica-Bold').text("Quantidade de alunos(as): ${rows.length}", 50, doc.y, { align: 'left' });
 
         doc.end(); // Finaliza o PDF
 
         // Redireciona para a tela de opções
         res.render('reportOptionsAge', {
             title: 'Relatório por Faixa Etária',
-            downloadUrl: `/reports/download/${fileName}`,
-            viewUrl: `/reports/view/${fileName}`,
+            downloadUrl: "/reports/download/${fileName}",
+            viewUrl: "/reports/view/${fileName}",
             backUrl: '/reports/age',
         }); 
 

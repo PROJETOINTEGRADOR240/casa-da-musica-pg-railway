@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const disciplinaId = disciplina.value;
 
         try {
-          const response = await fetch(`/verificarMatricula?aluno=${alunoId}&professor=${professorId}&disciplina=${disciplinaId}`);
+          const response = await fetch("/verificarMatricula?aluno=${alunoId}&professor=${professorId}&disciplina=${disciplinaId}");
           const data = await response.text();
 
           if (data === 'OK') {

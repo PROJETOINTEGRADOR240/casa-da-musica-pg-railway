@@ -20,7 +20,7 @@ exports.inserirVinculo = async (req, res) => {
   const { iddisciplina, idprofessor, data_vinculo, obs } = req.body;
 
   try {
-      await pool.query(`INSERT INTO vinculos (iddisciplina, idprofessor, data_vinculo, obs) VALUES (?, ?, ?, ?)`, [iddisciplina, idprofessor, data_vinculo, obs]
+      await pool.query("INSERT INTO vinculos (iddisciplina, idprofessor, data_vinculo, obs) VALUES ($1, $2, $3, $4)", [iddisciplina, idprofessor, data_vinculo, obs]
 
       );
       res.redirect('/vinculos');
@@ -43,7 +43,7 @@ exports.atualizarVinculo =  async (req, res) => {
   const{ data_vinculo, obs } = req.body;
   try {
 
-    await pool.query(`UPDATE vinculos SET data_vinculo = ?, obs = ? WHERE idvinculo = ?`, [data_vinculo, obs, idvinculo]);
+    await pool.query("UPDATE vinculos SET data_vinculo = $5, obs = $6 WHERE idvinculo = $7", [data_vinculo, obs, idvinculo]);
     res.redirect('/vinculos');
 
   } catch (err) {
@@ -58,7 +58,7 @@ exports.atualizarVinculo =  async (req, res) => {
 
     const { idvinculo } = req.params; // Obtém o ID da URL
     try {
-      await pool.query(`DELETE FROM vinculos WHERE idvinculo = ?`, [idvinculo]);
+      await pool.query("DELETE FROM vinculos WHERE idvinculo = $1", [idvinculo]);
       res.redirect('/vinculos');
       
     } catch (err) {
@@ -79,11 +79,11 @@ exports.atualizarVinculo =  async (req, res) => {
       vinculos.map(async (vinculo) => {
         try {
           // Busque e formate os dados do vínculo
-          vinculo.disciplina_nome = `${vinculo.iddisciplina} - ${await getDisciplinaName(vinculo.iddisciplina)}`;
-          vinculo.professor_nome = `${vinculo.idprofessor} - ${await getProfessorName(vinculo.idprofessor)}`;
+          vinculo.disciplina_nome = "${vinculo.iddisciplina} - ${await getDisciplinaName(vinculo.iddisciplina)}";
+          vinculo.professor_nome = "${vinculo.idprofessor} - ${await getProfessorName(vinculo.idprofessor)}";
           vinculo.data_vinculo_formatada = format(new Date(vinculo.data_vinculo), 'dd/MM/yyyy'); // Formata a data
         } catch (innerError) {
-          console.error(`Erro ao processar vínculo com ID ${vinculo.idvinculo}:`, innerError);
+          console.error("Erro ao processar vínculo com ID ${vinculo.idvinculo}:", innerError);
           // Valores padrão em caso de erro
           vinculo.disciplina_nome = 'Erro ao obter disciplina';
           vinculo.professor_nome = 'Erro ao obter professor';

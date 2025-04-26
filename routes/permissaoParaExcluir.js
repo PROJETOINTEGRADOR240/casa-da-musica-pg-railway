@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../models/db'); // Conexão com o banco de dados
 
-// Função para verificar dependências na tabela `notas`
+// Função para verificar dependências na tabela "notas"
 async function verificarDependencias(tabela, campoTabela, campoNotas, id) {
   console.log("Entrei na rotina de verificação de dependencia - passo 2");
   console.log("Tabela:", tabela);
@@ -12,7 +12,7 @@ async function verificarDependencias(tabela, campoTabela, campoNotas, id) {
 
    console.log("As Informaçoes - 1 > " + tabela, campoTabela, campoNotas, id);
 
-  const query = `SELECT COUNT(*) AS count FROM notas WHERE ${campoNotas} = ?`;
+  const query = "SELECT COUNT(*) AS count FROM notas WHERE ${campoNotas} = $1";
 
   console.log("Query SQL:", query);
 
@@ -42,7 +42,7 @@ router.post('/alunos/excluir/:id', async (req, res) => {
     }
 
     // Excluir o aluno
-    await pool.query('DELETE FROM alunos WHERE idaluno = ?', [idnota]);
+    await pool.query('DELETE FROM alunos WHERE idaluno = $1', [idnota]);
     const [alunos] = await pool.query('SELECT * FROM alunos');
     res.render('alunos', {
       alunos,
@@ -75,7 +75,7 @@ router.post('/professores/excluir/:id', async (req, res) => {
       });
     }
 
-    await db.query('DELETE FROM professores WHERE idprofessor = ?', [idprofessor]);
+    await db.query('DELETE FROM professores WHERE idprofessor = $1', [idprofessor]);
     const [professores] = await db.query('SELECT * FROM professores');
     res.render('professores', {
       professores,
@@ -102,7 +102,7 @@ router.post('/disciplinas/excluir/:id', async (req, res) => {
       });
     }
 
-    await db.query('DELETE FROM disciplinas WHERE iddisciplina = ?', [iddisciplina]);
+    await db.query('DELETE FROM disciplinas WHERE iddisciplina = $1', [iddisciplina]);
     const [disciplinas] = await db.query('SELECT * FROM disciplinas');
     res.render('disciplinas', {
       disciplinas,

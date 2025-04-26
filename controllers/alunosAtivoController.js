@@ -29,12 +29,12 @@ exports.gerarGrafico = async (req, res) => {
   exports.gerarRelatorioFiltrado = async (req, res) => {
     try {
       const filtro = req.query.filtro;
-      let query = `SELECT idaluno, nome, idade, telefone, ativo, pcd FROM alunos`;
+      let query = "SELECT idaluno, nome, idade, telefone, ativo, pcd FROM alunos";
   
       if (filtro === 'SIM') {
-        query += ` WHERE ativo = 'SIM'`;
+        query += " WHERE ativo = 'SIM'";
       } else if (filtro === 'NÃO') {
-        query += ` WHERE ativo = 'NÃO'`;
+        query += " WHERE ativo = 'NÃO'";
       }
   
       const [rows] = await pool.query(query);
@@ -48,12 +48,12 @@ exports.gerarGrafico = async (req, res) => {
   exports.baixarPDFFiltrado = async (req, res) => {
     try {
       const filtro = req.query.filtro;
-      let query = `SELECT idaluno, nome, idade, telefone, ativo, pcd FROM alunos`;
+      let query = "SELECT idaluno, nome, idade, telefone, ativo, pcd FROM alunos";
   
       if (filtro === 'SIM') {
-        query += ` WHERE ativo = 'SIM'`;
+        query += " WHERE ativo = 'SIM'";
       } else if (filtro === 'NÃO') {
-        query += ` WHERE ativo = 'NÃO'`;
+        query += " WHERE ativo = 'NÃO'";
       }
   
       const [registros] = await pool.query(query);
@@ -64,8 +64,8 @@ exports.gerarGrafico = async (req, res) => {
   
       const doc = new PDFDocument({ size: 'A4', margin: 50 });
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const filename = `Relatorio_Alunos_Ativo_Inativos_${timestamp}.pdf`;
-      const filepath = path.join(__dirname, `../temp/${filename}`);
+      const filename = "Relatorio_Alunos_Ativo_Inativos_${timestamp}.pdf";
+      const filepath = path.join(__dirname, "../temp/${filename}");
   
       if (!fs.existsSync(path.join(__dirname, '../temp'))) {
         fs.mkdirSync(path.join(__dirname, '../temp'));
@@ -76,7 +76,7 @@ exports.gerarGrafico = async (req, res) => {
   
       doc.fontSize(16).text('Relatório de Aluno(a)s Ativo(s)/Inativo(s)', { align: 'center' });
       doc.moveDown();
-      doc.fontSize(12).text(`Data/Hora: ${new Date().toLocaleString('pt-BR')}`);
+      doc.fontSize(12).text("Data/Hora: ${new Date().toLocaleString('pt-BR')}");
       doc.moveDown();
   
       const rowHeight = 20;
@@ -118,7 +118,7 @@ exports.gerarGrafico = async (req, res) => {
       });
   
       y += 10;
-      doc.font('Helvetica-Bold').fontSize(11).text(`Total: ${registros.length}`, 50, y);
+      doc.font('Helvetica-Bold').fontSize(11).text("Total: ${registros.length}", 50, y);
   
       doc.end();
   

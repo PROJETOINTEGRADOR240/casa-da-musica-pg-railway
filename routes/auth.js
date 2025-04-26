@@ -7,8 +7,8 @@ router.post('/login', async (req, res) => {
     const { email } = req.body;
 
     try {
-        // Verifica se o email existe na tabela `usuarios`
-        const query = 'SELECT * FROM usuarios WHERE email = ?';
+        // Verifica se o email existe na tabela "usuarios"
+        const query = 'SELECT * FROM usuarios WHERE email = $1';
         const [rows] = await db.query(query, [email]);
 
         if (rows.length === 0) {

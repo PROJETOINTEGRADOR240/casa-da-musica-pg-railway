@@ -2,7 +2,7 @@ const pool = require('../models/db');
 const PDFDocument = require('pdfkit');
 const path = require('path');
 const fs = require('fs');
-const { DateTime } = require('luxon');
+const { TIMESTAMP } = require('luxon');
 
 exports.generateGenderReport = async (req, res) => {
   const { gender } = req.body;
@@ -13,7 +13,7 @@ exports.generateGenderReport = async (req, res) => {
     const params = [];
 
     if (gender !== 'Todos') {
-      query += ' WHERE LOWER(sexo) IN (?, ?)';
+      query += ' WHERE LOWER(sexo) IN ($1, ?)';
       if (gender === 'Masculino') {
         params.push('masculino', 'm');
       } else if (gender === 'Feminino') {
@@ -36,8 +36,8 @@ exports.generateGenderReport = async (req, res) => {
     const totalGeral = totalMasculino + totalFeminino;
 
     // Configuração do PDF
-    const timestamp = Date.now();
-    const fileName = `Relatorio_Sexo_${timestamp}.pdf`;
+    const timestamp = Date.CURRENT_TIMESTAMP;
+    const fileName = "Relatorio_Sexo_${timestamp}.pdf";
     const filePath = path.join(__dirname, '../public/reports', fileName);
 
     const reportsDir = path.dirname(filePath);
@@ -54,12 +54,12 @@ exports.generateGenderReport = async (req, res) => {
 
     // Função para desenhar cabeçalho
     const drawHeader = () => {
-      const now = DateTime.now().toFormat('dd/MM/yyyy HH:mm:ss');
-      doc.fontSize(10).font('Helvetica-Oblique').text(`Data e Hora: ${now}`, { align: 'left' });
-      doc.text(`Página: ${pageCount}`, { align: 'right' });
+      const now = TIMESTAMP.CURRENT_TIMESTAMP.toFormat('dd/MM/yyyy HH:mm:ss');
+      doc.fontSize(10).font('Helvetica-Oblique').text("Data e Hora: ${now}", { align: 'left' });
+      doc.text("Página: ${pageCount}", { align: 'right' });
       doc.moveDown(1);
 
-      doc.fontSize(14).font('Helvetica-Bold').text(`Relatório por Sexo (${gender === 'Todos' ? 'Todos' : gender})`, { align: 'center' });
+      doc.fontSize(14).font('Helvetica-Bold').text("Relatório por Sexo (${gender === 'Todos' ? 'Todos' : gender})", { align: 'center' });
       doc.moveDown(1);
 
       // Cabeçalhos das colunas
@@ -120,17 +120,17 @@ exports.generateGenderReport = async (req, res) => {
     // Exibir contadores no final da última página
     doc.moveDown(4);
     doc.font('Helvetica-Bold').fontSize(12);
-    doc.text(`Quantidade de aluno(s): ${totalMasculino}`, 50, doc.y, { align: 'left' });
-    doc.text(`Quantidade de aluna(s): ${totalFeminino}`, 50, doc.y + 3, { align: 'left' });
-    doc.text(`Total Geral --------->: ${totalGeral}`, 50, doc.y + 20, { align: 'left' });
+    doc.text("Quantidade de aluno(s): ${totalMasculino}", 50, doc.y, { align: 'left' });
+    doc.text("Quantidade de aluna(s): ${totalFeminino}", 50, doc.y + 3, { align: 'left' });
+    doc.text("Total Geral --------->: ${totalGeral}", 50, doc.y + 20, { align: 'left' });
 
     doc.end();
 
     // Redirecionar para a tela de opções
     res.render('reportOptionsGender', {
       title: 'Relatório por Sexo',
-      downloadUrl: `/reports/download/${fileName}`,
-      viewUrl: `/reports/view/${fileName}`,
+      downloadUrl: "/reports/download/${fileName}",
+      viewUrl: "/reports/view/${fileName}",
       backUrl: '/reports/gender',
     });
 

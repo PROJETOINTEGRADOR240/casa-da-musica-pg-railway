@@ -17,7 +17,7 @@ module.exports = {
     async criarSala(req, res) {
         const { nome } = req.body;
         try {
-            await pool.query('INSERT INTO salas (nome) VALUES (?)', [nome]);
+            await pool.query('INSERT INTO salas (nome) VALUES ($1)', [nome]);
             res.redirect('/salasSensores');
         } catch (error) {
             console.error('Erro ao criar sala:', error);
@@ -37,7 +37,7 @@ module.exports = {
         const { id } = req.params;
         const { nome } = req.body;
         try {
-            await pool.query('UPDATE salas SET nome = ? WHERE id = ?', [nome, id]);
+            await pool.query('UPDATE salas SET nome = $2 WHERE id = $3', [nome, id]);
             res.json({ sucesso: 'Sala atualizada' });
         } catch (error) {
             console.error('Erro ao atualizar sala:', error);
@@ -47,7 +47,7 @@ module.exports = {
     async excluirSala(req, res) {
         const { id } = req.params;
         try {
-            await pool.query('DELETE FROM salas WHERE id = ?', [id]);
+            await pool.query('DELETE FROM salas WHERE id = $1', [id]);
             res.json({ sucesso: 'Sala excluída' });
         } catch (error) {
             console.error('Erro ao excluir sala:', error);
@@ -59,7 +59,7 @@ module.exports = {
     async criarSensor(req, res) {
         const { descricao } = req.body;
         try {
-            await pool.query('INSERT INTO sensores (descricao) VALUES (?)', [descricao]);
+            await pool.query('INSERT INTO sensores (descricao) VALUES ($1)', [descricao]);
             res.redirect('/salasSensores');
         } catch (error) {
             console.error('Erro ao criar sensor:', error);
@@ -79,7 +79,7 @@ module.exports = {
         const { id } = req.params;
         const { descricao } = req.body;
         try {
-            await pool.query('UPDATE sensores SET descricao = ? WHERE id = ?', [descricao, id]);
+            await pool.query('UPDATE sensores SET descricao = $1 WHERE id = $2', [descricao, id]);
             res.json({ sucesso: 'Sensor atualizado' });
         } catch (error) {
             console.error('Erro ao atualizar sensor:', error);
@@ -89,7 +89,7 @@ module.exports = {
     async excluirSensor(req, res) {
         const { id } = req.params;
         try {
-            await pool.query('DELETE FROM sensores WHERE id = ?', [id]);
+            await pool.query('DELETE FROM sensores WHERE id = $1', [id]);
             res.json({ sucesso: 'Sensor excluído' });
         } catch (error) {
             console.error('Erro ao excluir sensor:', error);
