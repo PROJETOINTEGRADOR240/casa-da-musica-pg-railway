@@ -35,10 +35,13 @@ exports.atualizarProfessor =  async (req, res) => {
   const { nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
 
   try {
-
-    await pool.query("UPDATE professores SET nome = $18, cpf_cnpj = $19, telefone = $20, email = $21, data_nasc = $22, idade = $23,
-    sexo = $24, genero = $25, cor = $26, cep = $27, endereco = $28, numero = $29, bairro = $30, cidade = $31, estado = $32, complemento = $33, obs = $34 WHERE idprofessor = $35",
-    [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cep, endereco, numero, bairro, cidade, estado, complemento, obs, idprofessor]);
+    await pool.query(
+      `UPDATE casadamusica.professores 
+       SET nome = $1, cpf_cnpj = $2, telefone = $3, email = $4, data_nasc = $5, idade = $6, sexo = $7, genero = $8, cor = $9, 
+           cep = $10, endereco = $11, numero = $12, bairro = $13, cidade = $14, estado = $15, complemento = $16, obs = $17 
+       WHERE idprofessor = $18`,
+      [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cep, endereco, numero, bairro, cidade, estado, complemento, obs, idprofessor]
+    );
     res.redirect('/professores');
 
    } catch (err) {
