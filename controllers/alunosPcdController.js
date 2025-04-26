@@ -32,7 +32,7 @@ exports.gerarGrafico = async (req, res) => {
     const simCount = rows.filter(a => a.pcd === 'SIM').length;
     const naoCount = total - simCount;
   
-    const simPercent = total > 0 $1 ((simCount / total) * 100).toFixed(2) : 0;
+    const simPercent = total > 0 ? ((simCount / total) * 100).toFixed(2) : 0;
     const naoPercent = total > 0 ? ((naoCount / total) * 100).toFixed(2) : 0;
   
     res.render('alunosPcd_grafico', {
@@ -48,11 +48,11 @@ exports.gerarGrafico = async (req, res) => {
 exports.baixarPDFRelatorio = async (req, res) => {
 
     try {
-        const [registros] = await pool.query("
+        const [registros] = await pool.query(`
         SELECT idaluno, nome, idade, telefone, pcd, ativo, obs
         FROM alunos 
         WHERE pcd = 'SIM'
-        ");
+        `);
     
         if (registros.length === 0) {
         return res.status(404).send('Nenhum aluno PCD encontrado.');
@@ -80,15 +80,6 @@ exports.baixarPDFRelatorio = async (req, res) => {
         const startY = doc.y + 10;
         let y = startY;
         const rowHeight = 20;
-/*---------------------------------------------------------    
-        const col = {
-            matricula: { x: 50, width: 60 },
-            nome: { x: 115, width: 180 },
-            idade: { x: 300, width: 35 },
-            telefone: { x: 340, width: 100 },
-            obs: { x: 445, width: 110 }
-          };
-----------------------------------------------------------------*/
 
         const col = {
           matricula: { x: 50, width: 60 },
