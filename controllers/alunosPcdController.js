@@ -12,11 +12,11 @@ exports.mostrarMenuRelatorio = (req, res) => {
 
 exports.gerarRelatorio = async (req, res) => {
     try {
-        const [rows] = await pool.query("
+        const [rows] = await pool.query(`
             SELECT idaluno, nome, idade, telefone, ativo, pcd, obs
             FROM alunos 
             WHERE pcd = "SIM"
-        ");
+        `);
         res.render('alunosPcd_relatorio', { alunos: rows }); // ← View correta
       } catch (error) {
         console.error('Erro ao gerar relatório PCD:', error);
