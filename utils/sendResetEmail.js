@@ -18,12 +18,12 @@ async function sendResetEmail(email, resetToken) {
         from: 'seu-email@outlook.com', // Seu e-mail
         to: email, // E-mail do destinatário
         subject: 'Redefinição de Senha',
-        html: "
+        html: `
             <h1>Redefinição de Senha</h1>
             <p>Você solicitou a redefinição de sua senha. Clique no link abaixo para criar uma nova senha:</p>
             <a href="${resetLink}" style="color: blue;">Redefinir Senha</a>
             <p>Se você não solicitou esta alteração, ignore este e-mail.</p>
-        ",
+        `,
     };
 
     try {

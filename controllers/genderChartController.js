@@ -3,11 +3,11 @@ const db = require('../models/db'); // Configuração do banco de dados
 exports.generateGenderChart = async (req, res) => {
     try {
         // Consulta ao banco de dados para obter os dados de gênero
-        const [rows] = await db.query("
+        const [rows] = await db.query(`
             SELECT sexo, COUNT(*) as quantidade
             FROM alunos
             GROUP BY sexo
-        ");
+        `);
 
         // Processamento dos dados
         const total = rows.reduce((sum, row) => sum + row.quantidade, 0);

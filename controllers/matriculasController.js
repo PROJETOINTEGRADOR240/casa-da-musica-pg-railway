@@ -80,13 +80,13 @@ exports.renderMatriculasPage = async (req, res) => {
   
       for (let matricula of matriculas) {
 
-        matricula.aluno_nome = "${matricula.idaluno}- ${await 
-          getAlunoName(matricula.idaluno)}";
+        matricula.aluno_nome = `${matricula.idaluno}- ${await 
+          getAlunoName(matricula.idaluno)}`;
 
-          matricula.professor_nome = "${matricula.idprofessor}- ${await getProfessorName(matricula.idprofessor)}";
+          matricula.professor_nome = `${matricula.idprofessor}- ${await getProfessorName(matricula.idprofessor)}`;
 
 
-          matricula.disciplina_nome = "${matricula.iddisciplina}- ${await getDisciplinaName(matricula.iddisciplina)}";
+          matricula.disciplina_nome = `${matricula.iddisciplina}- ${await getDisciplinaName(matricula.iddisciplina)}`;
 
           matricula.data_matricula_formatada = format(new Date(matricula.data_matricula), 'dd/MM/yyyy'); // Formata a data.
       }
