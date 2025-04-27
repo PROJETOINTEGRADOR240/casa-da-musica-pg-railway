@@ -39,6 +39,7 @@ ATENÇÃO INSTALAR SEMPRE A ÚLTIMA VERSÃO DO NODE (LTS).
                 npm install bcrypt bcryptjs canvas method-override connect-mysql
                 npm install -g ejs-lint chartjs-plugin-datalabels axios os
                 npm install --save-dev jest pg puppeteer
+                npm install express-session connect-pg-simple pg
                           
 5 - Para entrar na aplicação:
 
