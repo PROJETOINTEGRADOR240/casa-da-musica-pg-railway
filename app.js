@@ -6,6 +6,10 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const pool = require('./models/db');
 
+const PgSession = require('connect-pg-simple')(session);
+//const { Pool } = require('pg');
+
+
 const cepRoutes = require('./routes/cepRoutes'); 
 const authRoutes = require('./routes/authRoutes'); // Módulo autenticação
 const notasRoutes = require('./routes/notasRoutes'); // Módulo notas
@@ -71,13 +75,32 @@ app.use((req, res, next) => {
   next();
 });
 
-
+/* ---------------------- Para o MYSQL ------------------
 app.use(session({
   secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: false,
 }));
 
+---------------------------------------*/
+
+// ---------------------- Para o POSTGRESDBL ------------------
+
+// Middleware de sessão
+app.use(session({
+  store: new PgSession({
+    pool: pgPool,                // Conexão com o banco
+    tableName: 'session'         // Nome da tabela (padrão é "session")
+  }),
+  secret: 'seu_segredo_super_secreto', // segredo para assinar o cookie
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 2 // 2 horas
+  }
+}));
+
+// ------------------------------------------------------------
 
 app.use(flash());
 
