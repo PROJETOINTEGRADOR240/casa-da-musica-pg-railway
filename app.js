@@ -59,7 +59,7 @@ app.set('view engine', 'ejs');
 
 // Middleware para definir vlibras antes das rotas
 app.use((req, res, next) => {
-  res.locals.vlibras = `
+  res.locals.vlibras = ""`
       <!-- VLibras Widget -->
       <div vw class="enabled">
           <div vw-access-button class="active"></div>
@@ -198,5 +198,5 @@ app.use('/validate', validateRoutes);
 
 // Inicialização do servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Servidor rodando na porta ${PORT}"));
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
