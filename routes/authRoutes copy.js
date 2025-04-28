@@ -44,16 +44,18 @@ router.post('/logout', (req, res) => {
     });
 });
 
-
+/*
 const transporter = nodemailer.createTransport({
     service: 'smtp-mail.outlook.com', // Ou o serviço que você está usando (exemplo: 'Outlook', 'Yahoo')
-    port: 587,
+    port: '',
     secure: true, 
     auth: {
         user: '', // Substitua pelo seu e-mail
         pass: '' // Substitua pela senha do seu e-mail
     }
 });
+
+*/
 
 // Verifica se a conexão com o serviço SMTP está funcionando
 transporter.verify((error, success) => {

@@ -11,7 +11,7 @@ const { Pool } = require('pg');
 
 
 const cepRoutes = require('./routes/cepRoutes'); 
-const authRoutes = require('./routes/authRoutes'); // Módulo autenticação
+//const authRoutes = require('./routes/authRoutes'); // Módulo autenticação
 const notasRoutes = require('./routes/notasRoutes'); // Módulo notas
 const faltasRoutes = require('./routes/faltasRoutes'); // Módulo faltas
 const disciplinasRoutes = require('./routes/disciplinasRoutes'); // Módulo disciplinas
@@ -59,7 +59,7 @@ app.set('view engine', 'ejs');
 
 // Middleware para definir vlibras antes das rotas
 app.use((req, res, next) => {
-  res.locals.vlibras = ""`
+  res.locals.vlibras = `
       <!-- VLibras Widget -->
       <div vw class="enabled">
           <div vw-access-button class="active"></div>
@@ -124,7 +124,7 @@ pgPool.connect()
 app.use(flash());
 
 // Rotas da Aplicação para os Cadastros
-app.use('/', authRoutes);
+//app.use('/', authRoutes);
 app.use('/notas', notasRoutes);
 app.use('/faltas', faltasRoutes);
 app.use('/disciplinas', disciplinasRoutes);
