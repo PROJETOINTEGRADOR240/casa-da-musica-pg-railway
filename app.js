@@ -7,7 +7,7 @@ const path = require('path');
 const pool = require('./models/db');
 
 const PgSession = require('connect-pg-simple')(session);
-//const { Pool } = require('pg');
+const { Pool } = require('pg');
 
 
 const cepRoutes = require('./routes/cepRoutes'); 
@@ -86,6 +86,15 @@ app.use(session({
 
 // ---------------------- Para o POSTGRESDBL ------------------
 
+// Cria uma conexão com o banco de dados
+const pgPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+
 // Middleware de sessão
 app.use(session({
   store: new PgSession({
@@ -100,7 +109,17 @@ app.use(session({
   }
 }));
 
-// ------------------------------------------------------------
+/* ------------------- Para testae a conexão com o banco - envolve .env, db.js
+pgPool.connect()
+  .then(client => {
+    console.log('🟢 Conexão com o banco de dados PostgreSQL estabelecida com sucesso!');
+    client.release(); // devolve a conexão para o pool
+  })
+  .catch(err => {
+    console.error('🔴 Erro ao conectar ao banco de dados:', err.stack);
+  });
+
+------------------------------------------------------------------------*/
 
 app.use(flash());
 
