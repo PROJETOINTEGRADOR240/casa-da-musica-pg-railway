@@ -28,11 +28,12 @@ exports.postLogin = async (req, res) => {
   }
 
   const { username, password } = req.body;
-
+  console.log('Login recebido:', req.body);
   try {
+    console.log('Conectando ao banco...');
     const result = await pgPool.query('SELECT * FROM users WHERE username = $1', [username]);
     const user = result.rows[0];
-
+    console.log('Usuário encontrado:', user)
     if (!user) {
       req.flash('message', 'Usuário não encontrado.');
       return res.redirect('/');
@@ -42,7 +43,7 @@ exports.postLogin = async (req, res) => {
       req.flash('message', 'Usuário desativado. Contate o administrador.');
       return res.redirect('/');
     }
-
+    console.log(user.password)
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       req.flash('message', 'Senha incorreta.');
