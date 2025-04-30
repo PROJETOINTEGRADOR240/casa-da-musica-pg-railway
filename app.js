@@ -75,18 +75,16 @@ app.use((req, res, next) => {
   next();
 });
 
+/* ---------------------- Para o MYSQL ------------------
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: false,
+}));
 
-/* ------------------- Para testae a conexão com o banco - envolve .env, db.js
-pgPool.connect()
-  .then(client => {
-    console.log('🟢 Conexão com o banco de dados PostgreSQL estabelecida com sucesso!');
-    client.release(); // devolve a conexão para o pool
-  })
-  .catch(err => {
-    console.error('🔴 Erro ao conectar ao banco de dados:', err.stack);
-  });
+---------------------------------------*/
 
-------------------------------------------------------------------------*/
+// ---------------------- Para o POSTGRESDBL ------------------
 
 // Cria uma conexão com o banco de dados
 const pgPool = new Pool({
@@ -106,6 +104,20 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 2         // 2 horas de validade para a sessão
   }
 }));
+
+
+
+/* ------------------- Para testae a conexão com o banco - envolve .env, db.js
+pgPool.connect()
+  .then(client => {
+    console.log('🟢 Conexão com o banco de dados PostgreSQL estabelecida com sucesso!');
+    client.release(); // devolve a conexão para o pool
+  })
+  .catch(err => {
+    console.error('🔴 Erro ao conectar ao banco de dados:', err.stack);
+  });
+
+------------------------------------------------------------------------*/
 
 app.use(flash());
 

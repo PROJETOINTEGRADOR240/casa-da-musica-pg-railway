@@ -15,9 +15,52 @@ const pgPool = new Pool({
 
 // GET login
 exports.getLoginPage = (req, res) => {
-    res.send('Página de login funcionando!');
+  res.render('auth/login', { message: req.flash('message') });
 };
-      
+
+// POST login
+exports.postLogin = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).render('auth/login', {
+      message: errors.array().map((err) => err.msg).join(', '),
+    });
+  }
+
+  const { username, password } = req.body;
+
+  try {
+    const result = await pgPool.query('SELECT * FROM users WHERE username = $1', [username]);
+    const user = result.rows[0];
+
+    if (!user) {
+      req.flash('message', 'Usuário não encontrado.');
+      return res.redirect('/');
+    }
+
+    if (user.status === 'desativado') {
+      req.flash('message', 'Usuário desativado. Contate o administrador.');
+      return res.redirect('/');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      req.flash('message', 'Senha incorreta.');
+      return res.redirect('/');
+    }
+
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      level: user.level,
+    };
+
+    res.redirect('/menu');
+  } catch (err) {
+    console.error('Erro ao fazer login:', err);
+    res.render('auth/errorPage', { error: 'Erro no servidor 1.' });
+  }
+};
 
 // GET forgot-password
 exports.getForgotPassword = (req, res) => {
