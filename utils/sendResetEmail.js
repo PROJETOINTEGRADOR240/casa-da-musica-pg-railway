@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-/*/ Configuração do transporte de e-mail
+//Configuração do transporte de e-mail
 
 const transporter = nodemailer.createTransport({
     service: 'smtp-mail.outlook.com', // Serviço de e-mail (exemplo: 'Gmail', 'Outlook')
@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-*/
+
 // Função para enviar o e-mail de redefinição de senha
 async function sendResetEmail(email, resetToken) {
     const resetLink = "http://localhost:3000/reset-password?token=${resetToken}"; // Substitua pelo domínio da sua aplicação

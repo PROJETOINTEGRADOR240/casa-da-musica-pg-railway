@@ -6,12 +6,12 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const pool = require('./models/db');
 
-const PgSession = require('connect-pg-simple')(session);
+//const PgSession = require('connect-pg-simple')(session);
 const { Pool } = require('pg');
 
 
 const cepRoutes = require('./routes/cepRoutes'); 
-//const authRoutes = require('./routes/authRoutes'); // Módulo autenticação
+const authRoutes = require('./routes/authRoutes'); // Módulo autenticação
 const notasRoutes = require('./routes/notasRoutes'); // Módulo notas
 const faltasRoutes = require('./routes/faltasRoutes'); // Módulo faltas
 const disciplinasRoutes = require('./routes/disciplinasRoutes'); // Módulo disciplinas
@@ -94,20 +94,18 @@ const pgPool = new Pool({
   }
 });
 
-
-// Middleware de sessão
+// Middleware de sessão para gravar sem tabelas -------------
 app.use(session({
-  store: new PgSession({
-    pool: pgPool,                // Conexão com o banco
-    tableName: 'session'         // Nome da tabela (padrão é "session")
-  }),
-  secret: 'seu_segredo_super_secreto', // segredo para assinar o cookie
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 2 // 2 horas
+  pool: pgPool,    
+  secret: 'seu_segredo_super_secreto',  // Secret para assinar os cookies de sessão
+  resave: false,                       // Impede que a sessão seja salva mesmo sem modificações
+  saveUninitialized: false,            // Não cria uma sessão até que algo seja salvo nela
+  cookie: {                            // Cookies que guardam as informações da sessão
+    maxAge: 1000 * 60 * 60 * 2         // 2 horas de validade para a sessão
   }
 }));
+
+
 
 /* ------------------- Para testae a conexão com o banco - envolve .env, db.js
 pgPool.connect()
@@ -124,7 +122,8 @@ pgPool.connect()
 app.use(flash());
 
 // Rotas da Aplicação para os Cadastros
-//app.use('/', authRoutes);
+app.use('/', authRoutes);
+
 app.use('/notas', notasRoutes);
 app.use('/faltas', faltasRoutes);
 app.use('/disciplinas', disciplinasRoutes);

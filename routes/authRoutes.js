@@ -44,7 +44,7 @@ router.post('/logout', (req, res) => {
     });
 });
 
-/*
+
 const transporter = nodemailer.createTransport({
     service: 'smtp-mail.outlook.com', // Ou o serviço que você está usando (exemplo: 'Outlook', 'Yahoo')
     port: '',
@@ -55,7 +55,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-*/
 
 // Verifica se a conexão com o serviço SMTP está funcionando
 transporter.verify((error, success) => {

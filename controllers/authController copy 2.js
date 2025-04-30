@@ -3,6 +3,7 @@ const pool = require('../models/db');
 const nodemailer = require('nodemailer');
 const { validationResult } = require('express-validator');
 
+
 exports.getLoginPage = (req, res) => {
     res.render('auth/login', { message: req.flash('message') });
 };
