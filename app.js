@@ -164,7 +164,7 @@ app.use("/lista-presenca", listaPresencaRoutes); // Lista de preseça dos alunos
 
 
 // Rotas para IoT
-app.use('/monitoramento', salasSensoresRoutes);
+app.use('/', salasSensoresRoutes);
 app.use(monitoramentoRoutes);
 
 // Rotas do menu
