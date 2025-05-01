@@ -2,12 +2,13 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const methodOverride = require('method-override');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const pool = require('./models/db');
 
 //const PgSession = require('connect-pg-simple')(session);
-const { Pool } = require('pg');
+//const { Pool } = require('pg');
 
 
 const cepRoutes = require('./routes/cepRoutes'); 
@@ -56,6 +57,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(cors());
 
 // Middleware para definir vlibras antes das rotas
 app.use((req, res, next) => {

@@ -16,7 +16,7 @@ exports.postLogin = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const result = await pool.query('SELECT * FROM casadamusica.users WHERE username = $1', [username]);
+        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
         if (result.rows.length === 0) {
             req.flash('message', 'Usuário não encontrado.');
             return res.redirect('/');
@@ -38,7 +38,7 @@ exports.postLogin = async (req, res) => {
         res.redirect('/menu');
     } catch (err) {
         console.error(err);
-        res.render('auth/errorPage', { error: 'Erro no servidor.' });
+        res.render('auth/errorPage', { error: 'Erro no servidor 1.' });
     }
 };
 
@@ -50,7 +50,7 @@ exports.postForgotPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
-        const result = await pool.query('SELECT * FROM casadamusica.users WHERE email = $1', [email]);
+        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (result.rows.length === 0) {
             req.flash('message', 'E-mail não encontrado.');
             return res.redirect('/forgot-password');
@@ -73,7 +73,7 @@ exports.postForgotPassword = async (req, res) => {
         res.redirect('/');
     } catch (err) {
         console.error(err);
-        res.render('auth/errorPage', { error: 'Erro no servidor.' });
+        res.render('auth/errorPage', { error: 'Erro no servidor 2.' });
     }
 };
 
@@ -90,7 +90,7 @@ exports.postLogin = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const result = await pool.query('SELECT * FROM casadamusica.users WHERE username = $1', [username]);
+        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
         if (result.rows.length === 0) {
             req.flash('message', 'Usuário não encontrado.');
             return res.redirect('/');
@@ -107,6 +107,6 @@ exports.postLogin = async (req, res) => {
         res.redirect('/menu');
     } catch (err) {
         console.error(err);
-        res.render('auth/errorPage', { error: 'Erro no servidor.' });
+        res.render('auth/errorPage', { error: 'Erro no servidor 3.' });
     }
 };
