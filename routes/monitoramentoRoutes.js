@@ -13,9 +13,9 @@ router.get('/monitoramento/dados', async (req, res) => {
         m.data_hora,
         s.nome AS sala_nome, 
         se.descricao AS sensor_desc
-      FROM casadamusica.monitoramento m
-      JOIN casadamusica.salas s ON m.sala_id = s.id
-      JOIN casadamusica.sensores se ON m.sensor_id = se.id
+      FROM monitoramento m
+      JOIN salas s ON m.sala_id = s.id
+      JOIN sensores se ON m.sensor_id = se.id
       ORDER BY m.data_hora DESC
       LIMIT 10
     `);
@@ -30,12 +30,12 @@ router.get('/monitoramento/dados', async (req, res) => {
 router.get('/monitoramento/excluiMaiorqueDez', async (req, res) => {
   try {
     // Verificar o número de registros na tabela monitoramento
-    const countResult = await pool.query('SELECT COUNT(*) as count FROM casadamusica.monitoramento');
+    const countResult = await pool.query('SELECT COUNT(*) as count FROM monitoramento');
     const count = countResult.rows[0].count;
 
     if (count > 11) {
       // Apagar o registro mais antigo (FIFO)
-      await pool.query('DELETE FROM casadamusica.monitoramento WHERE data_hora = (SELECT data_hora FROM casadamusica.monitoramento ORDER BY data_hora ASC LIMIT 1)');
+      await pool.query('DELETE FROM monitoramento WHERE data_hora = (SELECT data_hora FROM monitoramento ORDER BY data_hora ASC LIMIT 1)');
     }
 
     // Redirecionar de volta para a página
