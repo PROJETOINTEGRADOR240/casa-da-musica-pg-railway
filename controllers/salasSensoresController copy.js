@@ -4,9 +4,9 @@ module.exports = {
     // Exibir a tela de cadastro com listas de salas e sensores
     async exibirCadastro(req, res) {
         try {
-            const salas = await pool.query('SELECT * FROM salas');
-            const sensores = await pool.query('SELECT * FROM sensores');
-            res.render('salasSensores', { salas: salas.rows, sensores: sensores.rows });
+            const [salas] = await pool.query('SELECT * FROM salas');
+            const [sensores] = await pool.query('SELECT * FROM sensores');
+            res.render('salasSensores', { salas, sensores });
         } catch (error) {
             console.error('Erro ao carregar cadastro:', error);
             res.status(500).send('Erro ao carregar a página');
@@ -26,8 +26,8 @@ module.exports = {
     },
     async listarSalas(req, res) {
         try {
-            const salas = await pool.query('SELECT * FROM salas');
-            res.json(salas.rows);
+            const [salas] = await pool.query('SELECT * FROM salas');
+            res.json(salas);
         } catch (error) {
             console.error('Erro ao listar salas:', error);
             res.status(500).json({ erro: 'Erro ao listar salas' });
@@ -37,7 +37,7 @@ module.exports = {
         const { id } = req.params;
         const { nome } = req.body;
         try {
-            await pool.query('UPDATE salas SET nome = $1 WHERE id = $2', [nome, id]);
+            await pool.query('UPDATE salas SET nome = $2 WHERE id = $3', [nome, id]);
             res.json({ sucesso: 'Sala atualizada' });
         } catch (error) {
             console.error('Erro ao atualizar sala:', error);
@@ -68,8 +68,8 @@ module.exports = {
     },
     async listarSensores(req, res) {
         try {
-            const sensores = await pool.query('SELECT * FROM sensores');
-            res.json(sensores.rows);
+            const [sensores] = await pool.query('SELECT * FROM sensores');
+            res.json(sensores);
         } catch (error) {
             console.error('Erro ao listar sensores:', error);
             res.status(500).json({ erro: 'Erro ao listar sensores' });
