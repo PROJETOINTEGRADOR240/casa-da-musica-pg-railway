@@ -87,14 +87,14 @@ app.use(session({
 // ---------------------- Para o POSTGRESDBL ------------------
 
 // Cria uma conexão com o banco de dados
-const pgPool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+//const pgPool = new Pool({
+//  connectionString: process.env.DATABASE_URL,
+//  ssl: {
+//    rejectUnauthorized: false
+//  }
+//});
 
-// Middleware de sessão para gravar sem tabelas -------------
+/*/ Middleware de sessão para gravar sem tabelas -------------
 app.use(session({
   pool: pgPool,    
   secret: 'seu_segredo_super_secreto',  // Secret para assinar os cookies de sessão
@@ -105,7 +105,7 @@ app.use(session({
   }
 }));
 
-
+-------------------------------------*/
 
 /* ------------------- Para testae a conexão com o banco - envolve .env, db.js
 pgPool.connect()
@@ -118,6 +118,13 @@ pgPool.connect()
   });
 
 ------------------------------------------------------------------------*/
+
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: false,
+}));
+
 
 app.use(flash());
 
