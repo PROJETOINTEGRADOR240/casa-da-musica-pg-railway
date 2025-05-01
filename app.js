@@ -196,10 +196,14 @@ app.use('/busca-cep', cepRoutes);
 
 // Rota para a página inicial (index)
 app.get('/home', async (req, res) => {
-  const [salas] = await pool.query('SELECT * FROM salas');  // Consulta a tabela salas
-  const [sensores] = await pool.query('SELECT * FROM sensores');  // Consulta a tabela sensores
-  const [dados] = await pool.query('SELECT * FROM monitoramento');  // Consulta a tabela monitoramento
-  res.render('indexMonitoramento', { salas, sensores, dados });  // Passa a variável salas para o EJS
+  const salasResult = await pool.query('SELECT * FROM salas');
+  const sensoresResult = await pool.query('SELECT * FROM sensores');
+  const dadosResult = await pool.query('SELECT * FROM monitoramento');
+  res.render('indexMonitoramento', { 
+  salas: salasResult.rows, 
+  sensores: sensoresResult.rows, 
+  dados: dadosResult.rows 
+  });
 });
 
 
@@ -207,7 +211,7 @@ app.get('/verificarMatricula', async (req, res) => {
   const { aluno, professor, disciplina } = req.query;
 
   const [rows] = await pool.query(
-    'SELECT * FROM matriculas WHERE idaluno = $1 AND idprofessor = ? AND iddisciplina = ?',
+    'SELECT * FROM matriculas WHERE idaluno = $1 AND idprofessor = $2 AND iddisciplina = $3',
     [aluno, professor, disciplina]
   );
 

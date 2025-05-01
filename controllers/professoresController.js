@@ -36,7 +36,7 @@ exports.atualizarProfessor =  async (req, res) => {
 
   try {
     await pool.query(
-      `UPDATE casadamusica.professores 
+      `UPDATE professores 
        SET nome = $1, cpf_cnpj = $2, telefone = $3, email = $4, data_nasc = $5, idade = $6, sexo = $7, genero = $8, cor = $9, 
            cep = $10, endereco = $11, numero = $12, bairro = $13, cidade = $14, estado = $15, complemento = $16, obs = $17 
        WHERE idprofessor = $18`,
