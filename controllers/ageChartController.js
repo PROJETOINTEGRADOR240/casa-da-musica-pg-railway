@@ -1,6 +1,6 @@
 const db = require('../models/db');
 
-exp.orts.generateBarChartPage = async (req, res) => {
+exports.generateBarChartPage = async (req, res) => {
     
     try {
         // Consultar dados da tabela alunos
