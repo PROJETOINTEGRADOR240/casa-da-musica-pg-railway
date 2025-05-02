@@ -73,8 +73,12 @@ function formataCpfCnpj(valor) {
 }
 
 function aplicarValidacaoCpfCnpj(inputId, formId) {
-    const $input = $("#${inputId}");
-    const $form = formId ? $("#${formId}") : $input.closest('form');
+//    const $input = $("#${inputId}");
+//    const $form = formId ? $("#${formId}") : $input.closest('form');
+
+const $input = $("#" + inputId);
+const $form = formId ? $("#" + formId) : $input.closest('form');
+
 
     // Validação em tempo real enquanto digita
     $input.on('input', function() {
