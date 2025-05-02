@@ -3,8 +3,9 @@ const db = require('../models/db'); // Conexão ao MySQL
 exports.getPieChart = async (req, res) => {
     try {
         // Consulta ao banco
-        const [rows] = await db.query('SELECT sexo, idade FROM alunos');
-
+        const result = await db.query('SELECT sexo, idade FROM alunos');
+        const rows = result.rows;
+        
         // Inicializar contadores
         const totalMasculino = rows.filter(r => /Masculino/i.test(r.sexo)).length;
         const totalFeminino = rows.filter(r => /Feminino/i.test(r.sexo)).length;

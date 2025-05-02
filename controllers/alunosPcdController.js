@@ -2,7 +2,6 @@ const pool = require('../models/db');
 const fs = require('fs');
 const path = require('path');
 const PDFDocument = require('pdfkit');
-const puppeteer = require('puppeteer');
 
 
 exports.mostrarMenuRelatorio = (req, res) => {

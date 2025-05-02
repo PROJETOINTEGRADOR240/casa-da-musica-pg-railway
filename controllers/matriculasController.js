@@ -5,8 +5,8 @@ const { getAlunoName, getProfessorName, getDisciplinaName } = require('../utils/
 // Página inicial - listar matriculas
 exports.listarMatriculas =  async (req, res) => {
   try {
-    const [matriculas] = await pool.query('SELECT * FROM matriculas');
-    res.render('matriculas', { matriculas });
+    const result = await pool.query('SELECT * FROM matriculas');
+    res.render('matriculas', { matriculas: result.rows });
   } catch (err) {
     console.error(err);
     res.status(500).send('Erro ao listar matriculas');
@@ -24,17 +24,17 @@ exports.listarMatriculas =  async (req, res) => {
        res.redirect('/matriculas');
 
       } catch (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
-          const errorMessage = 'Aluno(a) Disciplina/Professor já existe!';
-          const [matriculas] = await pool.query('SELECT * FROM matriculas');
-          res.render('matriculas', { matriculas, errorMessage });
-        } else {  
-          console.error('Erro ao inserir matricula', err);
+        if (err.code === '23505') { // Erro de unicidade no PostgreSQL
+          const errorMessage = 'Aluno(a) Disciplina já existe!';
+          const result = await pool.query('SELECT * FROM matriculas');
+          res.render('matriculas', { matriculas: result.rows, errorMessage });
+        } else {
+          console.error('Erro ao inserir matrícula', err);
           res.status(500).json({ message: 'Erro no servidor' });
-        }  
+        }
       }
-  };
-  
+    };
+      
   
   // Atualizar matriculas
   exports.atualizarMatricula =  async (req, res) => {
@@ -45,7 +45,7 @@ exports.listarMatriculas =  async (req, res) => {
 
     try {
   
-      await pool.query("UPDATE matriculas SET idaluno = $7, iddisciplina = $8, idprofessor = $9, data_matricula = $10, ativo = $11, obs = $12 WHERE idmatricula = $13", [idaluno, iddisciplina, idprofessor, data_matricula, ativo, obs, idmatricula]);
+      await pool.query("UPDATE matriculas SET idaluno = $1, iddisciplina = $2, idprofessor = $3, data_matricula = $4, ativo = $5, obs = $6 WHERE idmatricula = $7", [idaluno, iddisciplina, idprofessor, data_matricula, ativo, obs, idmatricula]);
       res.redirect('/matriculas');
   
     } catch (err) {
@@ -76,8 +76,9 @@ exports.listarMatriculas =  async (req, res) => {
 exports.renderMatriculasPage = async (req, res) => {
 
   try {
-      const [matriculas] = await pool.query('SELECT * FROM matriculas'); 
-  
+      const result = await pool.query('SELECT * FROM matriculas'); 
+      const matriculas = result.rows;
+      
       for (let matricula of matriculas) {
 
         matricula.aluno_nome = `${matricula.idaluno}- ${await 

@@ -5,8 +5,8 @@ const router = require('../routes/disciplinasRoutes');
 // Página inicial - listar disciplinas
 exports.listarDisciplinas =  async (req, res) => {
   try {
-    const [disciplinas] = await pool.query('SELECT * FROM disciplinas');
-    res.render('disciplinas', { disciplinas });
+    const result = await pool.query('SELECT * FROM disciplinas');
+    res.render('disciplinas', { disciplinas: result.rows });
   } catch (err) {
     console.error(err);
     res.status(500).send('Erro ao listar disciplinas');
@@ -35,7 +35,7 @@ exports.atualizarDisciplina =  async (req, res) => {
 
   try {
 
-  await pool.query("UPDATE disciplinas SET nome = $8, carga_horaria = $9, turno = $10, dia_semana = $11, hora_aula_inicio = $12, hora_aula_fim = $13, obs = $14 WHERE iddisciplina = $15",
+  await pool.query("UPDATE disciplinas SET nome = $1, carga_horaria = $2, turno = $3, dia_semana = $4, hora_aula_inicio = $5, hora_aula_fim = $6, obs = $7 WHERE iddisciplina = $8",
   [nome, carga_horaria, turno, dia_semana, hora_aula_inicio, hora_aula_fim, obs, iddisciplina]); 
   res.redirect('/disciplinas');
 

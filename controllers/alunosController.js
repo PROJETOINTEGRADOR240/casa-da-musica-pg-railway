@@ -34,7 +34,7 @@ exports.atualizarAluno =  async (req, res) => {
   const ativo = req.body['edit-ativo']; // O valor será "SIM" ou "NÃO"
   try {
 
-    await pool.query("UPDATE alunos SET nome = $22, cpf_cnpj = $23, telefone = $24, email = $25, data_nasc = $26, idade = $27, pcd = $28, sexo = $29, genero = $30, cor = $31, ativo = $32, cpf_cnpj_resp = $33, nome_resp = $34, cep = $35, endereco = $36, numero = $37, bairro = $38, cidade = $39, estado = $40, complemento = $41, obs = $42 WHERE idaluno = $43",
+    await pool.query("UPDATE alunos SET nome = $1, cpf_cnpj = $2, telefone = $3, email = $4, data_nasc = $5, idade = $6, pcd = $7, sexo = $8, genero = $9, cor = $10, ativo = $11, cpf_cnpj_resp = $33, nome_resp = $34, cep = $35, endereco = $12, numero = $13, bairro = $14, cidade = $15, estado = $16, complemento = $17, obs = $18 WHERE idaluno = $19",
     [nome, cpf_cnpj, telefone, email, data_nasc, idade, pcd, sexo, genero, cor, ativo, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs, idaluno]);
     res.redirect('/alunos');
 

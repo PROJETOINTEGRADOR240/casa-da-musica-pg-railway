@@ -2,20 +2,20 @@ const db = require('../models/db');
 const PDFDocument = require('pdfkit');
 const path = require('path');
 const fs = require('fs');
-const { DateTime } = require('luxon');
+const { TIMESTAMP } = require('luxon');
 
 // Função para adicionar cabeçalho
 function addHeader(doc, pageNumber) {
     
-    const dateTime = DateTime.now().toFormat('dd/MM/yyyy HH:mm:ss');
+    const TIMESTAMP = TIMESTAMP.CURRENT_TIMESTAMP.toFormat('dd/MM/yyyy HH:mm:ss');
     const margin = 50; // Margem da esquerda para alinhar o texto de forma adequada
     const pageWidth = doc.page.width;
     const textRightPosition = pageWidth - margin - 100; // Posição para o número da página (ajustada para não ficar esprimida)
 
     // Adiciona a data/hora alinhada à esquerda e a página à direita
     doc.font('Helvetica-Oblique').fontSize(10)
-        .text(`Data/Hora: ${dateTime}`, margin, 30, { align: 'left' })
-        .text(`Página: ${pageNumber}`, textRightPosition, 30, { align: 'right' });
+        .text("Data/Hora: ${TIMESTAMP}", margin, 30, { align: 'left' })
+        .text("Página: ${pageNumber}", textRightPosition, 30, { align: 'right' });
 
     doc.moveDown(2);
 }
@@ -25,19 +25,18 @@ exports.generateAgeReport = async (req, res) => {
     const { ageStart, ageEnd } = req.body;
 
     try {
-        const result = await db.query(
-            'SELECT idaluno, nome, idade FROM casadamusica.alunos WHERE idade BETWEEN $1 AND $2 ORDER BY idade ASC',
+        const [rows] = await db.query(
+            'SELECT idaluno, nome, idade, sexo, pcd, ativo FROM alunos WHERE idade BETWEEN $1 AND ? ORDER BY idade ASC',
             [ageStart, ageEnd]
-          );
-          const rows = result.rows;
-          
+        );
+
         if (rows.length === 0) {
             return res.status(404).send('Nenhum aluno encontrado no intervalo de idade especificado.');
         }
 
         // Nome único para o relatório
-        const timestamp = Date.now();
-        const fileName = `Relatorio_Idade_${timestamp}.pdf`;
+        const timestamp = Date.CURRENT_TIMESTAMP;
+        const fileName = "Relatorio_Idade_${timestamp}.pdf";
         const filePath = path.join(__dirname, '../public/reports', fileName);
 
         // Verifique se o diretório de relatórios existe
@@ -54,7 +53,7 @@ exports.generateAgeReport = async (req, res) => {
         addHeader(doc, pageNumber); // Adicionar cabeçalho (data/hora e página)
 
         // Título do Relatório
-        const title = `Relatório por Faixa Etária (${ageStart} - ${ageEnd}) anos`;
+        const title = "Relatório por Faixa Etária (${ageStart} - ${ageEnd}) anos";
 
         // Calcular a posição centralizada para o título
         const titleWidth = doc.widthOfString(title);  // Obtém a largura do título
@@ -63,8 +62,9 @@ exports.generateAgeReport = async (req, res) => {
         doc.fontSize(16).text(title, xPosition, doc.y).moveDown(2);
 
         // Cabeçalhos
-        const headers = ['Matrícula', 'Nome', 'Idade'];
-        const columnWidths = [100, 300, 100]; // Ajuste das larguras
+        const headers = ['Matr.', 'Nome', 'Ativo', 'PCD', 'Idade'];
+
+        const columnWidths = [51, 150, 50, 50, 50]; // Ajuste das larguras
         let xPositionHeader = 50; // Margem inicial
         const initialY = doc.y;
 
@@ -92,6 +92,11 @@ exports.generateAgeReport = async (req, res) => {
             doc.text(row.nome, xPositionHeader, currentY, { width: columnWidths[1], align: 'left' });
             xPositionHeader += columnWidths[1] + 20;
 
+            doc.text(row.ativo, xPositionHeader, currentY, { width: columnWidths[1], align: 'left' });
+            xPositionHeader += columnWidths[1] - 77;
+            doc.text(row.pcd, xPositionHeader, currentY, { width: columnWidths[1], align: 'left' });
+            xPositionHeader += columnWidths[1] - 77;
+
             doc.text(row.idade.toString(), xPositionHeader, currentY, { width: columnWidths[2], align: 'left' });
 
             doc.moveDown(0.5); // Move o cursor para a próxima linha
@@ -106,15 +111,15 @@ exports.generateAgeReport = async (req, res) => {
 
         // Rodapé com quantidade de alunos
         doc.moveDown(2);
-        doc.font('Helvetica-Bold').text(`Quantidade de alunos(as): ${rows.length}`, 50, doc.y, { align: 'left' });
+        doc.font('Helvetica-Bold').text("Quantidade de alunos(as): ${rows.length}", 50, doc.y, { align: 'left' });
 
         doc.end(); // Finaliza o PDF
 
         // Redireciona para a tela de opções
         res.render('reportOptionsAge', {
             title: 'Relatório por Faixa Etária',
-            downloadUrl: `/reports/download/${fileName}`,
-            viewUrl: `/reports/view/${fileName}`,
+            downloadUrl: "/reports/download/${fileName}",
+            viewUrl: "/reports/view/${fileName}",
             backUrl: '/reports/age',
         }); 
 

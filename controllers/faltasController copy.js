@@ -24,16 +24,18 @@ exports.listarFaltas =  async (req, res) => {
        res.redirect('/faltas');
 
       } catch (err) {
-        if (err.code === '23505') { // Erro de unicidade no PostgreSQL
+        if (err.code === 'ER_DUP_ENTRY') {
           const errorMessage = 'Aluno, Professor, Disciplina e Data já existe!';
-          const result = await pool.query('SELECT * FROM faltas');
-          res.render('faltas', { faltas: result.rows, errorMessage });
-            } else {  
+          const [faltas] = await pool.query('SELECT * FROM faltas');
+          res.render('faltas', { faltas, errorMessage });
+        } else {  
           console.error('Erro ao inserir falta', err);
           res.status(500).json({ message: 'Erro no servidor' });
         }  
       }
   };
+  
+  
   
   // Atualizar faltas
   exports.atualizarFalta =  async (req, res) => {
@@ -41,7 +43,7 @@ exports.listarFaltas =  async (req, res) => {
     const{ mes_falta, ano_falta, data_falta, falta, obs } = req.body;
     try {
   
-      await pool.query("UPDATE faltas SET mes_falta = $1, ano_falta = $2, data_falta = $3, falta = $4, obs = $5 WHERE idfalta = $6", [mes_falta, ano_falta, data_falta, falta, obs, idfalta]);
+      await pool.query("UPDATE faltas SET mes_falta = $9, ano_falta = $10, data_falta = $11, falta = $12, obs = $13 WHERE idfalta = $14", [mes_falta, ano_falta, data_falta, falta, obs, idfalta]);
       res.redirect('/faltas');
   
     } catch (err) {
@@ -72,16 +74,19 @@ exports.listarFaltas =  async (req, res) => {
 exports.renderFaltasPage = async (req, res) => {
 
   try {
-      const result = await pool.query('SELECT * FROM faltas'); 
-      const faltas = result.rows;
+      const [faltas] = await pool.query('SELECT * FROM faltas'); 
   
       for (let falta of faltas) {
-        falta.aluno_nome = `${falta.aluno_id} - ${await getAlunoName(falta.aluno_id)}`;
-        falta.professor_nome = `${falta.professor_id} - ${await getProfessorName(falta.professor_id)}`;
-        falta.disciplina_nome = `${falta.disciplina_id} - ${await getDisciplinaName(falta.disciplina_id)}`;
-        falta.data_falta_formatada = format(new Date(falta.data_falta), 'dd/MM/yyyy');
+
+          falta.aluno_nome = "${falta.aluno_id}- ${await getAlunoName(falta.aluno_id)}";
+
+          falta.professor_nome = "${falta.professor_id}- ${await getProfessorName(falta.professor_id)}";
+
+          falta.disciplina_nome = "${falta.disciplina_id}- ${await getDisciplinaName(falta.disciplina_id)}";
+
+          falta.data_falta_formatada = format(new Date(falta.data_falta), 'dd/MM/yyyy'); // Formata a data.
       }
-        res.render('faltas', { faltas }); 
+      res.render('faltas', { faltas }); 
   } catch (error) {
       console.error('Erro ao renderizar a página de faltas:', error);
       res.status(500).send('Erro ao carregar a página de faltas');

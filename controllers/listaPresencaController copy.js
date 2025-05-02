@@ -64,79 +64,53 @@ exports.gerarLista = async (req, res) => {
 
 exports.exportarPDF = async (req, res) => {
   try {
-    console.log("Iniciando exportarPDF - Corpo da requisição:", req.body);
-
-    if (!req.body || typeof req.body.lista !== "string") {
-      console.error("Erro: req.body.lista não é uma string válida ou está ausente", req.body);
-      return res.status(400).send("Erro: Dados da lista ausentes ou inválidos.");
-    }
-
-    let lista;
-    try {
-      lista = JSON.parse(req.body.lista);
-      console.log("Lista parseada com sucesso:", lista);
-    } catch (parseErr) {
-      console.error("Erro ao fazer parsing do req.body.lista:", parseErr.message);
-      return res.status(400).send("Erro: Formato de dados da lista inválido.");
-    }
+    const lista = req.body.lista ? JSON.parse(req.body.lista) : null;
 
     if (!lista || Object.keys(lista).length === 0) {
-      console.log("Erro: Lista vazia ou não enviada");
       return res.status(400).send("Erro: Nenhuma lista foi enviada.");
     }
 
     const fileName = `ListaPresenca_${Date.now()}.pdf`;
-    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
-    res.setHeader("Content-Type", "application/pdf");
+    const downloadsPath = path.join(os.homedir(), "Downloads", fileName);
 
     const doc = new PDFDocument({ margin: 20, size: "A4", layout: "portrait" });
-    doc.pipe(res);
+    doc.pipe(fs.createWriteStream(downloadsPath));
 
-    // Caminho do logotipo (ajuste conforme seu diretório)
-    const logoPath = "public/images/LogoCasaMusica.png"; // Exemplo com public
-    console.log("Caminho do logotipo:", logoPath);
+    // Caminho do logotipo
+    const logoPath = path.join(__dirname, "../public/images/logoCasaMusica.png");
 
-    if (!fs.existsSync(logoPath)) {
-      console.warn("Logotipo não encontrado em:", logoPath);
-    }
-
+    // Define o mês e ano atuais automaticamente
     const dataAtual = new Date();
     const nomeMes = dataAtual.toLocaleString("pt-BR", { month: "long" }).toUpperCase();
     const anoAtual = dataAtual.getFullYear();
 
     Object.values(lista).forEach((group, index) => {
+      // Adiciona nova página se não for o primeiro grupo
       if (index > 0) {
         doc.addPage();
       }
 
-      // Adiciona o logotipo no topo de cada página
-      if (fs.existsSync(logoPath)) {
-        try {
-          doc.image(logoPath, 30, 20, { width: 100, height: 50 });
-          console.log(`Logotipo adicionado na página ${index + 1}`);
-        } catch (imageErr) {
-          console.error("Erro ao adicionar logotipo:", imageErr.message);
-          doc.font("Helvetica").fontSize(10).text("Erro ao carregar logotipo", 30, 20);
-        }
-      } else {
-        doc.font("Helvetica").fontSize(10).text("Logotipo não disponível", 30, 20);
-      }
+      // Logotipo no topo
+      doc.image(logoPath, 30, 20, { width: 100, height: 50 });
+      doc.font("Helvetica-Bold").fontSize(11).text(``, 350, 40, { align: "right" });
 
-      doc.font("Helvetica-Bold").fontSize(11).text("", 350, 40, { align: "right" });
       doc.moveDown(2);
 
+      // Ajustando largura da grade do cabeçalho
       const startX = 30;
       let startY = doc.y + 5;
-      const colWidths = [150, 150, 100];
+      const colWidths = [150, 150, 100]; // Mantendo a largura correta do cabeçalho
       const rowHeight = 23;
 
+      // **Pegando o dia da semana e turno corretamente**
       const diaSemana = group.dia_semana ? group.dia_semana.toUpperCase() : "NÃO INFORMADO";
       const turno = group.turno ? group.turno.toUpperCase() : "NÃO INFORMADO";
 
+      // Cabeçalho (Grade para Informações)
       const headerData = [
         ["ARTE EDUCADOR:", group.professor.toUpperCase(), "MÊS:", `${nomeMes} / ${anoAtual}`],
         ["MODALIDADE:", group.disciplina.toUpperCase(), "DIA / PERÍODO:", `${diaSemana} / ${turno}`],
-        ["EQUIPAMENTO CULTURAL:", "CASA DA MÚSICA", "LINGUAGEM:", group.disciplina.toUpperCase()],
+        ["EQUIPAMENTO CULTURAL:", "CASA DA MÚSICA", "LINGUAGEM:", group.disciplina.toUpperCase()]
       ];
 
       headerData.forEach((row) => {
@@ -152,24 +126,32 @@ exports.exportarPDF = async (req, res) => {
 
       doc.moveDown(1);
 
-      const signatureStartY = startY;
-      const signatureTotalWidth = colWidths.reduce((a, b) => a + b, 0) + 149;
-      const signatureColWidth = signatureTotalWidth / 2;
-      const signatureRowHeight = rowHeight * 2.5;
+      // Criando a grade de assinaturas com mesmo tamanho do cabeçalho
+      const signatureStartY = startY; // original - const signatureStartY = startY + 10;
+// Definindo a largura total da grade de assinaturas
+const signatureTotalWidth = colWidths.reduce((a, b) => a + b, 0) + 149; // Aumentando a largura total em 100 unidades
+const signatureColWidth = signatureTotalWidth / 2; // Dividindo a largura total por 2 para duas colunas
+const signatureRowHeight = rowHeight * 2.5; // Ajustando para incluir 2 linhas em branco
 
-      doc.rect(startX, signatureStartY, signatureColWidth, signatureRowHeight).stroke();
-      doc.rect(startX + signatureColWidth, signatureStartY, signatureColWidth, signatureRowHeight).stroke();
+// Desenhando as caixas das assinaturas
+doc.rect(startX, signatureStartY, signatureColWidth, signatureRowHeight).stroke(); // Box do oficineiro
+doc.rect(startX + signatureColWidth, signatureStartY, signatureColWidth, signatureRowHeight).stroke(); // Box do coordenador
 
-      const blankSpaceY = signatureStartY + rowHeight;
-      doc.font("Helvetica").fontSize(9).fillColor("black");
-      doc.text("ASSINATURA DO OFICINEIRO", startX, blankSpaceY + rowHeight, { width: signatureColWidth, align: "center" });
-      doc.text("ASSINATURA DO COORDENADOR", startX + signatureColWidth, blankSpaceY + rowHeight, { width: signatureColWidth, align: "center" });
+// Adicionando espaço em branco para assinaturas
+const blankSpaceY = signatureStartY + rowHeight; // Deixa espaço acima da assinatura
+doc.font("Helvetica").fontSize(9).fillColor("black");
 
-      startY = signatureStartY + signatureRowHeight + 10;
+// Texto das assinaturas centralizado na parte inferior das caixas
+doc.text("ASSINATURA DO OFICINEIRO", startX, blankSpaceY + rowHeight, { width: signatureColWidth, align: "center" });
+doc.text("ASSINATURA DO COORDENADOR", startX + signatureColWidth, blankSpaceY + rowHeight, { width: signatureColWidth, align: "center" });
 
+      startY = signatureStartY + signatureRowHeight + 10; // Atualiza a posição para a próxima seção
+
+      // ** Ajustando a grade dos alunos para ter o mesmo tamanho da grade do cabeçalho **
       const studentTableStartY = startY;
-      const studentColWidths = [35, 230, 80, 80, 124];
+      const studentColWidths = [35, 230, 80, 80, 124]; // Adicionando PRESENÇA 3
 
+      // Cabeçalho da Tabela de Alunos
       doc.rect(startX, studentTableStartY, studentColWidths.reduce((a, b) => a + b), rowHeight).fill("#ddd").stroke();
       doc.fillColor("black").font("Helvetica-Bold").fontSize(9);
       doc.text("Nº", startX + 8, studentTableStartY + 3);
@@ -181,7 +163,9 @@ exports.exportarPDF = async (req, res) => {
 
       let studentStartY = studentTableStartY + rowHeight;
 
+      // Preenche os alunos na tabela
       group.alunos.forEach((aluno, alunoIndex) => {
+        // Desenha as células da linha
         doc.rect(startX, studentStartY, studentColWidths.reduce((a, b) => a + b), rowHeight).stroke();
         doc.font("Helvetica").fontSize(9).fillColor("black").text(`${alunoIndex + 1}`, startX + 8, studentStartY + 6);
         doc.text(aluno.toUpperCase(), startX + studentColWidths[0] + 8, studentStartY + 6, { width: studentColWidths[1] - 10 });
@@ -195,9 +179,11 @@ exports.exportarPDF = async (req, res) => {
     });
 
     doc.end();
-    console.log("PDF gerado e enviado com sucesso");
+
+    // Redireciona o usuário após gerar o PDF
+    res.redirect("/lista-presenca");
   } catch (err) {
-    console.error("Erro ao processar exportarPDF:", err.stack);
-    res.status(500).send("Erro ao gerar o PDF. Por favor, tente novamente mais tarde.");
+    console.error(err);
+    res.status(500).send("Erro ao gerar o PDF.");
   }
 };
