@@ -50,7 +50,7 @@ section#imagemguitarra {
     border: 3px solid black;
     background-position:left bottom;
     background-color: rgb(40, 40, 75);
-    background: url('../images/Cadastro.jpeg') no-repeat;
+    background: url('/images/guitarra.jpeg') no-repeat;
 }
 
 button {

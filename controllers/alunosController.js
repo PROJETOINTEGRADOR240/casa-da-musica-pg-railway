@@ -3,8 +3,8 @@ const pool = require('../models/db');
 // Página inicial - listar alunos
 exports.listarAlunos =  async (req, res) => {
   try {
-    const [alunos] = await pool.query('SELECT * FROM alunos');
-    res.render('alunos', { alunos });
+    const result = await pool.query('SELECT * FROM alunos');
+    res.render('alunos', { alunos: result.rows });
   } catch (err) {
     console.error(err);
     res.status(500).send('Erro ao listar alunos');
