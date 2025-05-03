@@ -14,8 +14,9 @@ exports.listarAlunos =  async (req, res) => {
 
 // Inserir aluno
 exports.inserirAluno = async (req, res) => {
+
+  const { nome, cpf_cnpj, telefone, email, data_nasc, idade, pcd, sexo, genero, cor, ativo, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
   const cepLimpo = cep.replace(/\D/g, ''); // Remove tudo que não for número
-  const {  nome, cpf_cnpj, telefone, email, data_nasc, idade, pcd, sexo, genero, cor, ativo, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
    try {
     await pool.query(`
       INSERT INTO alunos (
