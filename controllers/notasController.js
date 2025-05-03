@@ -6,8 +6,8 @@ const { getAlunoName, getProfessorName, getDisciplinaName } = require('../utils/
 // Página inicial - listar notas
 exports.listarNotas =  async (req, res) => {
     try {
-      const [notas] = await pool.query('SELECT * FROM notas');
-      res.render('notas', { notas });
+      const result = await pool.query('SELECT * FROM notas');
+      res.render('notas', { notas: result.rows });
     } catch (err) {
       console.error(err);
       res.status(500).send('Erro ao listar notas');

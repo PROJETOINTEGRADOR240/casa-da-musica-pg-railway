@@ -17,26 +17,9 @@ exports.inserirAluno = async (req, res) => {
   const cepLimpo = cep.replace(/\D/g, ''); // Remove tudo que não for número
   const {  nome, cpf_cnpj, telefone, email, data_nasc, idade, pcd, sexo, genero, cor, ativo, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
    try {
-    await pool.query(`
-      INSERT INTO alunos (
-        nome, cpf_cnpj, telefone, email, data_nasc, idade,
-        pcd, sexo, genero, cor, ativo,
-        cpf_cnpj_resp, nome_resp, cep, endereco, numero,
-        bairro, cidade, estado, complemento, obs
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6,
-        $7, $8, $9, $10, $11,
-        $12, $13, $14, $15, $16,
-        $17, $18, $19, $20, $21
-      )
-    `, [
-      nome, cpf_cnpj, telefone, email, data_nasc, idade,
-      pcd, sexo, genero, cor, ativo,
-      cpf_cnpj_resp, nome_resp, cepLimpo, endereco, numero,
-      bairro, cidade, estado, complemento, obs
-    ]);
-    
-    res.redirect('/alunos');
+        await pool.query("INSERT INTO alunos (nome, cpf_cnpj, telefone, email, data_nasc, idade, pcd, sexo, genero, cor, ativo, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)",
+        [nome, cpf_cnpj, telefone, email, data_nasc, idade, pcd, sexo, genero, cor, ativo, cpf_cnpj_resp, nome_resp, cep, endereco, numero, bairro, cidade, estado, complemento, obs]);
+        res.redirect('/alunos');
     } catch (err) {
         console.error(err);
         res.status(500).send('Erro ao inserir aluno');

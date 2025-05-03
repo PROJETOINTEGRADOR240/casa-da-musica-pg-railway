@@ -6,8 +6,8 @@ const { getProfessorName, getDisciplinaName } = require('../utils/formartarDados
 // Página inicial - listar vinculos
 exports.listarVinculos =  async (req, res) => {
     try {
-      const [notas] = await pool.query('SELECT * FROM vinculos');
-      res.render('vinculos', { vinculos });
+      const result = await pool.query('SELECT * FROM vinculos');
+      res.render('vinculos', { vinculos: result.rows });
     } catch (err) {
       console.error(err);
       res.status(500).send('Erro ao listar vinculos');

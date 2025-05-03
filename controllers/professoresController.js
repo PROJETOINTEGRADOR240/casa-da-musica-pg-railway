@@ -5,8 +5,8 @@ const router = require('../routes/professoresRoutes');
 // Página inicial - listar professores
 exports.listarProfessores =  async (req, res) => {
     try {
-      const [professores] = await pool.query('SELECT * FROM professores');
-      res.render('professores', { professores });
+      const result = await pool.query('SELECT * FROM professores');
+      res.render('professores', { professores: result.rows });
     } catch (err) {
       console.error(err);
       res.status(500).send('Erro ao listar professores');
